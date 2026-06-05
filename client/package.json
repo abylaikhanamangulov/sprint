@@ -18,6 +18,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@types/query-string": "^6.2.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@types/underscore": "^1.13.0",
