@@ -1,0 +1,136 @@
+[
+  {
+    "id": 1,
+    "telegramId": 100001,
+    "username": "racer_ivan",
+    "firstName": "Иван",
+    "avatarUrl": "",
+    "level": 12,
+    "xp": 5600,
+    "xpToNext": 5000,
+    "silver": 7977016,
+    "gold": 99649,
+    "energy": 15,
+    "maxEnergy": 20,
+    "lastEnergyRegen": "2026-05-27T10:00:00Z",
+    "rankPoints": 320,
+    "rankTier": 2,
+    "selectedCarId": 11,
+    "clanId": 1,
+    "dailyStreak": 1,
+    "lastDailyReward": "2026-06-03T19:58:37.813Z",
+    "stats": {
+      "totalRaces": 223,
+      "pvpWins": 72,
+      "pvpLosses": 58,
+      "bestTime": 6.755,
+      "perfectShifts": 412,
+      "longestWinStreak": 9,
+      "silverEarned": 98500
+    },
+    "settings": {
+      "language": "ru",
+      "soundEffects": true,
+      "music": true,
+      "musicVolume": 70,
+      "vibration": true,
+      "graphicsQuality": "high",
+      "notifications": true,
+      "showFps": false
+    },
+    "createdAt": "2026-01-15T12:00:00Z",
+    "ownedCars": [
+      1,
+      11,
+      16
+    ]
+  },
+  {
+    "id": 2,
+    "telegramId": 100002,
+    "username": "speed_demon_kz",
+    "firstName": "Алмас",
+    "avatarUrl": "",
+    "level": 18,
+    "xp": 8100,
+    "xpToNext": 9000,
+    "silver": 32000,
+    "gold": 250,
+    "energy": 20,
+    "maxEnergy": 21,
+    "lastEnergyRegen": "2026-05-27T09:30:00Z",
+    "rankPoints": 580,
+    "rankTier": 3,
+    "selectedCarId": 5,
+    "clanId": 1,
+    "dailyStreak": 7,
+    "lastDailyReward": "2026-05-26T09:00:00Z",
+    "stats": {
+      "totalRaces": 342,
+      "pvpWins": 156,
+      "pvpLosses": 89,
+      "bestTime": 10.112,
+      "perfectShifts": 1024,
+      "longestWinStreak": 14,
+      "silverEarned": 210000
+    },
+    "settings": {
+      "language": "ru",
+      "soundEffects": true,
+      "music": false,
+      "musicVolume": 0,
+      "vibration": true,
+      "graphicsQuality": "medium",
+      "notifications": true,
+      "showFps": true
+    },
+    "createdAt": "2025-12-01T08:00:00Z",
+    "ownedCars": [
+      5
+    ]
+  },
+  {
+    "id": 3,
+    "telegramId": 100003,
+    "username": "night_rider",
+    "firstName": "Дмитрий",
+    "avatarUrl": "",
+    "level": 5,
+    "xp": 1200,
+    "xpToNext": 2000,
+    "silver": 3200,
+    "gold": 30,
+    "energy": 15,
+    "maxEnergy": 20,
+    "lastEnergyRegen": "2026-05-27T08:00:00Z",
+    "rankPoints": 90,
+    "rankTier": 1,
+    "selectedCarId": 2,
+    "clanId": null,
+    "dailyStreak": 1,
+    "lastDailyReward": "2026-05-27T07:00:00Z",
+    "stats": {
+      "totalRaces": 34,
+      "pvpWins": 8,
+      "pvpLosses": 12,
+      "bestTime": 13.456,
+      "perfectShifts": 45,
+      "longestWinStreak": 3,
+      "silverEarned": 8500
+    },
+    "settings": {
+      "language": "ru",
+      "soundEffects": true,
+      "music": true,
+      "musicVolume": 50,
+      "vibration": false,
+      "graphicsQuality": "low",
+      "notifications": true,
+      "showFps": false
+    },
+    "createdAt": "2026-05-01T14:00:00Z",
+    "ownedCars": [
+      2
+    ]
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "dailyDeal": {
+    "carId": 5,
+    "discount": 20,
+    "expiresAt": "2026-05-28T00:00:00Z"
+  },
+  "crates": [
+    {
+      "id": "bronze",
+      "name": "Бронзовый кейс",
+      "description": "1 обычная деталь",
+      "price": { "currency": "silver", "amount": 200 },
+      "contents": { "common": 1, "rare": 0, "epic": 0 },
+      "image": "/assets/shop/crate_bronze.png"
+    },
+    {
+      "id": "silver",
+      "name": "Серебряный кейс",
+      "description": "1 обычная + 1 редкая деталь",
+      "price": { "currency": "gold", "amount": 50 },
+      "contents": { "common": 1, "rare": 1, "epic": 0 },
+      "image": "/assets/shop/crate_silver.png"
+    },
+    {
+      "id": "gold",
+      "name": "Золотой кейс",
+      "description": "2 редкие + шанс на эпик",
+      "price": { "currency": "gold", "amount": 150 },
+      "contents": { "common": 0, "rare": 2, "epicChance": 0.25 },
+      "image": "/assets/shop/crate_gold.png"
+    }
+  ],
+  "cosmetics": [
+    { "id": "paint_red", "type": "paint", "name": "Красный металлик", "price": { "currency": "silver", "amount": 500 }, "value": "#CC0000" },
+    { "id": "paint_blue", "type": "paint", "name": "Синий перламутр", "price": { "currency": "silver", "amount": 500 }, "value": "#0044CC" },
+    { "id": "paint_black", "type": "paint", "name": "Чёрный глянец", "price": { "currency": "silver", "amount": 300 }, "value": "#111111" },
+    { "id": "paint_gold", "type": "paint", "name": "Золотой хром", "price": { "currency": "gold", "amount": 100 }, "value": "#FFD700" },
+    { "id": "vinyl_flames", "type": "vinyl", "name": "Пламя", "price": { "currency": "silver", "amount": 1000 }, "image": "/assets/cosmetics/vinyl_flames.png" },
+    { "id": "vinyl_stripes", "type": "vinyl", "name": "Гоночные полосы", "price": { "currency": "silver", "amount": 800 }, "image": "/assets/cosmetics/vinyl_stripes.png" },
+    { "id": "vinyl_carbon", "type": "vinyl", "name": "Карбон", "price": { "currency": "gold", "amount": 50 }, "image": "/assets/cosmetics/vinyl_carbon.png" },
+    { "id": "wheels_sport", "type": "wheels", "name": "Спортивные диски", "price": { "currency": "silver", "amount": 1500 }, "image": "/assets/cosmetics/wheels_sport.png" },
+    { "id": "wheels_bbs", "type": "wheels", "name": "BBS Style", "price": { "currency": "gold", "amount": 30 }, "image": "/assets/cosmetics/wheels_bbs.png" },
+    { "id": "underglow_blue", "type": "underglow", "name": "Синий неон", "price": { "currency": "silver", "amount": 2000 }, "value": "#0088FF" },
+    { "id": "underglow_red", "type": "underglow", "name": "Красный неон", "price": { "currency": "silver", "amount": 2000 }, "value": "#FF0044" }
+  ],
+  "nftDrops": [
+    {
+      "id": "nft_dragon_vinyl",
+      "name": "Дракон (NFT винил)",
+      "description": "Эксклюзивный винил — всего 50 штук",
+      "totalEditions": 50,
+      "remaining": 12,
+      "priceTon": 2.5,
+      "type": "vinyl",
+      "image": "/assets/nft/dragon_vinyl.png"
+    },
+    {
+      "id": "nft_gold_border",
+      "name": "Золотая рамка профиля",
+      "description": "Анимированная рамка — 100 штук",
+      "totalEditions": 100,
+      "remaining": 43,
+      "priceTon": 1.0,
+      "type": "profile_border",
+      "image": "/assets/nft/gold_border.png"
+    }
+  ],
+  "goldPackages": [
+    { "id": "starter", "name": "Стартовый", "priceStars": 50, "priceTon": 0.5, "gold": 100 },
+    { "id": "racer", "name": "Гонщик", "priceStars": 250, "priceTon": 2.0, "gold": 600 },
+    { "id": "pro", "name": "Про", "priceStars": 500, "priceTon": 4.0, "gold": 1400 },
+    { "id": "legend", "name": "Легенда", "priceStars": 1000, "priceTon": 7.5, "gold": 3200 }
+  ]
+}

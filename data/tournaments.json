@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "name": "Уличный Кубок",
+    "type": "bracket",
+    "bracketSize": 16,
+    "entryFee": { "currency": "silver", "amount": 500 },
+    "prizePool": [
+      { "place": 1, "silver": 5000, "gold": 50 },
+      { "place": 2, "silver": 2500, "gold": 20 },
+      { "place": 3, "silver": 1000, "gold": 0 }
+    ],
+    "classRestriction": null,
+    "status": "active",
+    "startsAt": "2026-05-27T12:00:00Z",
+    "endsAt": "2026-05-28T12:00:00Z",
+    "participants": [1, 2, 3],
+    "banner": "/assets/banners/street_cup.png"
+  },
+  {
+    "id": 2,
+    "name": "Битва Класса B",
+    "type": "bracket",
+    "bracketSize": 8,
+    "entryFee": { "currency": "gold", "amount": 20 },
+    "prizePool": [
+      { "place": 1, "silver": 10000, "gold": 100 },
+      { "place": 2, "silver": 5000, "gold": 50 }
+    ],
+    "classRestriction": "B",
+    "status": "upcoming",
+    "startsAt": "2026-05-29T18:00:00Z",
+    "endsAt": "2026-05-30T18:00:00Z",
+    "participants": [],
+    "banner": "/assets/banners/class_b.png"
+  },
+  {
+    "id": 3,
+    "name": "Недельный Спринт",
+    "type": "time_attack",
+    "bracketSize": null,
+    "entryFee": { "currency": "silver", "amount": 0 },
+    "prizePool": [
+      { "place": 1, "silver": 3000, "gold": 30 },
+      { "place": 2, "silver": 1500, "gold": 15 },
+      { "place": 3, "silver": 750, "gold": 5 }
+    ],
+    "classRestriction": null,
+    "status": "active",
+    "startsAt": "2026-05-26T00:00:00Z",
+    "endsAt": "2026-06-02T00:00:00Z",
+    "participants": [1, 2],
+    "banner": "/assets/banners/weekly_sprint.png"
+  }
+]
