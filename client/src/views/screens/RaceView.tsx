@@ -425,32 +425,35 @@ export function RaceView() {
   }
 
   // ── RESULT: clan war ────────────────────────────────────────────────────────
-  if (vm.phase === 'result' && vm.warOutcome) {
+  if (vm.phase === 'result' && vm.mode === 'war') {
     const w = vm.warOutcome;
+    const isWin = w ? w.won : (vm.opponent?.targetTime != null && vm.raceTime < vm.opponent.targetTime);
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
-        <ResultIcon>{w.won ? '⚔️🏆' : '⚔️😢'}</ResultIcon>
+        <ResultIcon>{isWin ? '⚔️🏆' : '⚔️😢'}</ResultIcon>
         <Heading $size={22} style={{ marginBottom: 8 }}>
-          {w.won ? 'ОЧКО КЛАНУ!' : 'ПРИЗРАК БЫСТРЕЕ'}
+          {isWin ? 'ОЧКО КЛАНУ!' : 'ПРИЗРАК БЫСТРЕЕ'}
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <Muted>Твоё время</Muted>
-            <strong>{w.playerTime.toFixed(3)}с</strong>
+            <strong>{(w ? w.playerTime : vm.raceTime).toFixed(3)}с</strong>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <Muted>Призрак ({vm.opponent?.name})</Muted>
-            <strong>{w.ghostTime.toFixed(3)}с</strong>
+            <strong>{(w ? w.ghostTime : vm.opponent?.targetTime)?.toFixed(3)}с</strong>
           </div>
-          <div style={{ marginTop: 12, borderTop: '1px solid #2a3050', paddingTop: 8 }}>
-            <Muted>Счёт войны</Muted>
-            <div style={{ fontSize: 22, fontWeight: 900, marginTop: 4 }}>
-              <span style={{ color: '#2ed573' }}>{w.scoreOurs}</span>
-              {' : '}
-              <span style={{ color: '#ff4757' }}>{w.scoreTheirs}</span>
+          {w && (
+            <div style={{ marginTop: 12, borderTop: '1px solid #2a3050', paddingTop: 8 }}>
+              <Muted>Счёт войны</Muted>
+              <div style={{ fontSize: 22, fontWeight: 900, marginTop: 4 }}>
+                <span style={{ color: '#2ed573' }}>{w.scoreOurs}</span>
+                {' : '}
+                <span style={{ color: '#ff4757' }}>{w.scoreTheirs}</span>
+              </div>
             </div>
-          </div>
-          {w.won && <div style={{ marginTop: 8, fontSize: 14 }}>+75 🪙</div>}
+          )}
+          {w && w.won && <div style={{ marginTop: 8, fontSize: 14 }}>+75 🪙</div>}
           {vm.error && <div style={{ color: '#ff4757', marginTop: 8 }}>{vm.error}</div>}
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
@@ -468,21 +471,22 @@ export function RaceView() {
   // ── RESULT: PvE ───────────────────────────────────────────────────────────
   if (vm.phase === 'result') {
     const r = vm.result;
+    const isWin = r ? r.playerWon : (vm.opponent?.targetTime != null && vm.raceTime < vm.opponent.targetTime);
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
-        <ResultIcon>{r?.playerWon ? '🏆' : '😢'}</ResultIcon>
+        <ResultIcon>{isWin ? '🏆' : '😢'}</ResultIcon>
         <Heading $size={22} style={{ marginBottom: 8 }}>
-          {r?.playerWon ? 'ПОБЕДА!' : 'ПРОИГРЫШ'}
+          {isWin ? 'ПОБЕДА!' : 'ПРОИГРЫШ'}
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <Muted>Твоё время</Muted>
             <strong>{vm.raceTime.toFixed(3)}с</strong>
           </div>
-          {r?.aiTime != null && (
+          {(r?.aiTime != null || vm.opponent?.targetTime != null) && (
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
               <Muted>Противник</Muted>
-              <strong>{r.aiTime.toFixed(3)}с</strong>
+              <strong>{(r?.aiTime ?? vm.opponent?.targetTime)?.toFixed(3)}с</strong>
             </div>
           )}
           {!!r && r.stars > 0 && (
@@ -565,6 +569,7 @@ export function RaceView() {
             cosmetics={vm.selectedCar.cosmetics}
             speed={vm.speed}
             distance={vm.distance}
+            totalDistance={vm.distanceMeters}
             nosActive={vm.nosActive}
             smoke={vm.wheelspin}
             opponentCar={vm.opponent?.car}

@@ -7,6 +7,7 @@ interface Props {
   cosmetics?: CarCosmetics;
   speed: number; // km/h
   distance: number; // metres — drives all parallax (smooth, speed-accurate)
+  totalDistance?: number;
   nosActive: boolean;
   smoke: boolean; // burnout or wheelspin
   opponentCar?: Car | null;
@@ -77,6 +78,19 @@ const LaneDashes = styled.div`
   height: 6px;
   background-image: repeating-linear-gradient(90deg, #d8dde8 0 34px, transparent 34px 74px);
   background-size: 74px 100%;
+`;
+
+const FinishLine = styled.div<{ $shift: number }>`
+  position: absolute;
+  bottom: 26px;
+  height: 70px;
+  width: 16px;
+  left: calc(44% + ${({ $shift }) => $shift}px);
+  transform: translateX(-50%);
+  background-image: repeating-linear-gradient(45deg, #fff 0 8px, #111 8px 16px);
+  border-left: 2px solid #e1b12c;
+  border-right: 2px solid #e1b12c;
+  z-index: 1;
 `;
 
 // ── Parallax decorations behind the car ──────────────────────────────────────
@@ -203,6 +217,7 @@ export function RaceTrack({
   cosmetics,
   speed,
   distance,
+  totalDistance,
   nosActive,
   smoke,
   opponentCar,
@@ -213,7 +228,9 @@ export function RaceTrack({
   const decorShift = -(offset % DECOR_SPACING);
   const cityShift = -((offset * 0.25) % 80);
   const dashShift = -(offset % 74);
-  const oppShift = Math.max(-150, Math.min(280, opponentGap * 2.4));
+  const oppShift = opponentGap * PX_PER_M;
+  
+  const finishShift = totalDistance != null ? (totalDistance - distance) * PX_PER_M : null;
 
   const decorItems = Array.from({ length: DECOR_COUNT }, (_, i) => i - 1);
 
@@ -246,6 +263,9 @@ export function RaceTrack({
       </DecorLayer>
 
       <Asphalt />
+      {finishShift != null && finishShift > -200 && finishShift < 2000 && (
+        <FinishLine $shift={finishShift} />
+      )}
       <LaneDashes style={{ backgroundPositionX: `${dashShift}px` }} />
       <Grass />
 

@@ -2013,5 +2013,45 @@
     "distance": "quarter",
     "rewards": {},
     "createdAt": "2026-06-05T20:13:34.757Z"
+  },
+  {
+    "id": 1780690579715,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 17.009,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.306,
+      "shifts": [
+        "perfect",
+        "good",
+        "perfect",
+        "good",
+        "miss"
+      ]
+    },
+    "winnerId": 1,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {
+      "winner": {
+        "silver": 100,
+        "xp": 50
+      }
+    },
+    "createdAt": "2026-06-05T20:16:19.715Z"
   }
 ]
