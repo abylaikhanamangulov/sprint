@@ -438,8 +438,8 @@ export function useRaceViewModel(): RaceViewModel {
         if (s.warmNeedle >= zStart && s.warmNeedle <= zEnd) {
           // in the green: warm up; the zone clearly drifts LEFT and gradually shrinks
           s.warmFill = Math.min(100, s.warmFill + 18 * dt);
-          s.warmZoneCenter = Math.max(WARM_MIN_CENTER, s.warmZoneCenter - 14 * dt);
-          s.warmZoneHalf = Math.max(WARM_MIN_HALF, s.warmZoneHalf - 3 * dt);
+          s.warmZoneCenter = Math.max(WARM_MIN_CENTER, s.warmZoneCenter - 9 * dt);
+          s.warmZoneHalf = Math.max(WARM_MIN_HALF, s.warmZoneHalf - 1.5 * dt);
         } else {
           // out of zone: warmth drops and the zone eases BACK to its start position
           s.warmFill = Math.max(0, s.warmFill - 10 * dt);
