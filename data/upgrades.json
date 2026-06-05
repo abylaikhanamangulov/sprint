@@ -9,8 +9,8 @@
       "baseCost": 500,
       "costMultiplier": 1.5,
       "statsBoost": {
-        "speed": 8,
-        "acceleration": 10
+        "speed": 4,
+        "acceleration": 3
       }
     },
     {
@@ -22,8 +22,8 @@
       "baseCost": 600,
       "costMultiplier": 1.5,
       "statsBoost": {
-        "speed": 12,
-        "acceleration": 6
+        "speed": 5,
+        "acceleration": 4
       }
     },
     {
@@ -35,8 +35,8 @@
       "baseCost": 450,
       "costMultiplier": 1.5,
       "statsBoost": {
-        "acceleration": 12,
-        "handling": 4
+        "acceleration": 4,
+        "handling": 1
       }
     },
     {
@@ -48,8 +48,8 @@
       "baseCost": 300,
       "costMultiplier": 1.4,
       "statsBoost": {
-        "handling": 10,
-        "acceleration": 3
+        "handling": 4,
+        "acceleration": 2
       }
     },
     {
@@ -73,8 +73,8 @@
       "baseCost": 700,
       "costMultiplier": 1.6,
       "statsBoost": {
-        "acceleration": 8,
-        "speed": 4,
+        "acceleration": 3,
+        "speed": 2,
         "weight": -30
       }
     },
@@ -87,8 +87,8 @@
       "baseCost": 50,
       "costMultiplier": 2,
       "statsBoost": {
-        "speed": 15,
-        "acceleration": 15,
+        "speed": 5,
+        "acceleration": 5,
         "nosPower": 10
       }
     }

@@ -1633,5 +1633,235 @@
       }
     },
     "createdAt": "2026-06-05T17:48:48.469Z"
+  },
+  {
+    "id": 1780689089579,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 16.973,
+      "shifts": [
+        "miss",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.305,
+      "shifts": [
+        "miss",
+        "good",
+        "good",
+        "perfect",
+        "miss"
+      ]
+    },
+    "winnerId": 1,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {
+      "winner": {
+        "silver": 100,
+        "xp": 50
+      }
+    },
+    "createdAt": "2026-06-05T19:51:29.579Z"
+  },
+  {
+    "id": 1780689089595,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 16.973,
+      "shifts": [
+        "miss",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.305,
+      "shifts": [
+        "miss",
+        "miss",
+        "miss",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "winnerId": 1,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {
+      "winner": {
+        "silver": 100,
+        "xp": 50
+      }
+    },
+    "createdAt": "2026-06-05T19:51:29.595Z"
+  },
+  {
+    "id": 1780689563779,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 18.109,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.765,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "miss",
+        "miss"
+      ]
+    },
+    "winnerId": 0,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {},
+    "createdAt": "2026-06-05T19:59:23.779Z"
+  },
+  {
+    "id": 1780689563782,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 18.109,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.765,
+      "shifts": [
+        "miss",
+        "miss",
+        "miss",
+        "miss",
+        "miss"
+      ]
+    },
+    "winnerId": 0,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {},
+    "createdAt": "2026-06-05T19:59:23.782Z"
+  },
+  {
+    "id": 1780689660015,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 16.724,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.026,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "miss",
+        "perfect"
+      ]
+    },
+    "winnerId": 1,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {
+      "winner": {
+        "silver": 100,
+        "xp": 50
+      }
+    },
+    "createdAt": "2026-06-05T20:01:00.015Z"
+  },
+  {
+    "id": 1780689660019,
+    "type": "campaign",
+    "player1": {
+      "userId": 1,
+      "carId": 11,
+      "time": 16.724,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "player2": {
+      "userId": null,
+      "carId": null,
+      "time": 17.026,
+      "shifts": [
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect",
+        "perfect"
+      ]
+    },
+    "winnerId": 1,
+    "campaignNode": {
+      "chapterId": 1,
+      "nodeId": 1
+    },
+    "distance": "quarter",
+    "rewards": {
+      "winner": {
+        "silver": 100,
+        "xp": 50
+      }
+    },
+    "createdAt": "2026-06-05T20:01:00.019Z"
   }
 ]

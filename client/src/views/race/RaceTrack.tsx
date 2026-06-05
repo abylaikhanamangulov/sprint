@@ -14,7 +14,7 @@ interface Props {
   opponentGap?: number; // metres ahead(+)/behind(−) of the player
 }
 
-const PX_PER_M = 6;
+const PX_PER_M = 12;
 
 const Scene = styled.div`
   position: relative;
@@ -268,14 +268,14 @@ export function RaceTrack({
       </CarLayer>
 
       {/* faint speed lines when quick */}
-      {speed > 120 && (
+      {speed > 80 && (
         <Band
           $top={150}
           $height={30}
           style={{
             backgroundImage:
               'repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 30px, transparent 30px 90px)',
-            backgroundPositionX: `${-(offset % 120)}px`,
+            backgroundPositionX: `${-(offset * 1.5 % 120)}px`,
           }}
         />
       )}

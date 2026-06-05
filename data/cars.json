@@ -9,8 +9,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 150,
-      "acceleration": 56,
+      "speed": 165,
+      "acceleration": 90,
       "handling": 80,
       "nosPower": 60,
       "weight": 1035
@@ -29,8 +29,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 205,
-      "acceleration": 137,
+      "speed": 215,
+      "acceleration": 145,
       "handling": 100,
       "nosPower": 70,
       "weight": 1040
@@ -49,8 +49,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 222,
-      "acceleration": 135,
+      "speed": 230,
+      "acceleration": 148,
       "handling": 105,
       "nosPower": 65,
       "weight": 1180
@@ -69,8 +69,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 185,
-      "acceleration": 118,
+      "speed": 205,
+      "acceleration": 160,
       "handling": 110,
       "nosPower": 90,
       "weight": 945
@@ -89,8 +89,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 240,
-      "acceleration": 167,
+      "speed": 250,
+      "acceleration": 180,
       "handling": 155,
       "nosPower": 110,
       "weight": 1240
@@ -109,8 +109,8 @@
     "priceGold": null,
     "unlockCondition": "level:10",
     "baseStats": {
-      "speed": 285,
-      "acceleration": 204,
+      "speed": 290,
+      "acceleration": 215,
       "handling": 180,
       "nosPower": 150,
       "weight": 1570
@@ -129,8 +129,8 @@
     "priceGold": 500,
     "unlockCondition": "level:20",
     "baseStats": {
-      "speed": 315,
-      "acceleration": 345,
+      "speed": 330,
+      "acceleration": 350,
       "handling": 260,
       "nosPower": 200,
       "weight": 1740
@@ -149,8 +149,8 @@
     "priceGold": 1200,
     "unlockCondition": "level:30",
     "baseStats": {
-      "speed": 325,
-      "acceleration": 313,
+      "speed": 345,
+      "acceleration": 360,
       "handling": 300,
       "nosPower": 250,
       "weight": 1422
@@ -169,8 +169,8 @@
     "priceGold": null,
     "unlockCondition": "wins:30",
     "baseStats": {
-      "speed": 220,
-      "acceleration": 159,
+      "speed": 240,
+      "acceleration": 200,
       "handling": 150,
       "nosPower": 180,
       "weight": 1814
@@ -189,8 +189,8 @@
     "priceGold": null,
     "unlockCondition": "level:15",
     "baseStats": {
-      "speed": 250,
-      "acceleration": 204,
+      "speed": 265,
+      "acceleration": 220,
       "handling": 210,
       "nosPower": 140,
       "weight": 1410
@@ -209,8 +209,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 150,
-      "acceleration": 59,
+      "speed": 165,
+      "acceleration": 92,
       "handling": 70,
       "nosPower": 50,
       "weight": 1030
@@ -229,8 +229,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 235,
-      "acceleration": 145,
+      "speed": 245,
+      "acceleration": 175,
       "handling": 150,
       "nosPower": 95,
       "weight": 1336
@@ -249,8 +249,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 255,
-      "acceleration": 204,
+      "speed": 260,
+      "acceleration": 225,
       "handling": 215,
       "nosPower": 150,
       "weight": 1505
@@ -269,8 +269,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 320,
-      "acceleration": 270,
+      "speed": 335,
+      "acceleration": 310,
       "handling": 250,
       "nosPower": 200,
       "weight": 1421
@@ -289,8 +289,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 330,
-      "acceleration": 333,
+      "speed": 350,
+      "acceleration": 370,
       "handling": 300,
       "nosPower": 240,
       "weight": 1475
@@ -309,8 +309,8 @@
     "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
-      "speed": 445,
-      "acceleration": 500,
+      "speed": 460,
+      "acceleration": 520,
       "handling": 330,
       "nosPower": 300,
       "weight": 1995

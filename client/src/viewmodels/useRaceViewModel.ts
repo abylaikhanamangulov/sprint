@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../models/api';
 import { getErrorMessage } from '../models/errors';
 import { useGameStore } from '../models/store';
@@ -295,9 +296,18 @@ function freshSim(): SimState {
 }
 
 export function useRaceViewModel(): RaceViewModel {
-  const { myCars, setScreen, fetchUser } = useGameStore();
+  const navigate = useNavigate();
+  const { myCars, setScreen, fetchUser, fetchMyCars } = useGameStore();
   const pendingWar = useGameStore((s) => s.pendingWar);
   const setPendingWar = useGameStore((s) => s.setPendingWar);
+
+  useEffect(() => {
+    if (myCars.length === 0) {
+      fetchMyCars();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const selectedCar = myCars.find((c) => c.isSelected) ?? myCars[0];
   const maxGears = selectedCar?.car.maxGears ?? 5;
 
@@ -789,8 +799,8 @@ export function useRaceViewModel(): RaceViewModel {
 
   const toMenu = useCallback(() => {
     setPhase('menu');
-    setScreen('hub');
-  }, [setScreen]);
+    navigate('/hub');
+  }, [navigate]);
 
   const setThrottle = useCallback((on: boolean) => {
     sim.current.throttle = on;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../models/api';
-import { useGameStore } from '../models/store';
+import { useGameStore, ScreenId } from '../models/store';
 import type { DailyRewardResponse, MyCar } from '../models/types';
 
 interface HubViewModel {
@@ -13,11 +14,12 @@ interface HubViewModel {
   maxEnergy: number;
   dailyStreak: number;
   claimDaily: () => Promise<void>;
-  go: ReturnType<typeof useGameStore.getState>['setScreen'];
+  go: (screen: ScreenId) => void;
 }
 
 export function useHubViewModel(): HubViewModel {
-  const { user, myCars, setScreen, fetchMyCars, fetchUser } = useGameStore();
+  const navigate = useNavigate();
+  const { user, myCars, fetchMyCars, fetchUser } = useGameStore();
   const [dailyAvailable, setDailyAvailable] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [dailyResult, setDailyResult] = useState<DailyRewardResponse | null>(null);
@@ -58,6 +60,6 @@ export function useHubViewModel(): HubViewModel {
     maxEnergy: user?.maxEnergy ?? 0,
     dailyStreak: user?.dailyStreak ?? 0,
     claimDaily,
-    go: setScreen,
+    go: (screen: ScreenId) => navigate(`/${screen}`),
   };
 }
