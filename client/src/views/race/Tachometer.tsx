@@ -97,7 +97,7 @@ export function Tachometer({ rpm, gear, zones, size = 150 }: Props) {
       {/* gear in center */}
       <circle cx={cx} cy={cy} r="30" fill="#0a142e" stroke="#2a3050" strokeWidth="2" />
       <text x={cx} y={cy + 9} fill="#e8eaf0" fontSize="30" fontWeight="900" textAnchor="middle">
-        {gear}
+        {gear === 0 ? 'N' : gear}
       </text>
       <text x={cx} y={cy + 42} fill="#8890a8" fontSize="9" fontWeight="700" textAnchor="middle">
         RPM x1000

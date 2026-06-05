@@ -32,8 +32,8 @@ export function RaceHud({ raceTime, gear, maxGears, distance, total }: Props) {
   return (
     <Bar>
       <TopLine>
-        <span>⏱ {raceTime.toFixed(2)}с</span>
-        <span>⚙️ {gear}/{maxGears}</span>
+        <span>🏎️ {raceTime.toFixed(2)}с</span>
+        <span>⚙️ {gear === 0 ? 'N' : gear}/{maxGears}</span>
       </TopLine>
       <ProgressBar $height={12}>
         <ProgressFill

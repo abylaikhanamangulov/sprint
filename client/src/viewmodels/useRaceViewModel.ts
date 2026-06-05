@@ -81,7 +81,7 @@ const ENGINE_BRAKE = 2.4; // coast-down when off throttle
 
 // Pre-start launch rev window (NFS Underground style): rev into this on the
 // lights for the best launch.
-export const LAUNCH_ZONE: [number, number] = [5800, 7600];
+export const LAUNCH_ZONE: [number, number] = [6500, 7300];
 
 // Speed (m/s) at which a gear hits the redline. Geometric spread: 1st gear is
 // short (~0.2 of top → revs sweep fast, you shift often), top gear = top speed.
@@ -262,6 +262,7 @@ interface SimState {
   warmTimer: number;
   warmGrip: number; // grip from burnout, before the rev-launch multiplier
   launchGrip: number;
+  launchRpm: number;
   wheelspin: boolean;
   redTime: number;
   maxSpeed: number; // m/s
@@ -273,7 +274,7 @@ function freshSim(): SimState {
   return {
     rpm: IDLE_RPM,
     speed: 0,
-    gear: 1,
+    gear: 0,
     distance: 0,
     throttle: false,
     nosCharge: NOS_FULL,
@@ -287,6 +288,7 @@ function freshSim(): SimState {
     warmTimer: WARM_TIME,
     warmGrip: 1,
     launchGrip: 1,
+    launchRpm: 0,
     wheelspin: false,
     redTime: 0,
     maxSpeed: 0,
@@ -325,7 +327,7 @@ export function useRaceViewModel(): RaceViewModel {
   // Display state (written once per frame).
   const [rpm, setRpm] = useState(IDLE_RPM);
   const [speedKmh, setSpeedKmh] = useState(0);
-  const [gear, setGear] = useState(1);
+  const [gear, setGear] = useState(0);
   const [distance, setDistance] = useState(0);
   const [raceTime, setRaceTime] = useState(0);
   const [nosCharge, setNosCharge] = useState(NOS_FULL);
@@ -492,7 +494,16 @@ export function useRaceViewModel(): RaceViewModel {
       const gTop = gearTopSpeed(topSpeedMs, s.gear, maxG);
 
       // RPM is derived from wheel speed in the current gear (real gearbox).
-      s.rpm = rpmForSpeed(s.speed, gTop);
+      let mechRpm = rpmForSpeed(s.speed, gTop);
+
+      // Simulate clutch slip or wheelspin on launch so RPM doesn't drop to idle
+      if (s.speed < LAUNCH_SPEED && s.gear === 1) {
+        const k = s.speed / LAUNCH_SPEED;
+        let slipRpm = s.wheelspin ? REDLINE : Math.max(mechRpm, s.launchRpm * 0.7);
+        s.rpm = slipRpm * (1 - k) + mechRpm * k;
+      } else {
+        s.rpm = mechRpm;
+      }
 
       // Cumulative time in the red (over-rev) zone — blows the engine, except on
       // the last gear (nowhere to shift, so flooring it is allowed).
@@ -625,7 +636,9 @@ export function useRaceViewModel(): RaceViewModel {
           const s = sim.current;
           const boost = revBoostFromRpm(s.rpm);
           s.launchGrip = Math.max(0.5, Math.min(1.6, s.warmGrip * boost));
+          s.launchRpm = s.rpm;
           s.wheelspin = s.launchGrip < 0.85;
+          s.gear = 1;
           setLightsOut(true);
           setPhase('racing');
         }, hold);
@@ -640,7 +653,7 @@ export function useRaceViewModel(): RaceViewModel {
   const resetDisplay = useCallback(() => {
     setRpm(IDLE_RPM);
     setSpeedKmh(0);
-    setGear(1);
+    setGear(0);
     setDistance(0);
     setRaceTime(0);
     setNosCharge(NOS_FULL);
