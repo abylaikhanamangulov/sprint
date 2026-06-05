@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from '../../models/store';
 import { useRaceViewModel, RACE_LENGTHS, OVERHEAT_LIMIT } from '../../viewmodels/useRaceViewModel';
@@ -204,6 +205,38 @@ const BURNOUT_HINT =
 export function RaceView() {
   const vm = useRaceViewModel();
   const userName = useGameStore((s) => s.user?.firstName) || 'Ты';
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        vm.setThrottle(true);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        vm.setThrottle(false);
+      } else if (e.key === 'ArrowLeft' && !e.repeat) {
+        e.preventDefault();
+        vm.shiftDown();
+      } else if (e.key === 'ArrowRight' && !e.repeat) {
+        e.preventDefault();
+        vm.shiftUp();
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        vm.setThrottle(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [vm]);
 
   // ── MENU ──────────────────────────────────────────────────────────────────
   if (vm.phase === 'menu') {
