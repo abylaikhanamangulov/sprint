@@ -1,5 +1,5 @@
 import { useEventsViewModel } from '../../viewmodels/useEventsViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, Spinner } from '../ui';
+import { Screen, Card, Button, Row, Column, Heading, Muted, Loader } from '../ui';
 
 const STATUS_LABELS: Record<string, { text: string; color: string }> = {
   active: { text: 'Активен', color: '#2ed573' },
@@ -12,9 +12,7 @@ export function EventsView() {
 
   if (vm.loading) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 

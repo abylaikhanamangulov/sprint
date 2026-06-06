@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNotificationsViewModel } from '../../viewmodels/useNotificationsViewModel';
 import type { NotificationType } from '../../models/types';
-import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Spinner } from '../ui';
+import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader } from '../ui';
 
 const Header = styled.div`
   display: flex;
@@ -40,9 +40,7 @@ export function NotificationsView() {
 
   if (vm.loading) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 

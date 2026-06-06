@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useCampaignViewModel } from '../../viewmodels/useCampaignViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, Stars, ProgressBar, ProgressFill, Spinner } from '../ui';
+import { Screen, Card, Button, Row, Column, Heading, Muted, Stars, ProgressBar, ProgressFill, Loader } from '../ui';
 
 const Header = styled.div`
   display: flex;
@@ -19,9 +19,7 @@ export function CampaignView() {
 
   if (vm.loading) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 

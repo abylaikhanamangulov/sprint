@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { useGameStore } from '../../models/store';
+import { useNavigate } from 'react-router-dom';
+import { PATHS } from 'src/routes/paths';
 
 const Bar = styled.div`
   display: flex;
@@ -84,14 +86,16 @@ const BellBadge = styled.span`
 `;
 
 export function TopBar() {
-  const { user, unreadCount, setScreen } = useGameStore();
+  const { user, unreadCount } = useGameStore();
+  const navigate = useNavigate();
+
   if (!user) return null;
 
   const xpPercent = Math.round((user.xp / user.xpToNext) * 100);
 
   return (
     <Bar>
-      <Profile onClick={() => setScreen('profile')}>
+      <Profile onClick={() => navigate(PATHS.PROFILE)}>
         <Avatar>{user.firstName?.charAt(0) || '?'}</Avatar>
         <div>
           <div style={{ fontSize: 13, fontWeight: 600 }}>{user.firstName}</div>
@@ -107,11 +111,11 @@ export function TopBar() {
       <Currencies>
         <Money $color="#c0c7d4">🪙 {user.silver.toLocaleString()}</Money>
         <Money $color="#ffd700">💎 {user.gold.toLocaleString()}</Money>
-        <BellWrap onClick={() => setScreen('notifications')}>
+        <BellWrap onClick={() => navigate(PATHS.NOTIFICATIONS)}>
           🔔
           {unreadCount > 0 && <BellBadge>{unreadCount}</BellBadge>}
         </BellWrap>
-        <span style={{ fontSize: 18, cursor: 'pointer' }} onClick={() => setScreen('settings')}>
+        <span style={{ fontSize: 18, cursor: 'pointer' }} onClick={() => navigate(PATHS.SETTINGS)}>
           ⚙️
         </span>
       </Currencies>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useClanViewModel } from '../../viewmodels/useClanViewModel';
 import type { ClanTab } from '../../viewmodels/useClanViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Spinner, TextInput } from '../ui';
+import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader, TextInput } from '../ui';
 
 const Header = styled.div`
   display: flex;
@@ -39,9 +39,7 @@ export function ClanView() {
 
   if (vm.loading) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 
@@ -121,9 +119,7 @@ export function ClanView() {
 
   if (!vm.clan) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 

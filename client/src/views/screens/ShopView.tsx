@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useShopViewModel } from '../../viewmodels/useShopViewModel';
 import type { ShopTab } from '../../viewmodels/useShopViewModel';
-import { Screen, Card, Button, Row, Column, Grid, Heading, Muted, Spinner } from '../ui';
+import { Screen, Card, Button, Row, Column, Grid, Heading, Muted, Loader } from '../ui';
 
 const TabBar = styled.div`
   display: flex;
@@ -34,9 +34,7 @@ export function ShopView() {
 
   if (vm.loading || !vm.shop) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 

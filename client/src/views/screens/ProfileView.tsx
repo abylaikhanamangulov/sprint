@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useProfileViewModel } from '../../viewmodels/useProfileViewModel';
 import type { ProfileTab } from '../../viewmodels/useProfileViewModel';
-import { Screen, Card, Button, Row, Column, Grid, Heading, Muted, Badge, Spinner, EmptyState } from '../ui';
+import { Screen, Card, Button, Row, Column, Grid, Heading, Muted, Badge, Loader, EmptyState } from '../ui';
 
 const Header = styled.div`
   display: flex;
@@ -42,9 +42,7 @@ export function ProfileView() {
 
   if (!vm.profile || !vm.user) {
     return (
-      <Screen>
-        <Spinner />
-      </Screen>
+      <Loader />
     );
   }
 
