@@ -1,6 +1,7 @@
 import http from 'http';
 import app from './app';
 import { setupWebSocket } from './websocket'; 
+import './bot'; // Initialize telegram bot
 
 const PORT = process.env.PORT || 3001;
 
