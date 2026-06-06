@@ -67,6 +67,49 @@ export class AuthService {
 
     return { user, isNew: user.selectedCarId === null };
   }
+
+  claimDailyReward(userId: number) {
+    const users = dataStore.get(FILES.USERS);
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex === -1) throw new Error('User not found');
+
+    const user = { ...users[userIndex] };
+    const now = new Date();
+
+    if (user.lastDailyReward) {
+      const hours = (now.getTime() - new Date(user.lastDailyReward).getTime()) / (1000 * 60 * 60);
+      if (hours < 20) throw new Error('Daily reward already claimed');
+      if (hours > 48) {
+        user.dailyStreak = 0;
+      } else {
+        user.dailyStreak = (user.dailyStreak || 0) + 1;
+      }
+    } else {
+      user.dailyStreak = 1;
+    }
+
+    user.lastDailyReward = now.toISOString();
+    
+    const reward = {
+      silver: 500 + Math.min(user.dailyStreak * 100, 2000),
+      gold: user.dailyStreak > 0 && user.dailyStreak % 7 === 0 ? 5 : 0,
+    };
+
+    user.silver = (user.silver || 0) + reward.silver;
+    user.gold = (user.gold || 0) + reward.gold;
+
+    dataStore.update(FILES.USERS, current => {
+      const updated = [...current];
+      updated[userIndex] = user as User;
+      return updated;
+    });
+
+    return {
+      success: true,
+      streak: user.dailyStreak,
+      reward,
+    };
+  }
 }
 
 export const authService = new AuthService();

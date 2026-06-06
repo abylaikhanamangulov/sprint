@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useShopViewModel } from '../../viewmodels/useShopViewModel';
 import type { ShopTab } from '../../viewmodels/useShopViewModel';
 import { Screen, Card, Button, Row, Column, Grid, Heading, Muted, Loader } from '../ui';
+import { CarCard } from '../../components/ui/CarCard/CarCard';
 
 const TabBar = styled.div`
   display: flex;
@@ -60,21 +61,32 @@ export function ShopView() {
       </TabBar>
 
       {vm.tab === 'deals' && shop.dailyDeal && (
-        <Card style={{ background: 'linear-gradient(135deg, #1a1a3e, #2d1b69)', textAlign: 'center' }}>
-          <div style={{ fontSize: 12, color: '#ffd700', fontWeight: 700, marginBottom: 8 }}>
-            СКИДКА ДНЯ -{shop.dailyDeal.discount}%
-          </div>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🏎️</div>
-          <h3 style={{ fontSize: 16 }}>{shop.dailyDeal.car.name}</h3>
-          <div style={{ marginTop: 8 }}>
-            <span style={{ textDecoration: 'line-through', color: '#8890a8', marginRight: 8 }}>
-              {shop.dailyDeal.car.priceSilver?.toLocaleString()} 🪙
-            </span>
-            <span style={{ fontWeight: 700, color: '#2ed573', fontSize: 18 }}>
-              {shop.dailyDeal.discountedPrice?.toLocaleString()} 🪙
-            </span>
-          </div>
-        </Card>
+        <CarCard
+          imageSrc={shop.dailyDeal.car.image || '/mustang.png'}
+          name={shop.dailyDeal.car.name}
+          badge={
+            <div style={{ 
+              background: '#ffd700', 
+              color: '#000', 
+              padding: '4px 8px', 
+              borderRadius: '8px', 
+              fontSize: '12px', 
+              fontWeight: 'bold' 
+            }}>
+              СКИДКА -{shop.dailyDeal.discount}%
+            </div>
+          }
+          price={
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <span style={{ textDecoration: 'line-through', color: '#8890a8', fontSize: '14px' }}>
+                {shop.dailyDeal.car.priceSilver?.toLocaleString()} 🪙
+              </span>
+              <span style={{ fontWeight: 700, color: '#2ed573', fontSize: '18px' }}>
+                {shop.dailyDeal.discountedPrice?.toLocaleString()} 🪙
+              </span>
+            </div>
+          }
+        />
       )}
 
       {vm.tab === 'crates' && (

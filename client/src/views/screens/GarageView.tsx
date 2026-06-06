@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState, useMemo } from 'react';
 import { useGarageViewModel } from '../../viewmodels/useGarageViewModel';
 import type { GarageTab } from '../../viewmodels/useGarageViewModel';
 import type {
@@ -25,8 +26,10 @@ import {
   Muted,
   Range,
 } from '../ui';
-import { CarCard } from '../components/CarCard';
+import { CarCard as OldCarCard } from '../components/CarCard';
+import { CarCard as UiCarCard } from '../../components/ui/CarCard/CarCard';
 import { CarSprite } from '../components/CarSprite';
+import { GlassTabs } from '../../components/ui/GlassTabs/GlassTabs';
 
 const Header = styled.div`
   display: flex;
@@ -108,6 +111,12 @@ const NOS_DURATIONS: { value: NosDuration; label: string }[] = [
 
 export function GarageView() {
   const vm = useGarageViewModel();
+  const [filterClass, setFilterClass] = useState<string>('all');
+
+  const filteredCars = useMemo(() => {
+    if (filterClass === 'all') return vm.available;
+    return vm.available.filter(c => c.class === filterClass);
+  }, [vm.available, filterClass]);
 
   if (vm.showDealership) {
     return (
@@ -118,12 +127,43 @@ export function GarageView() {
             Назад
           </Button>
         </Header>
-        <Grid $cols={2}>
-          {vm.available.map((car) => (
-            <CarCard key={car.id} car={car} showPrice onClick={() => vm.buyCar(car.id)} />
-          ))}
-        </Grid>
-        {vm.available.length === 0 && <EmptyState>Все доступные машины уже куплены!</EmptyState>}
+        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
+          <GlassTabs 
+            tabs={[
+              { id: 'all', label: 'Все' },
+              { id: 'D', label: 'Класс D' },
+              { id: 'C', label: 'Класс C' },
+              { id: 'B', label: 'Класс B' },
+              { id: 'A', label: 'Класс A' },
+              { id: 'S', label: 'Класс S' },
+              { id: 'X', label: 'Класс X' },
+            ]} 
+            activeTab={filterClass} 
+            onChange={setFilterClass} 
+          />
+          <Grid $cols={2} style={{ marginTop: 16 }}>
+            {filteredCars.map((car) => {
+            const priceNode = car.priceSilver != null ? (
+              <span style={{ color: '#e8eaf0' }}>{car.priceSilver.toLocaleString()} 🪙</span>
+            ) : car.priceGold != null ? (
+              <span style={{ color: '#ffd700' }}>{car.priceGold.toLocaleString()} 💎</span>
+            ) : (
+              <span style={{ color: '#2ed573' }}>Бесплатно</span>
+            );
+
+            return (
+              <UiCarCard 
+                key={car.id} 
+                imageSrc={car.image || '/mustang.png'}
+                name={car.name}
+                price={priceNode}
+                onClick={() => vm.buyCar(car.id)} 
+              />
+            );
+          })}
+          </Grid>
+          {filteredCars.length === 0 && <EmptyState>Нет машин в этой категории!</EmptyState>}
+        </div>
         {vm.error && <Muted style={{ color: '#ff4757' }}>{vm.error}</Muted>}
       </Screen>
     );
@@ -142,7 +182,7 @@ export function GarageView() {
 
       <ScrollRow>
         {vm.myCars.map((c) => (
-          <CarCard
+          <OldCarCard
             key={c.carId}
             car={c.car}
             cosmetics={c.cosmetics}

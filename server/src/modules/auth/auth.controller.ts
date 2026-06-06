@@ -28,3 +28,17 @@ export const login = (req: Request, res: Response): void => {
 export const getMe = (req: AuthRequest, res: Response): void => {
   res.json(req.user);
 };
+
+export const dailyReward = (req: AuthRequest, res: Response): void => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Необходима авторизация' });
+      return;
+    }
+    const result = authService.claimDailyReward(req.user.id);
+    res.json(result);
+  } catch (error: any) {
+    console.error('[Auth Controller] Ошибка ежедневной награды:', error);
+    res.status(400).json({ error: error.message || 'Ошибка получения награды' });
+  }
+};

@@ -8,4 +8,6 @@ router.post('/login', authController.login);
 
 router.get('/me', authMiddleware, authController.getMe);
 
+router.post('/daily-reward', authMiddleware, authController.dailyReward);
+
 export default router;

@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import { useHubViewModel } from '../../viewmodels/useHubViewModel';
 import { Screen, Card, Button, Grid, ClassBadge } from '../ui';
 import { CarSprite } from '../components/CarSprite';
+import { GlassModal } from '../../components/ui/GlassModal/GlassModal';
 
 const Banner = styled(Card)<{ $variant: 'reward' | 'claimed' }>`
   margin-bottom: 16px;
@@ -41,9 +43,36 @@ const TileSub = styled.div`
 
 export function HubView() {
   const vm = useHubViewModel();
+  const [showRewardModal, setShowRewardModal] = useState(false);
+
+  useEffect(() => {
+    if (vm.dailyResult) {
+      setShowRewardModal(true);
+    }
+  }, [vm.dailyResult]);
 
   return (
     <Screen>
+      <GlassModal
+        isOpen={showRewardModal}
+        onClose={() => setShowRewardModal(false)}
+        icon={<div style={{ fontSize: '72px', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }}>🎁</div>}
+        title="Ежедневная награда"
+        description={
+          vm.dailyResult ? (
+            <>
+              Вы зашли в игру <strong>{vm.dailyResult.streak} дней подряд</strong>!<br/><br/>
+              Вы получили:<br/>
+              <span style={{ color: '#e8eaf0', fontSize: '18px', fontWeight: 'bold' }}>{vm.dailyResult.reward.silver} 🪙</span>
+              {vm.dailyResult.reward.gold > 0 && (
+                <> и <span style={{ color: '#ffd700', fontSize: '18px', fontWeight: 'bold' }}>{vm.dailyResult.reward.gold} 💎</span></>
+              )}
+            </>
+          ) : null
+        }
+        actionText="Круто!"
+      />
+
       {vm.dailyAvailable && !vm.dailyResult && (
         <Banner $variant="reward">
           <div style={{ fontSize: 24, marginBottom: 8 }}>🎁</div>
@@ -57,15 +86,7 @@ export function HubView() {
         </Banner>
       )}
 
-      {vm.dailyResult && (
-        <Banner $variant="claimed">
-          <div style={{ fontSize: 20, marginBottom: 4 }}>✅ День {vm.dailyResult.streak}</div>
-          <div style={{ fontSize: 14 }}>
-            +{vm.dailyResult.reward.silver} 🪙
-            {vm.dailyResult.reward.gold > 0 && ` +${vm.dailyResult.reward.gold} 💎`}
-          </div>
-        </Banner>
-      )}
+
 
       {vm.selectedCar && (
         <Card style={{ marginBottom: 16, textAlign: 'center' }}>
