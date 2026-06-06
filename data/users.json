@@ -8,17 +8,17 @@
     "level": 12,
     "xp": 6050,
     "xpToNext": 5000,
-    "silver": 7977916,
-    "gold": 99649,
-    "energy": 0,
+    "silver": 7972366,
+    "gold": 98449,
+    "energy": 11,
     "maxEnergy": 20,
     "lastEnergyRegen": "2026-05-27T10:00:00Z",
     "rankPoints": 320,
     "rankTier": 2,
-    "selectedCarId": 11,
+    "selectedCarId": 4,
     "clanId": 1,
-    "dailyStreak": 1,
-    "lastDailyReward": "2026-06-03T19:58:37.813Z",
+    "dailyStreak": 2,
+    "lastDailyReward": "2026-06-05T19:54:45.208Z",
     "stats": {
       "totalRaces": 238,
       "pvpWins": 72,
@@ -42,7 +42,9 @@
     "ownedCars": [
       1,
       11,
-      16
+      16,
+      8,
+      4
     ]
   },
   {

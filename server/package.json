@@ -8,6 +8,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@drag-racing/shared": "*",
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "ws": "^8.18.0"

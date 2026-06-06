@@ -1,6 +1,11 @@
 {
   "name": "drag-racing-tg",
   "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
   "private": true,
   "description": "Telegram Mini App — Drag Racing Game",
   "scripts": {
