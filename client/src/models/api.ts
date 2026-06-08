@@ -147,4 +147,7 @@ export const api = {
     read: (id: number) => post<SuccessResponse>(`/notifications/${id}/read`),
     readAll: () => post<SuccessResponse>('/notifications/read-all'),
   },
+  admin: {
+    users: () => get<User[]>('/admin/users'),
+  },
 };

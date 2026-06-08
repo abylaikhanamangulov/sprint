@@ -1,160 +1,141 @@
-import { dataStore, FILES } from '../../core/database';
-import { ClanPrivacy, ClanRole } from '@drag-racing/shared/types';
+import { clansCol, clanMembersCol, clanWarsCol, clanMessagesCol, usersCol, carsCol } from '../../core/database';
+import { ClanPrivacy, ClanRole, Clan, ClanMember } from '@drag-racing/shared/types';
+import { MESSAGES } from '../../constants/messages';
 
 export class ClansService {
-  getAllClans() {
-    const data = dataStore.get(FILES.CLANS);
-    return data.clans.map(clan => ({
-      ...clan,
-      memberCount: data.members.filter(m => m.clanId === clan.id).length,
+  async getAllClans() {
+    const clans = await clansCol.find().toArray();
+    const clansWithCounts = await Promise.all(clans.map(async (clan) => {
+      const memberCount = await clanMembersCol.countDocuments({ clanId: clan.id });
+      return { ...clan, memberCount };
     }));
+    return clansWithCounts;
   }
 
-  getClanById(clanId: number) {
-    const data = dataStore.get(FILES.CLANS);
-    const clan = data.clans.find(c => c.id === clanId);
+  async getClanById(clanId: number) {
+    const clan = await clansCol.findOne({ id: clanId });
     if (!clan) throw new Error('CLAN_NOT_FOUND');
 
-    const users = dataStore.get(FILES.USERS);
-    const members = data.members
-      .filter(m => m.clanId === clan.id)
-      .map(m => {
-        const user = users.find(u => u.id === m.userId);
-        return { ...m, username: user?.username, firstName: user?.firstName, level: user?.level };
-      });
+    const membersRaw = await clanMembersCol.find({ clanId }).toArray();
+    const members = await Promise.all(membersRaw.map(async (m) => {
+      const user = await usersCol.findOne({ id: m.userId });
+      return { ...m, username: user?.username, firstName: user?.firstName, level: user?.level };
+    }));
 
-    const wars = data.wars.filter(w => w.clanA === clan.id || w.clanB === clan.id);
-    const messages = data.messages.filter(m => m.clanId === clan.id).slice(-50);
+    const wars = await clanWarsCol.find({ $or: [{ clanA: clanId }, { clanB: clanId }] }).toArray();
+    const messages = await clanMessagesCol.find({ clanId }).sort({ timestamp: 1 }).limit(50).toArray();
 
     return { ...clan, members, wars, messages };
   }
 
-  createClan(userId: number, payload: { name: string; tag: string; icon?: string; privacy?: ClanPrivacy }) {
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+  async createClan(userId: number, payload: { name: string; tag: string; icon?: string; privacy?: ClanPrivacy }) {
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     if (user.coins < 1000) throw new Error('NOT_ENOUGH_COINS');
     if (user.clanId) throw new Error('ALREADY_IN_CLAN');
 
-    let newClanId = 1;
+    const lastClan = await clansCol.find().sort({ id: -1 }).limit(1).toArray();
+    const newClanId = lastClan.length > 0 ? lastClan[0].id + 1 : 1;
 
-    dataStore.update(FILES.CLANS, d => {
-      newClanId = d.clans.length > 0 ? Math.max(...d.clans.map(c => c.id)) + 1 : 1;
-      const newClan = {
-        id: newClanId,
-        name: payload.name,
-        tag: payload.tag.toUpperCase(),
-        icon: payload.icon || 'default',
-        privacy: payload.privacy || 'open',
-        level: 1,
-        xp: 0,
-        xpToNext: 3000,
-        treasury: 0,
-        leaderId: userId,
-        createdAt: new Date().toISOString(),
-      };
+    const newClan: Clan = {
+      id: newClanId,
+      name: payload.name,
+      tag: payload.tag.toUpperCase(),
+      icon: payload.icon || 'default',
+      privacy: payload.privacy || 'open',
+      level: 1,
+      xp: 0,
+      xpToNext: 3000,
+      treasury: 0,
+      leaderId: userId,
+      createdAt: new Date().toISOString(),
+    };
 
-      return {
-        ...d,
-        clans: [...d.clans, newClan],
-        members: [...d.members, {
-          clanId: newClanId,
-          userId: userId,
-          role: 'leader' as ClanRole,
-          contribution: 0,
-          joinedAt: new Date().toISOString(),
-        }],
-      };
-    });
+    const newMember: ClanMember = {
+      clanId: newClanId,
+      userId: userId,
+      role: 'leader',
+      contribution: 0,
+      joinedAt: new Date().toISOString(),
+    };
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - 1000, clanId: newClanId } : u)
+    await clansCol.insertOne(newClan);
+    await clanMembersCol.insertOne(newMember);
+
+    await usersCol.updateOne(
+      { id: userId },
+      { $inc: { coins: -1000 }, $set: { clanId: newClanId } }
     );
 
-    return this.getClanById(newClanId);
+    return await this.getClanById(newClanId);
   }
 
-  joinClan(userId: number, clanId: number) {
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+  async joinClan(userId: number, clanId: number) {
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
     if (user.clanId) throw new Error('ALREADY_IN_CLAN');
 
-    dataStore.update(FILES.CLANS, d => {
-      const clan = d.clans.find(c => c.id === clanId);
-      if (!clan) throw new Error('CLAN_NOT_FOUND');
-      
-      return {
-        ...d,
-        members: [...d.members, {
-          clanId,
-          userId,
-          role: 'recruit' as ClanRole,
-          contribution: 0,
-          joinedAt: new Date().toISOString(),
-        }],
-      };
-    });
+    const clan = await clansCol.findOne({ id: clanId });
+    if (!clan) throw new Error('CLAN_NOT_FOUND');
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, clanId } : u)
-    );
+    const newMember: ClanMember = {
+      clanId,
+      userId,
+      role: 'recruit',
+      contribution: 0,
+      joinedAt: new Date().toISOString(),
+    };
+
+    await clanMembersCol.insertOne(newMember);
+    await usersCol.updateOne({ id: userId }, { $set: { clanId } });
 
     return { success: true };
   }
 
-  leaveClan(userId: number, clanId: number) {
-    dataStore.update(FILES.CLANS, d => ({
-      ...d,
-      members: d.members.filter(m => !(m.clanId === clanId && m.userId === userId)),
-    }));
-
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, clanId: null } : u)
-    );
-
+  async leaveClan(userId: number, clanId: number) {
+    await clanMembersCol.deleteOne({ clanId, userId });
+    await usersCol.updateOne({ id: userId }, { $set: { clanId: null } });
     return { success: true };
   }
 
-  donate(userId: number, clanId: number, amount: number) {
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+  async donate(userId: number, clanId: number, amount: number) {
+    const user = await usersCol.findOne({ id: userId });
     if (!user || user.coins < amount) throw new Error('NOT_ENOUGH_COINS');
 
-    dataStore.update(FILES.CLANS, d => ({
-      ...d,
-      clans: d.clans.map(c => c.id === clanId ? { ...c, treasury: c.treasury + amount, xp: c.xp + amount } : c),
-      members: d.members.map(m =>
-        m.clanId === clanId && m.userId === userId
-          ? { ...m, contribution: m.contribution + amount }
-          : m
-      ),
-    }));
+    await clansCol.updateOne(
+      { id: clanId },
+      { $inc: { treasury: amount, xp: amount } }
+    );
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - amount } : u)
+    await clanMembersCol.updateOne(
+      { clanId, userId },
+      { $inc: { contribution: amount } }
+    );
+
+    await usersCol.updateOne(
+      { id: userId },
+      { $inc: { coins: -amount } }
     );
 
     return { success: true };
   }
 
-  sendChat(userId: number, clanId: number, text: string) {
-    dataStore.update(FILES.CLANS, d => ({
-      ...d,
-      messages: [...d.messages, {
-        clanId,
-        userId,
-        text,
-        timestamp: new Date().toISOString(),
-      }],
-    }));
+  async sendChat(userId: number, clanId: number, text: string) {
+    await clanMessagesCol.insertOne({
+      clanId,
+      userId,
+      text,
+      timestamp: new Date().toISOString(),
+    });
     return { success: true };
   }
 
-  getWarGhost(clanId: number) {
-    const data = dataStore.get(FILES.CLANS);
-    const war = data.wars.find(w => (w.clanA === clanId || w.clanB === clanId) && w.status === 'active');
+  async getWarGhost(clanId: number) {
+    const war = await clanWarsCol.findOne({
+      $or: [{ clanA: clanId }, { clanB: clanId }],
+      status: 'active'
+    });
     
     if (!war) return { warId: 0, clanId, enemyClanId: 0, scoreOurs: 0, scoreTheirs: 0, ghost: null };
 
@@ -163,36 +144,41 @@ export class ClansService {
     const scoreOurs = oursIsA ? war.scoreA : war.scoreB;
     const scoreTheirs = oursIsA ? war.scoreB : war.scoreA;
 
-    const users = dataStore.get(FILES.USERS);
-    const cars = dataStore.get(FILES.CARS);
-    const enemyMembers = data.members.filter(m => m.clanId === enemyClanId);
+    const enemyMembers = await clanMembersCol.find({ clanId: enemyClanId }).toArray();
 
-    const GHOST_NAMES = ['Призрак Кенджи', 'Тень Ивана', 'Ночной Виктор', 'Рейсер X'];
+    const GHOST_NAMES = MESSAGES.misc.ghostNames;
     let ghost;
 
     if (enemyMembers.length > 0) {
       const pick = enemyMembers[scoreOurs % enemyMembers.length];
-      const gu = users.find(u => u.id === pick.userId);
-      const gcar = cars.find(c => c.id === (gu?.selectedCarId ?? 5)) || cars[4];
+      const gu = await usersCol.findOne({ id: pick.userId });
+      
+      let gcarId = gu?.selectedCarId ?? 5;
+      let gcar = await carsCol.findOne({ id: gcarId });
+      if (!gcar) {
+        gcar = (await carsCol.find().toArray())[4]; 
+      }
+      
       const baseTime = gu?.stats?.bestTime && gu.stats.bestTime > 0 ? gu.stats.bestTime : 11.5;
       ghost = {
         userId: pick.userId,
         name: gu?.firstName || gu?.username || GHOST_NAMES[scoreOurs % GHOST_NAMES.length],
-        carId: gcar.id,
-        carName: gcar.name,
-        carClass: gcar.class,
-        drivetrain: gcar.drivetrain,
+        carId: gcar?.id,
+        carName: gcar?.name,
+        carClass: gcar?.class,
+        drivetrain: gcar?.drivetrain,
         time: Math.round((baseTime + (scoreOurs % 3) * 0.25) * 1000) / 1000,
       };
     } else {
+      const cars = await carsCol.find().toArray();
       const gcar = cars[4] || cars[0];
       ghost = {
         userId: -enemyClanId,
         name: GHOST_NAMES[scoreOurs % GHOST_NAMES.length],
-        carId: gcar.id,
-        carName: gcar.name,
-        carClass: gcar.class,
-        drivetrain: gcar.drivetrain,
+        carId: gcar?.id,
+        carName: gcar?.name,
+        carClass: gcar?.class,
+        drivetrain: gcar?.drivetrain,
         time: Math.round((11.2 + (scoreOurs % 4) * 0.4) * 1000) / 1000,
       };
     }
@@ -200,34 +186,34 @@ export class ClansService {
     return { warId: war.id, clanId, enemyClanId, scoreOurs, scoreTheirs, ghost };
   }
 
-  processWarRace(userId: number, clanId: number, warId: number, playerTime: number, ghostTime: number) {
+  async processWarRace(userId: number, clanId: number, warId: number, playerTime: number, ghostTime: number) {
     const won = playerTime < ghostTime;
 
-    const data = dataStore.update(FILES.CLANS, d => ({
-      ...d,
-      wars: d.wars.map(w => {
-        if (w.id !== warId) return w;
-        const oursIsA = w.clanA === clanId;
-        if (!won) return w;
-        return oursIsA ? { ...w, scoreA: w.scoreA + 1 } : { ...w, scoreB: w.scoreB + 1 };
-      }),
-    }));
-
     if (won) {
-      dataStore.update(FILES.USERS, users =>
-        users.map(u => u.id === userId ? { ...u, coins: u.coins + 75 } : u)
+      const war = await clanWarsCol.findOne({ id: warId });
+      if (war) {
+        const oursIsA = war.clanA === clanId;
+        await clanWarsCol.updateOne(
+          { id: warId },
+          oursIsA ? { $inc: { scoreA: 1 } } : { $inc: { scoreB: 1 } }
+        );
+      }
+
+      await usersCol.updateOne(
+        { id: userId },
+        { $inc: { coins: 75 } }
       );
     }
 
-    const war = data.wars.find(w => w.id === warId);
-    const oursIsA = war && war.clanA === clanId;
+    const updatedWar = await clanWarsCol.findOne({ id: warId });
+    const oursIsA = updatedWar && updatedWar.clanA === clanId;
 
     return {
       won,
       playerTime,
       ghostTime,
-      scoreOurs: war ? (oursIsA ? war.scoreA : war.scoreB) : 0,
-      scoreTheirs: war ? (oursIsA ? war.scoreB : war.scoreA) : 0,
+      scoreOurs: updatedWar ? (oursIsA ? updatedWar.scoreA : updatedWar.scoreB) : 0,
+      scoreTheirs: updatedWar ? (oursIsA ? updatedWar.scoreB : updatedWar.scoreA) : 0,
     };
   }
 }

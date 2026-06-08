@@ -1,31 +1,32 @@
 import { Request, Response } from 'express';
 import { profileService } from './profile.service';
 import { AuthRequest } from '../../core/middlewares/auth.middleware';
+import { MESSAGES } from '../../constants/messages';
 
-export const getProfile = (req: AuthRequest, res: Response) => {
+export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
-    res.json(profileService.getProfile(req.userId!));
+    res.json(await profileService.getProfile(req.userId!));
   } catch (error: any) {
-    if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: 'Пользователь не найден' });
+    if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
     console.error('[Profile Controller] getProfile error:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    res.status(500).json({ error: MESSAGES.errors.internalServer });
   }
 };
 
-export const updateSettings = (req: AuthRequest, res: Response) => {
+export const updateSettings = async (req: AuthRequest, res: Response) => {
   try {
-    res.json(profileService.updateSettings(req.userId!, req.body));
+    res.json(await profileService.updateSettings(req.userId!, req.body));
   } catch (error) {
     console.error('[Profile Controller] updateSettings error:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    res.status(500).json({ error: MESSAGES.errors.internalServer });
   }
 };
 
-export const getLeaderboard = (_req: Request, res: Response) => {
+export const getLeaderboard = async (_req: Request, res: Response) => {
   try {
-    res.json(profileService.getLeaderboard());
+    res.json(await profileService.getLeaderboard());
   } catch (error) {
     console.error('[Profile Controller] getLeaderboard error:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    res.status(500).json({ error: MESSAGES.errors.internalServer });
   }
 };

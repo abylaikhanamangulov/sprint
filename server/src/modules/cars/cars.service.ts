@@ -1,25 +1,24 @@
-import { dataStore, FILES } from '../../core/database';
+import { carsCol, usersCol } from '../../core/database';
 import { Car } from '@drag-racing/shared/types';
 
 export class CarsService {
-  getAllCars(): Car[] {
-    return dataStore.get(FILES.CARS);
+  async getAllCars(): Promise<Car[]> {
+    return await carsCol.find().toArray();
   }
 
-  getStarterCars(): Car[] {
-    return this.getAllCars().filter(car => car.isStarter);
+  async getStarterCars(): Promise<Car[]> {
+    return await carsCol.find({ isStarter: true }).toArray();
   }
 
-  getCarById(id: number): Car | undefined {
-    return this.getAllCars().find(car => car.id === id);
+  async getCarById(id: number): Promise<Car | null> {
+    return await carsCol.findOne({ id });
   }
 
-  buyCar(userId: number, carId: number) {
-    const car = this.getCarById(carId);
+  async buyCar(userId: number, carId: number) {
+    const car = await this.getCarById(carId);
     if (!car) throw new Error('CAR_NOT_FOUND');
 
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     if (car.priceCoins !== null && user.coins < car.priceCoins) {
@@ -28,12 +27,12 @@ export class CarsService {
 
     const costCoins = car.priceCoins || 0;
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? {
-        ...u,
-        coins: u.coins - costCoins,
-        ownedCars: Array.from(new Set([...(u.ownedCars || []), carId])),
-      } : u)
+    await usersCol.updateOne(
+      { id: userId },
+      {
+        $inc: { coins: -costCoins },
+        $addToSet: { ownedCars: carId }
+      }
     );
 
     return {

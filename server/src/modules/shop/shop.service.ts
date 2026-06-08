@@ -1,54 +1,55 @@
-import { dataStore, FILES } from '../../core/database';
-import { ShopCrate, Cosmetic, CoinPackage } from '@drag-racing/shared/types';
+import { shopCratesCol, cosmeticsCol, coinPackagesCol, carsCol, usersCol, db } from '../../core/database';
 
 export class ShopService {
-  getShopCatalog() {
-    const shop = dataStore.get(FILES.SHOP);
-    const cars = dataStore.get(FILES.CARS);
+  async getShopCatalog() {
+    const shopStateCol = db.collection<any>('shopState');
+    let state = await shopStateCol.findOne({ id: 'dailyDeal' });
+    if (!state) {
+      state = { id: 'dailyDeal', dailyDeal: { carId: 2, discount: 20, expiresAt: new Date(Date.now() + 86400000).toISOString() } };
+      await shopStateCol.insertOne(state);
+    }
 
-    const dailyDealCar = cars.find(c => c.id === shop.dailyDeal.carId);
+    const dailyDealCar = await carsCol.findOne({ id: state.dailyDeal.carId });
     const dailyDeal = dailyDealCar ? {
       car: dailyDealCar,
-      discount: shop.dailyDeal.discount,
-      expiresAt: shop.dailyDeal.expiresAt,
+      discount: state.dailyDeal.discount,
+      expiresAt: state.dailyDeal.expiresAt,
       discountedPrice: dailyDealCar.priceCoins
-        ? Math.round(dailyDealCar.priceCoins * (1 - shop.dailyDeal.discount / 100))
+        ? Math.round(dailyDealCar.priceCoins * (1 - state.dailyDeal.discount / 100))
         : null,
     } : null;
 
+    const crates = await shopCratesCol.find().toArray();
+    const cosmetics = await cosmeticsCol.find().toArray();
+    const coinPackages = await coinPackagesCol.find().toArray();
+
     return {
       dailyDeal,
-      crates: shop.crates,
-      cosmetics: shop.cosmetics,
-      coinPackages: shop.coinPackages,
+      crates,
+      cosmetics,
+      coinPackages,
     };
   }
 
-  buyCosmetic(userId: number, cosmeticId: string) {
-    const shop = dataStore.get(FILES.SHOP);
-    const cosmetic = shop.cosmetics.find(c => c.id === cosmeticId);
+  async buyCosmetic(userId: number, cosmeticId: string) {
+    const cosmetic = await cosmeticsCol.findOne({ id: cosmeticId });
     if (!cosmetic) throw new Error('COSMETIC_NOT_FOUND');
 
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     if (user.coins < cosmetic.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - cosmetic.price.amount } : u)
-    );
+    await usersCol.updateOne({ id: userId }, { $inc: { coins: -cosmetic.price.amount } });
 
     return cosmetic;
   }
 
-  buyCrate(userId: number, crateId: string) {
-    const shop = dataStore.get(FILES.SHOP);
-    const crate = shop.crates.find(c => c.id === crateId);
+  async buyCrate(userId: number, crateId: string) {
+    const crate = await shopCratesCol.findOne({ id: crateId });
     if (!crate) throw new Error('CRATE_NOT_FOUND');
 
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     if (user.coins < crate.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
@@ -64,21 +65,16 @@ export class ShopService {
       drops.push('epic_part');
     }
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - crate.price.amount } : u)
-    );
+    await usersCol.updateOne({ id: userId }, { $inc: { coins: -crate.price.amount } });
 
     return drops;
   }
 
-  buyCoins(userId: number, packageId: string) {
-    const shop = dataStore.get(FILES.SHOP);
-    const pkg = shop.coinPackages.find(p => p.id === packageId);
+  async buyCoins(userId: number, packageId: string) {
+    const pkg = await coinPackagesCol.findOne({ id: packageId });
     if (!pkg) throw new Error('PACKAGE_NOT_FOUND');
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins + pkg.coins } : u)
-    );
+    await usersCol.updateOne({ id: userId }, { $inc: { coins: pkg.coins } });
 
     return { coinsAdded: pkg.coins };
   }

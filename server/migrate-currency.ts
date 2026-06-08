@@ -122,16 +122,11 @@ function migrateShop() {
   if (data.goldPackages) {
     data.goldPackages.forEach((p: any) => {
       if (p.gold != null) {
-        p.coins = p.gold; // Wait, gold packages gave gold. Should they give that amount * 100 in coins?
-        // Let's multiply by 100 to match the conversion.
+        p.coins = p.gold; 
         p.coins = p.gold * 100;
         delete p.gold;
       }
     });
-    // Rename goldPackages to coinPackages? 
-    // We can just rename the key in the JSON, but we have to make sure server code reads it.
-    // Let's keep it as is, or wait, I renamed GoldPackage to CoinPackage in types.
-    // I will rename the key in json.
     data.coinPackages = data.goldPackages;
     delete data.goldPackages;
   }

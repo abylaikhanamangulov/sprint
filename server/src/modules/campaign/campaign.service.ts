@@ -1,4 +1,4 @@
-import { dataStore, FILES } from '../../core/database';
+import { campaignChaptersCol, campaignProgressCol, usersCol, racesCol } from '../../core/database';
 import { ShiftQuality, RaceResult, CampaignChapter, CampaignNode, CampaignProgress } from '@drag-racing/shared/types';
 
 export interface PlayPvEDto {
@@ -29,11 +29,11 @@ export class CampaignService {
     return { time: Math.round(time * 1000) / 1000, shifts };
   }
 
-  getChapters(userId: number) {
-    const campaignData = dataStore.get(FILES.CAMPAIGN);
-    const userProgress = campaignData.userProgress.filter(p => p.userId === userId);
+  async getChapters(userId: number) {
+    const chapters = await campaignChaptersCol.find().toArray();
+    const userProgress = await campaignProgressCol.find({ userId }).toArray();
 
-    return campaignData.chapters.map(chapter => {
+    return chapters.map(chapter => {
       const chapterProgress = userProgress.filter(p => p.chapterId === chapter.id);
       const completedNodes = chapterProgress.filter(p => p.completed).length;
       const totalStars = chapterProgress.reduce((sum, p) => sum + p.stars, 0);
@@ -43,7 +43,7 @@ export class CampaignService {
       if (chapter.unlockCondition) {
         const [, prevChapter] = chapter.unlockCondition.match(/chapter:(\d+):complete/) || [];
         if (prevChapter) {
-          const prevNodes = campaignData.chapters.find(c => c.id === Number(prevChapter))?.nodes || [];
+          const prevNodes = chapters.find(c => c.id === Number(prevChapter))?.nodes || [];
           const prevBoss = prevNodes.find(n => n.type === 'boss');
           if (prevBoss) {
             isUnlocked = userProgress.some(
@@ -64,15 +64,12 @@ export class CampaignService {
     });
   }
 
-  getChapterById(userId: number, chapterId: number) {
-    const campaignData = dataStore.get(FILES.CAMPAIGN);
-    const chapter = campaignData.chapters.find(c => c.id === chapterId);
+  async getChapterById(userId: number, chapterId: number) {
+    const chapter = await campaignChaptersCol.findOne({ id: chapterId });
 
     if (!chapter) throw new Error('CHAPTER_NOT_FOUND');
 
-    const userProgress = campaignData.userProgress.filter(
-      p => p.userId === userId && p.chapterId === chapterId
-    );
+    const userProgress = await campaignProgressCol.find({ userId, chapterId }).toArray();
 
     const nodes = chapter.nodes.map((node, index) => {
       const progress = userProgress.find(p => p.nodeId === node.id);
@@ -92,16 +89,14 @@ export class CampaignService {
     return { ...chapter, nodes };
   }
 
-  playPvE(userId: number, dto: PlayPvEDto) {
-    const campaignData = dataStore.get(FILES.CAMPAIGN);
-    const chapter = campaignData.chapters.find(c => c.id === dto.chapterId);
+  async playPvE(userId: number, dto: PlayPvEDto) {
+    const chapter = await campaignChaptersCol.findOne({ id: dto.chapterId });
     if (!chapter) throw new Error('CHAPTER_NOT_FOUND');
 
     const node = chapter.nodes.find(n => n.id === dto.nodeId);
     if (!node) throw new Error('NODE_NOT_FOUND');
 
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     if (user.energy < node.energyCost) throw new Error('NOT_ENOUGH_ENERGY');
@@ -137,37 +132,34 @@ export class CampaignService {
       createdAt: new Date().toISOString(),
     };
 
-    dataStore.update(FILES.RACES, races => [...races, raceResult]);
+    await racesCol.insertOne(raceResult);
 
-    dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? {
-        ...u,
-        energy: u.energy - node.energyCost,
-        coins: playerWon ? u.coins + node.rewards.coins : u.coins,
-        xp: playerWon ? u.xp + node.rewards.xp : u.xp,
-        stats: {
-          ...u.stats,
-          totalRaces: u.stats.totalRaces + 1,
-          bestTime: (playerWon && (u.stats.bestTime === 0 || dto.playerTime < u.stats.bestTime)) 
+    const bestTime = (playerWon && (user.stats.bestTime === 0 || dto.playerTime < user.stats.bestTime)) 
             ? dto.playerTime 
-            : u.stats.bestTime,
-        },
-      } : u)
-    );
+            : user.stats.bestTime;
+
+    await usersCol.updateOne({ id: userId }, {
+      $inc: {
+        energy: -node.energyCost,
+        coins: playerWon ? node.rewards.coins : 0,
+        xp: playerWon ? node.rewards.xp : 0,
+        'stats.totalRaces': 1
+      },
+      $set: {
+        'stats.bestTime': bestTime
+      }
+    });
 
     if (playerWon) {
-      dataStore.update(FILES.CAMPAIGN, data => {
-        const existing = data.userProgress.find(
-          p => p.userId === userId && p.chapterId === dto.chapterId && p.nodeId === dto.nodeId
+      const existing = await campaignProgressCol.findOne({ userId, chapterId: dto.chapterId, nodeId: dto.nodeId });
+      if (existing) {
+        await campaignProgressCol.updateOne(
+          { userId, chapterId: dto.chapterId, nodeId: dto.nodeId },
+          { $set: { stars: Math.max(existing.stars, stars), completed: true } }
         );
-        if (existing) {
-          existing.stars = Math.max(existing.stars, stars);
-          existing.completed = true;
-        } else {
-          data.userProgress.push({ userId, chapterId: dto.chapterId, nodeId: dto.nodeId, stars, completed: true });
-        }
-        return data;
-      });
+      } else {
+        await campaignProgressCol.insertOne({ userId, chapterId: dto.chapterId, nodeId: dto.nodeId, stars, completed: true });
+      }
     }
 
     return {

@@ -1,30 +1,29 @@
-import { dataStore, FILES } from '../../core/database';
+import { tournamentsCol, usersCol } from '../../core/database';
 import { Tournament } from '@drag-racing/shared/types';
 
 export class TournamentsService {
-  getAll(): Tournament[] {
-    return dataStore.get(FILES.TOURNAMENTS);
+  async getAll(): Promise<Tournament[]> {
+    return await tournamentsCol.find().toArray();
   }
 
-  getActive(): Tournament[] {
-    return this.getAll().filter(t => t.status === 'active' || t.status === 'upcoming');
+  async getActive(): Promise<Tournament[]> {
+    return await tournamentsCol.find({ status: { $in: ['active', 'upcoming'] } }).toArray();
   }
 
-  getById(id: number): Tournament {
-    const tournament = this.getAll().find(t => t.id === id);
+  async getById(id: number): Promise<Tournament> {
+    const tournament = await tournamentsCol.findOne({ id });
     if (!tournament) throw new Error('TOURNAMENT_NOT_FOUND');
     return tournament;
   }
 
-  joinTournament(userId: number, tournamentId: number) {
-    const tournament = this.getById(tournamentId);
+  async joinTournament(userId: number, tournamentId: number) {
+    const tournament = await this.getById(tournamentId);
 
     if (tournament.participants.includes(userId)) {
       throw new Error('ALREADY_PARTICIPATING');
     }
 
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
     const fee = tournament.entryFee;
@@ -34,14 +33,10 @@ export class TournamentsService {
         throw new Error('NOT_ENOUGH_FUNDS');
       }
 
-      dataStore.update(FILES.USERS, currentUsers =>
-        currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - fee.amount } : u)
-      );
+      await usersCol.updateOne({ id: userId }, { $inc: { coins: -fee.amount } });
     }
 
-    dataStore.update(FILES.TOURNAMENTS, ts =>
-      ts.map(t => t.id === tournamentId ? { ...t, participants: [...t.participants, userId] } : t)
-    );
+    await tournamentsCol.updateOne({ id: tournamentId }, { $push: { participants: userId } });
 
     return { success: true };
   }

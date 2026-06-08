@@ -1,17 +1,18 @@
-import { dataStore, FILES } from '../../core/database';
+import { racesCol } from '../../core/database';
 import { RaceResult } from '@drag-racing/shared/types';
 
 export class RacesService {
-  getHistory(userId: number): RaceResult[] {
-    const races = dataStore.get(FILES.RACES);
-    return races
-      .filter(r => r.player1.userId === userId || (r.player2 && r.player2.userId === userId))
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 50);
+  async getHistory(userId: number): Promise<RaceResult[]> {
+    return await racesCol.find({
+      $or: [
+        { 'player1.userId': userId },
+        { 'player2.userId': userId }
+      ]
+    }).sort({ createdAt: -1 }).limit(50).toArray();
   }
 
-  saveRaceResult(raceResult: RaceResult) {
-    dataStore.update(FILES.RACES, races => [...races, raceResult]);
+  async saveRaceResult(raceResult: RaceResult) {
+    await racesCol.insertOne(raceResult);
     return { success: true };
   }
 }

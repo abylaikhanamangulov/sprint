@@ -1,5 +1,6 @@
-import { dataStore, FILES } from '../../core/database';
+import { usersCol } from '../../core/database';
 import { User } from '@drag-racing/shared/types';
+import { MESSAGES } from '../../constants/messages';
 
 interface LoginPayload {
   telegramId: number;
@@ -9,21 +10,22 @@ interface LoginPayload {
 }
 
 export class AuthService {
-  loginOrRegister(payload: LoginPayload): { user: User; isNew: boolean } {
-    const users = dataStore.get(FILES.USERS);
-    let user = users.find(u => u.telegramId === payload.telegramId);
+  async loginOrRegister(payload: LoginPayload): Promise<{ user: User; isNew: boolean }> {
+    let user = await usersCol.findOne({ telegramId: payload.telegramId });
     let isNew = false;
 
     if (!user) {
       isNew = true;
       
-      const nextId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
-
-      user = {
+      // Get the highest ID
+      const lastUser = await usersCol.find().sort({ id: -1 }).limit(1).toArray();
+      const nextId = lastUser.length > 0 ? lastUser[0].id + 1 : 1;
+      
+      const newUser: User = {
         id: nextId,
         telegramId: payload.telegramId,
         username: payload.username || `user_${payload.telegramId}`,
-        firstName: payload.firstName || 'Гонщик',
+        firstName: payload.firstName || MESSAGES.misc.racerDefaultName,
         avatarUrl: payload.avatarUrl || '',
         level: 1,
         xp: 0,
@@ -59,20 +61,23 @@ export class AuthService {
           showFps: false,
         },
         createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString(),
       };
 
-      dataStore.update(FILES.USERS, currentUsers => [...currentUsers, user as User]);
+      await usersCol.insertOne(newUser);
+      user = newUser as any;
+    } else {
+      user.lastLoginAt = new Date().toISOString();
+      await usersCol.updateOne({ _id: user._id }, { $set: { lastLoginAt: user.lastLoginAt } });
     }
 
-    return { user, isNew: user.selectedCarId === null };
+    return { user: user as User, isNew: user!.selectedCarId === null };
   }
 
-  claimDailyReward(userId: number) {
-    const users = dataStore.get(FILES.USERS);
-    const userIndex = users.findIndex(u => u.id === userId);
-    if (userIndex === -1) throw new Error('User not found');
+  async claimDailyReward(userId: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('User not found');
 
-    const user = { ...users[userIndex] };
     const now = new Date();
 
     if (user.lastDailyReward) {
@@ -95,10 +100,12 @@ export class AuthService {
 
     user.coins = (user.coins || 0) + reward.coins;
 
-    dataStore.update(FILES.USERS, current => {
-      const updated = [...current];
-      updated[userIndex] = user as User;
-      return updated;
+    await usersCol.updateOne({ id: userId }, { 
+      $set: { 
+        coins: user.coins, 
+        dailyStreak: user.dailyStreak, 
+        lastDailyReward: user.lastDailyReward 
+      } 
     });
 
     return {

@@ -1,98 +1,75 @@
-import fs from 'fs';
-import path from 'path';
+import { MongoClient, Db, Collection } from 'mongodb';
+import dotenv from 'dotenv';
 import { 
   User, Car, Clan, ClanMember, ClanWar, ClanMessage, 
   Tournament, CampaignChapter, CampaignProgress, 
   RaceResult, Notification, Achievement, ShopCrate, 
-  Cosmetic, CoinPackage, UpgradeCategory, 
-  UserUpgrade, Tuning 
+  Cosmetic, CoinPackage, UpgradeCategory,
+  UserUpgrade, Tuning, CarCosmetics
 } from '@drag-racing/shared/types';
 
-const DATA_DIR = path.join(__dirname, '..', '..', '..', 'data');
+dotenv.config();
 
-export interface DatabaseSchema {
-  'users.json': User[];
-  'cars.json': Car[];
-  'upgrades.json': {
-    categories: UpgradeCategory[];
-    userUpgrades: UserUpgrade[];
-    userTuning: Tuning[];
-    userCosmetics: any[]; 
-  };
-  'campaign.json': {
-    chapters: CampaignChapter[];
-    userProgress: CampaignProgress[];
-  };
-  'clans.json': {
-    clans: Clan[];
-    members: ClanMember[];
-    wars: ClanWar[];
-    messages: ClanMessage[];
-  };
-  'tournaments.json': Tournament[];
-  'shop.json': {
-    dailyDeal: { carId: number; discount: number; expiresAt: string };
-    crates: ShopCrate[];
-    cosmetics: Cosmetic[];
+const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/sprint';
+export const client = new MongoClient(uri);
 
-    coinPackages: CoinPackage[];
-  };
-  'achievements.json': Achievement[];
-  'races.json': RaceResult[];
-  'notifications.json': Notification[];
+export let db: Db;
+export let usersCol: Collection<User>;
+export let carsCol: Collection<Car>;
+export let clansCol: Collection<Clan>;
+export let clanMembersCol: Collection<ClanMember>;
+export let clanWarsCol: Collection<ClanWar>;
+export let clanMessagesCol: Collection<ClanMessage>;
+export let tournamentsCol: Collection<Tournament>;
+export let racesCol: Collection<RaceResult>;
+export let achievementsCol: Collection<Achievement>;
+export let shopCratesCol: Collection<ShopCrate>;
+export let cosmeticsCol: Collection<Cosmetic>;
+export let coinPackagesCol: Collection<CoinPackage>;
+export let upgradesCol: Collection<UpgradeCategory>;
+export let userUpgradesCol: Collection<UserUpgrade>;
+export let userTuningCol: Collection<Tuning>;
+export let userCosmeticsCol: Collection<CarCosmetics>;
+export let campaignChaptersCol: Collection<CampaignChapter>;
+export let campaignProgressCol: Collection<CampaignProgress>;
+export let notificationsCol: Collection<Notification>;
+// Keep legacy exports for easy refactoring until removed
+export const FILES = {};
+export const dataStore = {
+  get: () => { throw new Error('dataStore is deprecated. Use MongoDB collections.'); },
+  update: () => { throw new Error('dataStore is deprecated. Use MongoDB collections.'); }
+};
+
+export async function connectDB() {
+  await client.connect();
+  db = client.db();
+  
+  usersCol = db.collection<User>('users');
+  carsCol = db.collection<Car>('cars');
+  clansCol = db.collection<Clan>('clans');
+  clanMembersCol = db.collection<ClanMember>('clanMembers');
+  clanWarsCol = db.collection<ClanWar>('clanWars');
+  clanMessagesCol = db.collection<ClanMessage>('clanMessages');
+  tournamentsCol = db.collection<Tournament>('tournaments');
+  racesCol = db.collection<RaceResult>('races');
+  achievementsCol = db.collection<Achievement>('achievements');
+  shopCratesCol = db.collection<ShopCrate>('shopCrates');
+  cosmeticsCol = db.collection<Cosmetic>('cosmetics');
+  coinPackagesCol = db.collection<CoinPackage>('coinPackages');
+  upgradesCol = db.collection<UpgradeCategory>('upgrades');
+  userUpgradesCol = db.collection<UserUpgrade>('userUpgrades');
+  userTuningCol = db.collection<Tuning>('userTuning');
+  userCosmeticsCol = db.collection<CarCosmetics>('userCosmetics');
+  campaignChaptersCol = db.collection<CampaignChapter>('campaignChapters');
+  campaignProgressCol = db.collection<CampaignProgress>('campaignProgress');
+  notificationsCol = db.collection<Notification>('notifications');
+  
+  // Create indexes for performance
+  await usersCol.createIndex({ id: 1 }, { unique: true });
+  await usersCol.createIndex({ telegramId: 1 }, { unique: true });
+  await carsCol.createIndex({ id: 1 }, { unique: true });
+  await clansCol.createIndex({ id: 1 }, { unique: true });
+  await clanMembersCol.createIndex({ clanId: 1, userId: 1 }, { unique: true });
+  
+  console.log('[Server] Connected to MongoDB');
 }
-
-export const FILES = {
-  USERS: 'users.json',
-  CARS: 'cars.json',
-  UPGRADES: 'upgrades.json',
-  CAMPAIGN: 'campaign.json',
-  CLANS: 'clans.json',
-  TOURNAMENTS: 'tournaments.json',
-  SHOP: 'shop.json',
-  ACHIEVEMENTS: 'achievements.json',
-  RACES: 'races.json',
-  NOTIFICATIONS: 'notifications.json',
-} as const satisfies Record<string, keyof DatabaseSchema>;
-
-class DataStore {
-  private cache: Map<string, { data: unknown; mtime: number }> = new Map();
-
-  get<K extends keyof DatabaseSchema>(filename: K): DatabaseSchema[K] {
-    const filePath = path.join(DATA_DIR, filename);
-    const stat = fs.statSync(filePath);
-    const cached = this.cache.get(filename);
-
-    if (cached && cached.mtime === stat.mtimeMs) {
-      return cached.data as DatabaseSchema[K];
-    }
-
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const data = JSON.parse(raw) as DatabaseSchema[K];
-    this.cache.set(filename, { data, mtime: stat.mtimeMs });
-    
-    return data;
-  }
-
-  set<K extends keyof DatabaseSchema>(filename: K, data: DatabaseSchema[K]): void {
-    const filePath = path.join(DATA_DIR, filename);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-    this.cache.delete(filename);
-  }
-
-  update<K extends keyof DatabaseSchema>(
-    filename: K, 
-    updater: (data: DatabaseSchema[K]) => DatabaseSchema[K]
-  ): DatabaseSchema[K] {
-    const current = this.get(filename);
-    const updated = updater(current);
-    this.set(filename, updated);
-    return updated;
-  }
-
-  invalidate(filename: string): void {
-    this.cache.delete(filename);
-  }
-}
-
-export const dataStore = new DataStore();

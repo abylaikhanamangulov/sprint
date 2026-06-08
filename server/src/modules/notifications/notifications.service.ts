@@ -1,48 +1,38 @@
-import { dataStore, FILES } from '../../core/database';
+import { notificationsCol } from '../../core/database';
 import { Notification } from '@drag-racing/shared/types';
 
 export class NotificationsService {
-  getUserNotifications(userId: number): Notification[] {
-    const notifications = dataStore.get(FILES.NOTIFICATIONS);
-    return notifications
-      .filter(n => n.userId === userId)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  async getUserNotifications(userId: number): Promise<Notification[]> {
+    return await notificationsCol.find({ userId }).sort({ createdAt: -1 }).toArray();
   }
 
-  getUnreadCount(userId: number): number {
-    const notifications = dataStore.get(FILES.NOTIFICATIONS);
-    return notifications.filter(n => n.userId === userId && !n.read).length;
+  async getUnreadCount(userId: number): Promise<number> {
+    return await notificationsCol.countDocuments({ userId, read: false });
   }
 
-  markAsRead(userId: number, notifId: number) {
-    dataStore.update(FILES.NOTIFICATIONS, notifications =>
-      notifications.map(n => 
-        n.id === notifId && n.userId === userId ? { ...n, read: true } : n
-      )
-    );
+  async markAsRead(userId: number, notifId: number) {
+    await notificationsCol.updateOne({ id: notifId, userId }, { $set: { read: true } });
     return { success: true };
   }
 
-  markAllAsRead(userId: number) {
-    dataStore.update(FILES.NOTIFICATIONS, notifications =>
-      notifications.map(n => 
-        n.userId === userId ? { ...n, read: true } : n
-      )
-    );
+  async markAllAsRead(userId: number) {
+    await notificationsCol.updateMany({ userId }, { $set: { read: true } });
     return { success: true };
   }
 
-  createNotification(payload: Omit<Notification, 'id' | 'createdAt' | 'read'>) {
-    dataStore.update(FILES.NOTIFICATIONS, notifications => {
-      const nextId = notifications.length > 0 ? Math.max(...notifications.map(n => n.id)) + 1 : 1;
-      const newNotif: Notification = {
-        ...payload,
-        id: nextId,
-        read: false,
-        createdAt: new Date().toISOString()
-      };
-      return [...notifications, newNotif];
-    });
+  async createNotification(payload: Omit<Notification, 'id' | 'createdAt' | 'read'>) {
+    const lastNotif = await notificationsCol.find().sort({ id: -1 }).limit(1).toArray();
+    const nextId = lastNotif.length > 0 ? lastNotif[0].id + 1 : 1;
+    
+    const newNotif: Notification = {
+      ...payload,
+      id: nextId,
+      read: false,
+      createdAt: new Date().toISOString()
+    };
+    
+    await notificationsCol.insertOne(newNotif);
+    return newNotif;
   }
 }
 

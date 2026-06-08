@@ -1,20 +1,16 @@
-import { dataStore, FILES } from '../../core/database';
+import { usersCol, achievementsCol, racesCol, clansCol, clanMembersCol } from '../../core/database';
 import { UserSettings } from '@drag-racing/shared/types';
 
 export class ProfileService {
-  getProfile(userId: number) {
-    const users = dataStore.get(FILES.USERS);
-    const user = users.find(u => u.id === userId);
-    
+  async getProfile(userId: number) {
+    const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    const achievements = dataStore.get(FILES.ACHIEVEMENTS);
-    const races = dataStore.get(FILES.RACES);
-    const clansData = dataStore.get(FILES.CLANS);
-
-    const clan = user.clanId ? clansData.clans.find(c => c.id === user.clanId) : null;
+    const achievements = await achievementsCol.find().toArray();
+    
+    const clan = user.clanId ? await clansCol.findOne({ id: user.clanId }) : null;
     const clanRole = user.clanId
-      ? clansData.members.find(m => m.clanId === user.clanId && m.userId === user.id)?.role
+      ? (await clanMembersCol.findOne({ clanId: user.clanId, userId: user.id }))?.role
       : null;
 
     const unlockedAchievements = achievements.filter(a => {
@@ -27,10 +23,12 @@ export class ProfileService {
       }
     });
 
-    const recentRaces = races
-      .filter(r => r.player1.userId === user.id || r.player2?.userId === user.id)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 20);
+    const recentRaces = await racesCol.find({
+      $or: [
+        { 'player1.userId': user.id },
+        { 'player2.userId': user.id }
+      ]
+    }).sort({ createdAt: -1 }).limit(20).toArray();
 
     return {
       user,
@@ -43,30 +41,31 @@ export class ProfileService {
     };
   }
 
-  updateSettings(userId: number, settings: Partial<UserSettings>) {
-    dataStore.update(FILES.USERS, users =>
-      users.map(u => u.id === userId ? { ...u, settings: { ...u.settings, ...settings } } : u)
-    );
+  async updateSettings(userId: number, settings: Partial<UserSettings>) {
+    const updateQuery: Record<string, any> = {};
+    for (const [key, value] of Object.entries(settings)) {
+      updateQuery[`settings.${key}`] = value;
+    }
+
+    await usersCol.updateOne({ id: userId }, { $set: updateQuery });
     return { success: true };
   }
 
-  getLeaderboard() {
-    const users = dataStore.get(FILES.USERS);
-    return users
-      .map(u => ({
-        id: u.id,
-        username: u.username,
-        firstName: u.firstName,
-        level: u.level,
-        rankPoints: u.rankPoints,
-        rankTier: u.rankTier,
-        winRate: u.stats.totalRaces > 0
-          ? Math.round((u.stats.pvpWins / (u.stats.pvpWins + u.stats.pvpLosses)) * 100)
-          : 0,
-        bestTime: u.stats.bestTime,
-      }))
-      .sort((a, b) => b.rankPoints - a.rankPoints)
-      .slice(0, 100); 
+  async getLeaderboard() {
+    const users = await usersCol.find().sort({ rankPoints: -1 }).limit(100).toArray();
+    
+    return users.map(u => ({
+      id: u.id,
+      username: u.username,
+      firstName: u.firstName,
+      level: u.level,
+      rankPoints: u.rankPoints,
+      rankTier: u.rankTier,
+      winRate: u.stats.totalRaces > 0
+        ? Math.round((u.stats.pvpWins / (u.stats.pvpWins + u.stats.pvpLosses)) * 100)
+        : 0,
+      bestTime: u.stats.bestTime,
+    }));
   }
 }
 

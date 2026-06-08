@@ -100,6 +100,9 @@ export interface User {
   stats: UserStats;
   settings: UserSettings;
   createdAt: string;
+  isAdmin?: boolean;
+  isBanned?: boolean;
+  lastLoginAt?: string;
 }
 
 export interface Tuning {
