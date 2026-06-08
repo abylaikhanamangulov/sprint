@@ -12,7 +12,7 @@ const adminData: Record<number, any> = {};
 
 const token = process.env.BOT_TOKEN || '8616018832:AAG4yZYnks6Gh2eYTgHF601WWNw_uQ9onOc';
 const CHANNEL_USERNAME = '@sprint_game';
-const WEBAPP_URL = process.env.WEBAPP_URL || 'https://google.com';
+const WEBAPP_URL = process.env.WEBAPP_URL || process.env.RENDER_EXTERNAL_URL || 'https://sprint-fbb9.onrender.com';
 
 const isProduction = process.env.NODE_ENV === 'production';
 export const bot = new TelegramBot(token, { polling: !isProduction });
