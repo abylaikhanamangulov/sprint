@@ -1,7 +1,7 @@
 import http from 'http';
 import app from './app';
 import { setupWebSocket } from './websocket'; 
-import { bot } from './bot'; 
+import { bot, startBot } from './bot';
 import { MESSAGES } from './constants/messages';
 import { connectDB, client } from './core/database';
 import { logger } from './core/logger';
@@ -21,6 +21,7 @@ setupWebSocket(server);
 async function bootstrap() {
   try {
     await connectDB();
+    startBot();
     
     server.listen(PORT, () => {
       logger.info(MESSAGES.server.apiStarted(PORT));
@@ -41,7 +42,9 @@ async function shutdown(signal: string) {
     console.log('[Server] HTTP server closed.');
     
     try {
-      await client.close();
+      if (client) await client.close();
+      const { mongoMemoryServer } = await import('./core/database');
+      if (mongoMemoryServer) await mongoMemoryServer.stop();
       console.log('[Server] MongoDB connection closed.');
       process.exit(0);
     } catch (err) {

@@ -15,15 +15,18 @@ const CHANNEL_USERNAME = '@sprint_game';
 const WEBAPP_URL = process.env.WEBAPP_URL || process.env.RENDER_EXTERNAL_URL || 'https://sprint-fbb9.onrender.com';
 
 const isProduction = process.env.NODE_ENV === 'production';
-export const bot = new TelegramBot(token, { polling: !isProduction });
+export const bot = new TelegramBot(token, { polling: false });
 
-if (isProduction && process.env.RENDER_EXTERNAL_URL) {
-  const webhookUrl = `${process.env.RENDER_EXTERNAL_URL}/webhook/telegram`;
-  bot.setWebHook(webhookUrl).then(() => {
-    console.log(`[Bot] Webhook set to ${webhookUrl}`);
-  });
-} else {
-  console.log('[Bot] Running in Polling mode');
+export function startBot() {
+  if (isProduction && process.env.RENDER_EXTERNAL_URL) {
+    const webhookUrl = `${process.env.RENDER_EXTERNAL_URL}/webhook/telegram`;
+    bot.setWebHook(webhookUrl).then(() => {
+      console.log(`[Bot] Webhook set to ${webhookUrl}`);
+    });
+  } else {
+    bot.startPolling();
+    console.log('[Bot] Running in Polling mode');
+  }
 }
 
 bot.onText(/\/start/, async (msg) => {

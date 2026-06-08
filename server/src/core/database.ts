@@ -1,4 +1,5 @@
 import { MongoClient, Db, Collection } from 'mongodb';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import dotenv from 'dotenv';
 import {
   User,
@@ -25,8 +26,8 @@ import { logger } from './logger';
 
 dotenv.config();
 
-const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/sprint';
-export const client = new MongoClient(uri);
+export let client: MongoClient;
+export let mongoMemoryServer: MongoMemoryServer | null = null;
 
 export let db: Db;
 export let usersCol: Collection<User>;
@@ -50,6 +51,15 @@ export let campaignProgressCol: Collection<CampaignProgress>;
 export let notificationsCol: Collection<Notification>;
 
 export async function connectDB() {
+  let uri = process.env.MONGO_URI;
+
+  if (!uri || uri.includes('localhost')) {
+    logger.info('[Server] No remote MONGO_URI provided. Starting in-memory MongoDB...');
+    mongoMemoryServer = await MongoMemoryServer.create();
+    uri = mongoMemoryServer.getUri();
+  }
+
+  client = new MongoClient(uri);
   await client.connect();
   db = client.db();
 
