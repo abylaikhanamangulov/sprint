@@ -22,11 +22,11 @@ export class MatchGateway {
     let currentRoom: Room | null = null;
 
     ws.on('message', (raw: Buffer) => {
-      let msg: any; 
+      let msg: any;
       try {
         msg = JSON.parse(raw.toString());
       } catch {
-        return; 
+        return;
       }
 
       switch (msg.type) {
@@ -59,23 +59,25 @@ export class MatchGateway {
 
   private processJoinQueue(player: PlayerSession): Room | null {
     const opponentIndex = this.matchQueue.findIndex(
-      p => Math.abs(p.pp - player.pp) <= 50 && p.userId !== player.userId
+      (p) => Math.abs(p.pp - player.pp) <= 50 && p.userId !== player.userId,
     );
 
     if (opponentIndex >= 0) {
       const opponent = this.matchQueue.splice(opponentIndex, 1)[0];
       const roomId = `room_${Date.now()}`;
-      
+
       const newRoom: Room = { id: roomId, players: [opponent, player], state: 'waiting' };
       this.rooms.set(roomId, newRoom);
 
       for (const p of newRoom.players) {
-        const other = newRoom.players.find(o => o.userId !== p.userId)!;
-        p.ws.send(JSON.stringify({
-          type: 'match_found',
-          roomId,
-          opponent: { userId: other.userId, pp: other.pp },
-        }));
+        const other = newRoom.players.find((o) => o.userId !== p.userId)!;
+        p.ws.send(
+          JSON.stringify({
+            type: 'match_found',
+            roomId,
+            opponent: { userId: other.userId, pp: other.pp },
+          }),
+        );
       }
       return newRoom;
     } else {
@@ -86,14 +88,14 @@ export class MatchGateway {
   }
 
   private processCancelQueue(player: PlayerSession) {
-    const idx = this.matchQueue.findIndex(p => p.userId === player.userId);
+    const idx = this.matchQueue.findIndex((p) => p.userId === player.userId);
     if (idx >= 0) this.matchQueue.splice(idx, 1);
     player.ws.send(JSON.stringify({ type: 'queue_cancelled' }));
   }
 
   private processReady(room: Room, player: PlayerSession) {
     player.ready = true;
-    if (room.players.every(p => p.ready)) {
+    if (room.players.every((p) => p.ready)) {
       room.state = 'countdown';
       for (const p of room.players) {
         p.ws.send(JSON.stringify({ type: 'countdown_start', countdown: 3 }));
@@ -111,22 +113,24 @@ export class MatchGateway {
 
   private processRaceFinish(room: Room, msg: any) {
     for (const p of room.players) {
-      p.ws.send(JSON.stringify({
-        type: 'race_result',
-        userId: msg.userId,
-        time: msg.time,
-        shifts: msg.shifts,
-      }));
+      p.ws.send(
+        JSON.stringify({
+          type: 'race_result',
+          userId: msg.userId,
+          time: msg.time,
+          shifts: msg.shifts,
+        }),
+      );
     }
     room.state = 'finished';
   }
 
   private handleDisconnect(player: PlayerSession | null, room: Room | null) {
     if (player) {
-      const idx = this.matchQueue.findIndex(p => p.userId === player.userId);
+      const idx = this.matchQueue.findIndex((p) => p.userId === player.userId);
       if (idx >= 0) this.matchQueue.splice(idx, 1);
     }
-    
+
     if (room) {
       for (const p of room.players) {
         if (player && p.userId !== player.userId) {

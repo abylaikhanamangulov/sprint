@@ -12,11 +12,13 @@ export const MESSAGES = {
     adminEnterCoins: 'Введите количество coins (например: 1000):',
     adminInvalidCoinsFormat: 'Некорректный формат. Введите число (coins):',
     adminUserNotFound: 'Пользователь с таким ID не найден.',
-    adminCoinsSuccess: (id: number, coins: number, balance: number) => `✅ Успешно!\nПользователь ID ${id} получил ${coins} coins.\nТекущий баланс: ${balance} coins`,
+    adminCoinsSuccess: (id: number, coins: number, balance: number) =>
+      `✅ Успешно!\nПользователь ID ${id} получил ${coins} coins.\nТекущий баланс: ${balance} coins`,
     adminEnterAchId: 'Введите ID достижения (число):',
     adminInvalidAchId: 'Некорректный ID достижения. Введите число:',
     adminAchNotFound: 'Достижение с таким ID не найдено.',
-    adminAchSuccess: (name: string, id: number) => `✅ Успешно! Для получения достижения "${name}" обновлена статистика пользователя ${id}.`,
+    adminAchSuccess: (name: string, id: number) =>
+      `✅ Успешно! Для получения достижения "${name}" обновлена статистика пользователя ${id}.`,
     adminMenuTitle: '🛠 Панель администратора',
     adminBtnGiveCoins: '💰 Выдать монеты',
     adminBtnGiveAch: '🏆 Выдать достижение',
@@ -27,7 +29,8 @@ export const MESSAGES = {
     adminBtnManageClans: '🛡 Управление кланами',
     adminBtnManageTournaments: '🏎 Турниры',
     adminPromptBroadcast: 'Введите текст для глобальной рассылки (сообщение получат все пользователи):',
-    adminBroadcastSuccess: (sent: number, failed: number) => `✅ Рассылка завершена!\nОтправлено: ${sent}\nОшибок: ${failed}`,
+    adminBroadcastSuccess: (sent: number, failed: number) =>
+      `✅ Рассылка завершена!\nОтправлено: ${sent}\nОшибок: ${failed}`,
     adminPromptManageUser: 'Введите ID пользователя для управления:',
     adminUserManageTitle: (id: number, name: string) => `👤 Пользователь ID ${id} (@${name})`,
     adminBtnBan: '🚫 Бан',
@@ -41,7 +44,8 @@ export const MESSAGES = {
     adminDeleteClanSuccess: (clanName: string) => `✅ Клан "${clanName}" успешно удален!`,
     adminPromptTournamentId: 'Введите ID турнира для переключения статуса:',
     adminToggleTournamentSuccess: (status: string) => `✅ Статус турнира изменен на: ${status}!`,
-    adminServerStats: (users: number, dau: number, races: number) => `📊 Статистика сервера:\n\nВсего пользователей: ${users}\nDAU (Активные за 24ч): ${dau}\nСыграно гонок: ${races}`,
+    adminServerStats: (users: number, dau: number, races: number) =>
+      `📊 Статистика сервера:\n\nВсего пользователей: ${users}\nDAU (Активные за 24ч): ${dau}\nСыграно гонок: ${races}`,
     subThanks: 'Спасибо за подписку! Добро пожаловать в Sprint 🏎️\nЖми кнопку ниже и погнали!',
     subNotSubscribed: 'Вы еще не подписались на канал ❌',
     subCheckErrorAlert: 'Ошибка проверки',
@@ -53,7 +57,7 @@ export const MESSAGES = {
     adminUnknownUser: 'unknown',
     botInit: '[Bot] Инициализирован и ожидает сообщений...',
     botSubErrorLog: '[Bot] Ошибка проверки подписки при старте:',
-    botSubCheckErrorLog: '[Bot] Ошибка проверки подписки (callback):'
+    botSubCheckErrorLog: '[Bot] Ошибка проверки подписки (callback):',
   },
   errors: {
     internalServer: 'Внутренняя ошибка сервера',
@@ -100,14 +104,14 @@ export const MESSAGES = {
     packageIdRequired: 'packageId обязателен',
     alreadyParticipating: 'Вы уже участвуете в этом турнире',
     notEnoughFundsFee: 'Недостаточно средств для взноса',
-    userBanned: 'Аккаунт заблокирован'
+    userBanned: 'Аккаунт заблокирован',
   },
   server: {
     apiStarted: (port: number | string) => `[Server] Drag Racing API успешно запущен на http://localhost:${port}`,
-    wsStarted: (port: number | string) => `[Server] WebSocket шлюз ожидает подключений на ws://localhost:${port}/ws`
+    wsStarted: (port: number | string) => `[Server] WebSocket шлюз ожидает подключений на ws://localhost:${port}/ws`,
   },
   misc: {
     racerDefaultName: 'Гонщик',
-    ghostNames: ['Призрак Кенджи', 'Тень Ивана', 'Ночной Виктор', 'Рейсер X']
-  }
+    ghostNames: ['Призрак Кенджи', 'Тень Ивана', 'Ночной Виктор', 'Рейсер X'],
+  },
 };

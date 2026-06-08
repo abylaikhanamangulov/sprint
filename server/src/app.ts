@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import cors from 'cors';
 import path from 'path';
 
@@ -12,9 +13,25 @@ import tournamentsRoutes from './modules/tournaments/tournaments.routes';
 import shopRoutes from './modules/shop/shop.routes';
 import profileRoutes from './modules/profile/profile.routes';
 import notificationsRoutes from './modules/notifications/notifications.routes';
+import { errorHandler } from './core/middlewares/error.middleware';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP to allow WebApp rendering
+}));
+
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 200, // Limit each IP to 200 requests per `window` (here, per 1 minute)
+  message: { success: false, error: 'Too many requests, please try again later.' },
+  standardHeaders: true, 
+  legacyHeaders: false,
+});
+
+app.use(limiter);
 app.use(cors({ origin: true }));
 app.use(express.json());
 
@@ -35,5 +52,7 @@ app.use(express.static(clientDist));
 app.get('*', (_req, res) => {
   res.sendFile(path.join(clientDist, 'index.html'));
 });
+
+app.use(errorHandler);
 
 export default app;

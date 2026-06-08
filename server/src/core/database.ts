@@ -1,12 +1,27 @@
 import { MongoClient, Db, Collection } from 'mongodb';
 import dotenv from 'dotenv';
-import { 
-  User, Car, Clan, ClanMember, ClanWar, ClanMessage, 
-  Tournament, CampaignChapter, CampaignProgress, 
-  RaceResult, Notification, Achievement, ShopCrate, 
-  Cosmetic, CoinPackage, UpgradeCategory,
-  UserUpgrade, Tuning, CarCosmetics
+import {
+  User,
+  Car,
+  Clan,
+  ClanMember,
+  ClanWar,
+  ClanMessage,
+  Tournament,
+  CampaignChapter,
+  CampaignProgress,
+  RaceResult,
+  Notification,
+  Achievement,
+  ShopCrate,
+  Cosmetic,
+  CoinPackage,
+  UpgradeCategory,
+  UserUpgrade,
+  Tuning,
+  CarCosmetics,
 } from '@drag-racing/shared/types';
+import { logger } from './logger';
 
 dotenv.config();
 
@@ -33,17 +48,11 @@ export let userCosmeticsCol: Collection<CarCosmetics>;
 export let campaignChaptersCol: Collection<CampaignChapter>;
 export let campaignProgressCol: Collection<CampaignProgress>;
 export let notificationsCol: Collection<Notification>;
-// Keep legacy exports for easy refactoring until removed
-export const FILES = {};
-export const dataStore = {
-  get: () => { throw new Error('dataStore is deprecated. Use MongoDB collections.'); },
-  update: () => { throw new Error('dataStore is deprecated. Use MongoDB collections.'); }
-};
 
 export async function connectDB() {
   await client.connect();
   db = client.db();
-  
+
   usersCol = db.collection<User>('users');
   carsCol = db.collection<Car>('cars');
   clansCol = db.collection<Clan>('clans');
@@ -63,13 +72,15 @@ export async function connectDB() {
   campaignChaptersCol = db.collection<CampaignChapter>('campaignChapters');
   campaignProgressCol = db.collection<CampaignProgress>('campaignProgress');
   notificationsCol = db.collection<Notification>('notifications');
-  
+
   // Create indexes for performance
   await usersCol.createIndex({ id: 1 }, { unique: true });
   await usersCol.createIndex({ telegramId: 1 }, { unique: true });
+  await usersCol.createIndex({ username: 1 });
   await carsCol.createIndex({ id: 1 }, { unique: true });
   await clansCol.createIndex({ id: 1 }, { unique: true });
+  await clansCol.createIndex({ name: 1 });
   await clanMembersCol.createIndex({ clanId: 1, userId: 1 }, { unique: true });
-  
-  console.log('[Server] Connected to MongoDB');
+
+  logger.info('[Server] Connected to MongoDB');
 }

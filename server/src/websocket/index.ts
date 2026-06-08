@@ -5,7 +5,7 @@ import { MESSAGES } from '../constants/messages';
 
 export function setupWebSocket(server: HttpServer): void {
   const wss = new WebSocketServer({ server, path: '/ws' });
-  
+
   const matchGateway = new MatchGateway();
 
   wss.on('connection', (ws: WebSocket) => {
