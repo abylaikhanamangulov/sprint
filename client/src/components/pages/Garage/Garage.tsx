@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useMemo } from 'react';
-import { useGarageViewModel } from '../../viewmodels/useGarageViewModel';
-import type { GarageTab } from '../../viewmodels/useGarageViewModel';
+import { useGarageViewModel } from 'src/viewmodels/useGarageViewModel';
+import type { GarageTab } from 'src/viewmodels/useGarageViewModel';
 import type {
   CarStats,
   NosDuration,
@@ -9,7 +9,7 @@ import type {
   WheelStyle,
   SpoilerStyle,
   IntakeStyle,
-} from '../../models/types';
+} from 'src/models/types';
 import {
   Screen,
   Card,
@@ -25,11 +25,13 @@ import {
   EmptyState,
   Muted,
   Range,
-} from '../ui';
-import { CarCard as OldCarCard } from '../components/CarCard';
-import { CarCard as UiCarCard } from '../../components/ui/CarCard/CarCard';
-import { CarSprite } from '../components/CarSprite';
-import { GlassTabs } from '../../components/ui/GlassTabs/GlassTabs';
+} from 'src/views/ui';
+import { CarCard as OldCarCard } from 'src/views/components/CarCard';
+import { CarCard as UiCarCard } from 'src/components/ui/CarCard/CarCard';
+import { CarSprite } from 'src/views/components/CarSprite';
+import { GlassTabs } from 'src/components/ui/GlassTabs/GlassTabs';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
 
 const Header = styled.div`
   display: flex;
@@ -121,12 +123,7 @@ export function GarageView() {
   if (vm.showDealership) {
     return (
       <Screen>
-        <Header>
-          <Heading>Автосалон</Heading>
-          <Button $variant="outline" $size="sm" onClick={vm.closeDealership}>
-            Назад
-          </Button>
-        </Header>
+        <MainHeader title="Автосалон" showClose={true} onClose={vm.closeDealership} />
         <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
           <GlassTabs 
             tabs={[
@@ -143,10 +140,8 @@ export function GarageView() {
           />
           <Grid $cols={2} style={{ marginTop: 16 }}>
             {filteredCars.map((car) => {
-            const priceNode = car.priceSilver != null ? (
-              <span style={{ color: '#e8eaf0' }}>{car.priceSilver.toLocaleString()} 🪙</span>
-            ) : car.priceGold != null ? (
-              <span style={{ color: '#ffd700' }}>{car.priceGold.toLocaleString()} 💎</span>
+            const priceNode = car.priceCoins != null ? (
+              <span style={{ color: '#e8eaf0', display: 'inline-flex', alignItems: 'center', gap: 4 }}>{car.priceCoins.toLocaleString()} <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} /></span>
             ) : (
               <span style={{ color: '#2ed573' }}>Бесплатно</span>
             );
@@ -173,12 +168,12 @@ export function GarageView() {
 
   return (
     <Screen>
-      <Header>
-        <Heading>Гараж</Heading>
+      <MainHeader title="Гараж" />
+      <div style={{ marginBottom: 12 }}>
         <Button $variant="primary" $size="sm" onClick={vm.openDealership}>
           + Купить
         </Button>
-      </Header>
+      </div>
 
       <ScrollRow>
         {vm.myCars.map((c) => (
@@ -250,7 +245,7 @@ export function GarageView() {
                     </div>
                     {cat.canUpgrade ? (
                       <Button $variant="primary" $size="sm" onClick={() => vm.doUpgrade(cat.id)}>
-                        {cat.currency === 'gold' ? '💎' : '🪙'} {cat.nextCost}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{cat.currency === 'stars' ? '⭐' : <img src={coinIcon} alt="coin" style={{ width: 14, height: 14 }} />} {cat.nextCost}</span>
                       </Button>
                     ) : (
                       <Badge $bg="#2ed573">MAX</Badge>

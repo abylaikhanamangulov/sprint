@@ -42,6 +42,6 @@ export const Default: Story = {
   args: {
     imageSrc: '/mustang.png',
     name: 'Ford Mustang GT 2022',
-    price: '74,000 🪙',
+    price: '74,000 монет',
   },
 };

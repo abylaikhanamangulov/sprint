@@ -1,20 +1,22 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useGameStore } from '../../models/store';
-import { useRaceViewModel, RACE_LENGTHS, OVERHEAT_LIMIT } from '../../viewmodels/useRaceViewModel';
-import type { Drivetrain } from '../../models/types';
-import { Screen, Card, Button, Column, Heading, Muted, Stars, ClassBadge } from '../ui';
-import { CarSprite } from '../components/CarSprite';
-import { Tachometer } from '../race/Tachometer';
-import { Speedometer } from '../race/Speedometer';
-import { ShiftLight } from '../race/ShiftLight';
-import { NosIndicator } from '../race/NosIndicator';
-import { Paddle } from '../race/Paddle';
-import { GasPedal, BrakePedal } from '../race/Pedals';
-import { RaceTrack } from '../race/RaceTrack';
-import { RaceHud } from '../race/RaceHud';
-import { BurnoutGauge } from '../race/BurnoutGauge';
-import { StartLights } from '../race/StartLights';
+import { useGameStore } from 'src/models/store';
+import { useRaceViewModel, RACE_LENGTHS, OVERHEAT_LIMIT } from 'src/viewmodels/useRaceViewModel';
+import type { Drivetrain } from 'src/models/types';
+import { Screen, Card, Button, Column, Heading, Muted, Stars, ClassBadge } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
+import { CarSprite } from 'src/views/components/CarSprite';
+import { Tachometer } from 'src/views/race/Tachometer';
+import { Speedometer } from 'src/views/race/Speedometer';
+import { ShiftLight } from 'src/views/race/ShiftLight';
+import { NosIndicator } from 'src/views/race/NosIndicator';
+import { Paddle } from 'src/views/race/Paddle';
+import { GasPedal, BrakePedal } from 'src/views/race/Pedals';
+import { RaceTrack } from 'src/views/race/RaceTrack';
+import { RaceHud } from 'src/views/race/RaceHud';
+import { BurnoutGauge } from 'src/views/race/BurnoutGauge';
+import { StartLights } from 'src/views/race/StartLights';
 
 const RaceLayout = styled.div`
   height: 100vh;
@@ -242,13 +244,13 @@ export function RaceView() {
   if (vm.phase === 'menu') {
     const car = vm.selectedCar;
     return (
-      <Screen style={{ textAlign: 'center', paddingTop: 40 }}>
-        <Heading style={{ marginBottom: 20 }}>Режим гонки</Heading>
+      <Screen>
+        <MainHeader title="Гонки" />
         <Column $gap={12} style={{ maxWidth: 300, margin: '0 auto' }}>
           <Button $variant="primary" $block onClick={vm.chooseRace}>
             🏁 Заезд (PvE)
           </Button>
-          <Button $variant="gold" $block onClick={vm.chooseFree}>
+          <Button $variant="primary" $block onClick={vm.chooseFree}>
             ♾️ Свободный заезд
           </Button>
           <Button $variant="outline" $block disabled>
@@ -453,7 +455,7 @@ export function RaceView() {
               </div>
             </div>
           )}
-          {w && w.won && <div style={{ marginTop: 8, fontSize: 14 }}>+75 🪙</div>}
+          {w && w.won && <div style={{ marginTop: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>+75 <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} /></div>}
           {vm.error && <div style={{ color: '#ff4757', marginTop: 8 }}>{vm.error}</div>}
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
@@ -508,8 +510,8 @@ export function RaceView() {
             </div>
           </div>
           {r?.rewards && (
-            <div style={{ marginTop: 8, fontSize: 14 }}>
-              +{r.rewards.silver} 🪙 +{r.rewards.xp} XP
+            <div style={{ marginTop: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+              +{r.rewards.coins} <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} /> +{r.rewards.xp} XP
             </div>
           )}
           {vm.error && <div style={{ color: '#ff4757', marginTop: 8 }}>{vm.error}</div>}

@@ -4,7 +4,7 @@ import { getErrorMessage } from '../models/errors';
 import { useGameStore } from '../models/store';
 import type { ShopData } from '../models/types';
 
-export type ShopTab = 'deals' | 'crates' | 'cosmetics' | 'nft' | 'gold';
+export type ShopTab = 'deals' | 'crates' | 'cosmetics' | 'coins';
 
 interface ShopViewModel {
   shop: ShopData | null;
@@ -14,7 +14,7 @@ interface ShopViewModel {
   setTab: (t: ShopTab) => void;
   buyCosmetic: (id: string) => Promise<void>;
   buyCrate: (id: string) => Promise<void>;
-  buyGold: (id: string) => Promise<void>;
+  buyCoins: (id: string) => Promise<void>;
   clearMessage: () => void;
 }
 
@@ -52,10 +52,10 @@ export function useShopViewModel(): ShopViewModel {
     }
   };
 
-  const buyGold = async (id: string) => {
+  const buyCoins = async (id: string) => {
     try {
-      await api.shop.buyGold(id, 'stars');
-      setMessage('Золото зачислено!');
+      await api.shop.buyCoins(id, 'stars');
+      setMessage('Монеты зачислены!');
       fetchUser();
     } catch (e: unknown) {
       setMessage(getErrorMessage(e));
@@ -70,7 +70,7 @@ export function useShopViewModel(): ShopViewModel {
     setTab,
     buyCosmetic,
     buyCrate,
-    buyGold,
+    buyCoins,
     clearMessage: () => setMessage(null),
   };
 }

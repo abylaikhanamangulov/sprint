@@ -31,7 +31,7 @@ export type NosDuration = 'short' | 'medium' | 'long';
 export type GraphicsQuality = 'low' | 'medium' | 'high';
 export type TournamentStatus = 'upcoming' | 'active' | 'completed';
 export type WarStatus = 'pending' | 'active' | 'completed';
-export type Currency = 'silver' | 'gold' | 'ton' | 'stars';
+export type Currency = 'coins' | 'stars';
 export type NotificationType = 'clan_war' | 'daily_reward' | 'tournament' | 'challenge' | 'upgrade' | 'nft_drop' | 'clan_invite';
 
 export interface CarStats {
@@ -48,8 +48,7 @@ export interface Car {
   class: CarClass;
   drivetrain: Drivetrain;
   isStarter: boolean;
-  priceSilver: number | null;
-  priceGold: number | null;
+  priceCoins: number | null;
   unlockCondition: string | null;
   baseStats: CarStats;
   maxGears: number;
@@ -75,7 +74,7 @@ export interface UserStats {
   bestTime: number;
   perfectShifts: number;
   longestWinStreak: number;
-  silverEarned: number;
+  coinsEarned: number;
 }
 
 export interface User {
@@ -87,8 +86,7 @@ export interface User {
   level: number;
   xp: number;
   xpToNext: number;
-  silver: number;
-  gold: number;
+  coins: number;
   energy: number;
   maxEnergy: number;
   lastEnergyRegen: string;
@@ -126,7 +124,7 @@ export interface UpgradeCategory {
   name: string;
   icon: string;
   maxStage: number;
-  currency: 'silver' | 'gold';
+  currency: Currency;
   baseCost: number;
   costMultiplier: number;
   statsBoost: Partial<CarStats>;
@@ -156,7 +154,7 @@ export interface CampaignNode {
   };
   recommendedPP: number;
   energyCost: number;
-  rewards: { silver: number; xp: number; special?: string };
+  rewards: { coins: number; xp: number; special?: string };
   starThresholds: number[];
 }
 
@@ -223,7 +221,7 @@ export interface Tournament {
   type: 'bracket' | 'time_attack';
   bracketSize: number | null;
   entryFee: { currency: Currency; amount: number };
-  prizePool: { place: number; silver: number; gold: number }[];
+  prizePool: { place: number; coins: number }[];
   classRestriction: CarClass | null;
   status: TournamentStatus;
   startsAt: string;
@@ -239,7 +237,7 @@ export interface Achievement {
   icon: string;
   condition: { type: string; value: number };
   rewardXp: number;
-  rewardSilver: number;
+  rewardCoins: number;
 }
 
 export interface RaceResult {
@@ -249,7 +247,7 @@ export interface RaceResult {
   player2: { userId: number | null; carId: number | null; time: number; shifts: ShiftQuality[] };
   winnerId: number;
   distance: RaceDistance;
-  rewards: Record<string, { silver: number; xp: number }>;
+  rewards: Record<string, { coins: number; xp: number }>;
   createdAt: string;
 }
 
@@ -271,23 +269,11 @@ export interface Cosmetic {
   image?: string;
 }
 
-export interface NftDrop {
-  id: string;
-  name: string;
-  description: string;
-  totalEditions: number;
-  remaining: number;
-  priceTon: number;
-  type: string;
-  image: string;
-}
-
-export interface GoldPackage {
+export interface CoinPackage {
   id: string;
   name: string;
   priceStars: number;
-  priceTon: number;
-  gold: number;
+  coins: number;
 }
 
 export interface Notification {

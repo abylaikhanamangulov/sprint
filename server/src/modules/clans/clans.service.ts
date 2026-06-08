@@ -34,7 +34,7 @@ export class ClansService {
     const user = users.find(u => u.id === userId);
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    if (user.silver < 1000) throw new Error('NOT_ENOUGH_SILVER');
+    if (user.coins < 1000) throw new Error('NOT_ENOUGH_COINS');
     if (user.clanId) throw new Error('ALREADY_IN_CLAN');
 
     let newClanId = 1;
@@ -69,7 +69,7 @@ export class ClansService {
     });
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, silver: u.silver - 1000, clanId: newClanId } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - 1000, clanId: newClanId } : u)
     );
 
     return this.getClanById(newClanId);
@@ -120,7 +120,7 @@ export class ClansService {
   donate(userId: number, clanId: number, amount: number) {
     const users = dataStore.get(FILES.USERS);
     const user = users.find(u => u.id === userId);
-    if (!user || user.silver < amount) throw new Error('NOT_ENOUGH_SILVER');
+    if (!user || user.coins < amount) throw new Error('NOT_ENOUGH_COINS');
 
     dataStore.update(FILES.CLANS, d => ({
       ...d,
@@ -133,7 +133,7 @@ export class ClansService {
     }));
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, silver: u.silver - amount } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - amount } : u)
     );
 
     return { success: true };
@@ -215,7 +215,7 @@ export class ClansService {
 
     if (won) {
       dataStore.update(FILES.USERS, users =>
-        users.map(u => u.id === userId ? { ...u, silver: u.silver + 75 } : u)
+        users.map(u => u.id === userId ? { ...u, coins: u.coins + 75 } : u)
       );
     }
 

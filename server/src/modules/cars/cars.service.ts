@@ -22,28 +22,23 @@ export class CarsService {
     const user = users.find(u => u.id === userId);
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    if (car.priceSilver !== null && user.silver < car.priceSilver) {
-      throw new Error('NOT_ENOUGH_SILVER');
-    }
-    if (car.priceGold !== null && user.gold < car.priceGold) {
-      throw new Error('NOT_ENOUGH_GOLD');
+    if (car.priceCoins !== null && user.coins < car.priceCoins) {
+      throw new Error('NOT_ENOUGH_COINS');
     }
 
-    const costSilver = car.priceSilver || 0;
-    const costGold = car.priceGold || 0;
+    const costCoins = car.priceCoins || 0;
 
     dataStore.update(FILES.USERS, currentUsers =>
       currentUsers.map(u => u.id === userId ? {
         ...u,
-        silver: u.silver - costSilver,
-        gold: u.gold - costGold,
+        coins: u.coins - costCoins,
         ownedCars: Array.from(new Set([...(u.ownedCars || []), carId])),
       } : u)
     );
 
     return {
       carId,
-      balance: { silver: user.silver - costSilver, gold: user.gold - costGold }
+      balance: { coins: user.coins - costCoins }
     };
   }
 }

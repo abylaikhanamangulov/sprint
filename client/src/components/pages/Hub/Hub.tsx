@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { useHubViewModel } from '../../viewmodels/useHubViewModel';
-import { Screen, Card, Button, Grid, ClassBadge } from '../ui';
-import { CarSprite } from '../components/CarSprite';
-import { GlassModal } from '../../components/ui/GlassModal/GlassModal';
+import { useHubViewModel } from 'src/viewmodels/useHubViewModel';
+import { Screen, Card, Button, Grid, ClassBadge } from 'src/views/ui';
+import { CarSprite } from 'src/views/components/CarSprite';
+import { GlassModal } from 'src/components/ui/GlassModal/GlassModal';
 
 const Banner = styled(Card)<{ $variant: 'reward' | 'claimed' }>`
   margin-bottom: 16px;
@@ -41,6 +41,9 @@ const TileSub = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
+
 export function HubView() {
   const vm = useHubViewModel();
   const [showRewardModal, setShowRewardModal] = useState(false);
@@ -53,6 +56,7 @@ export function HubView() {
 
   return (
     <Screen>
+      <MainHeader title="Главная" />
       <GlassModal
         isOpen={showRewardModal}
         onClose={() => setShowRewardModal(false)}
@@ -63,10 +67,7 @@ export function HubView() {
             <>
               Вы зашли в игру <strong>{vm.dailyResult.streak} дней подряд</strong>!<br/><br/>
               Вы получили:<br/>
-              <span style={{ color: '#e8eaf0', fontSize: '18px', fontWeight: 'bold' }}>{vm.dailyResult.reward.silver} 🪙</span>
-              {vm.dailyResult.reward.gold > 0 && (
-                <> и <span style={{ color: '#ffd700', fontSize: '18px', fontWeight: 'bold' }}>{vm.dailyResult.reward.gold} 💎</span></>
-              )}
+              <span style={{ color: '#e8eaf0', fontSize: '18px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: 6 }}>{vm.dailyResult.reward.coins} <img src={coinIcon} alt="coin" style={{ width: 20, height: 20 }} /></span>
             </>
           ) : null
         }
@@ -80,7 +81,7 @@ export function HubView() {
           <p style={{ fontSize: 13, color: '#8890a8', marginBottom: 12 }}>
             День {vm.dailyStreak + 1} из 7
           </p>
-          <Button $variant="gold" onClick={vm.claimDaily} disabled={vm.claiming}>
+          <Button $variant="primary" onClick={vm.claimDaily} disabled={vm.claiming}>
             {vm.claiming ? '...' : 'Забрать'}
           </Button>
         </Banner>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { useWelcomeViewModel } from '../../viewmodels/useWelcomeViewModel';
-import { Screen, Button } from '../ui';
-import { CarCard } from '../components/CarCard';
+import { useWelcomeViewModel } from 'src/viewmodels/useWelcomeViewModel';
+import { Screen, Button } from 'src/views/ui';
+import { CarCard } from 'src/views/components/CarCard';
 
 const Title = styled.h1`
   font-size: 24px;

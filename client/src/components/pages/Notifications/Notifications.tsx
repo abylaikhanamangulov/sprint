@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useNotificationsViewModel } from '../../viewmodels/useNotificationsViewModel';
-import type { NotificationType } from '../../models/types';
-import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader } from '../ui';
+import { useNotificationsViewModel } from 'src/viewmodels/useNotificationsViewModel';
+import type { NotificationType } from 'src/models/types';
+import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 
 const Header = styled.div`
   display: flex;
@@ -46,17 +47,11 @@ export function NotificationsView() {
 
   return (
     <Screen>
-      <Header>
-        <Heading>Уведомления</Heading>
-        <Row $gap={8}>
-          <Button $variant="outline" $size="sm" onClick={vm.markAllRead}>
-            Все прочитаны
-          </Button>
-          <Button $variant="outline" $size="sm" onClick={vm.close}>
-            ✕
-          </Button>
-        </Row>
-      </Header>
+      <MainHeader title="Уведомления" showClose={true} onClose={vm.close}>
+        <Button $variant="outline" $size="sm" onClick={vm.markAllRead}>
+          Пометить все прочитанными
+        </Button>
+      </MainHeader>
 
       {vm.notifications.length === 0 && <EmptyState>Нет уведомлений</EmptyState>}
 

@@ -1,16 +1,16 @@
 import { Navigate } from 'react-router-dom';
 
 import { MainLayout } from 'src/layouts/MainLayout';
-import { HubView } from 'src/views/screens/HubView';
-import { GarageView } from 'src/views/screens/GarageView';
-import { RaceView } from 'src/views/screens/RaceView';
-import { CampaignView } from 'src/views/screens/CampaignView';
-import { EventsView } from 'src/views/screens/EventsView';
-import { ClanView } from 'src/views/screens/ClanView';
-import { ShopView } from 'src/views/screens/ShopView';
-import { ProfileView } from 'src/views/screens/ProfileView';
-import { SettingsView } from 'src/views/screens/SettingsView';
-import { NotificationsView } from 'src/views/screens/NotificationsView';
+import { HubView } from 'src/components/pages/Hub/Hub';
+import { GarageView } from 'src/components/pages/Garage/Garage';
+import { RaceView } from 'src/components/pages/Race/Race';
+import { CampaignView } from 'src/components/pages/Campaign/Campaign';
+import { EventsView } from 'src/components/pages/Events/Events';
+import { ClanView } from 'src/components/pages/Clan/Clan';
+import { ShopView } from 'src/components/pages/Shop/Shop';
+import { Profile } from 'src/components/pages/Profile';
+import { SettingsView } from 'src/components/pages/Settings/Settings';
+import { NotificationsView } from 'src/components/pages/Notifications/Notifications';
 
 import { VIEWS, getPath } from './paths';
 import { RenderRoutesInnerProps, RouteData } from './types';
@@ -25,7 +25,7 @@ export const routes: RouteData[] = [
       { view: 'EVENTS', component: <EventsView /> },
       { view: 'CLAN', component: <ClanView /> },
       { view: 'SHOP', component: <ShopView /> },
-      { view: 'PROFILE', component: <ProfileView /> },
+      { view: 'PROFILE', component: <Profile /> },
       { view: 'SETTINGS', component: <SettingsView /> },
       { view: 'NOTIFICATIONS', component: <NotificationsView /> },
       { view: 'CAMPAIGN', component: <CampaignView /> },

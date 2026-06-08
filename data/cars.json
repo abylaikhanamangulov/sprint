@@ -5,8 +5,6 @@
     "class": "D",
     "drivetrain": "rwd",
     "isStarter": true,
-    "priceSilver": 0,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 165,
@@ -17,7 +15,8 @@
     },
     "maxGears": 4,
     "basePP": 62,
-    "image": "/assets/cars/vaz2106.png"
+    "image": "/assets/cars/vaz2106.png",
+    "priceCoins": 0
   },
   {
     "id": 2,
@@ -25,8 +24,6 @@
     "class": "D",
     "drivetrain": "fwd",
     "isStarter": true,
-    "priceSilver": 0,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 215,
@@ -37,7 +34,8 @@
     },
     "maxGears": 5,
     "basePP": 107,
-    "image": "/assets/cars/civic_ek.png"
+    "image": "/assets/cars/civic_ek.png",
+    "priceCoins": 0
   },
   {
     "id": 3,
@@ -45,8 +43,6 @@
     "class": "D",
     "drivetrain": "rwd",
     "isStarter": true,
-    "priceSilver": 0,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 230,
@@ -57,7 +53,8 @@
     },
     "maxGears": 5,
     "basePP": 109,
-    "image": "/assets/cars/bmw_e30.png"
+    "image": "/assets/cars/bmw_e30.png",
+    "priceCoins": 0
   },
   {
     "id": 4,
@@ -65,8 +62,6 @@
     "class": "C",
     "drivetrain": "fwd",
     "isStarter": false,
-    "priceSilver": 5000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 205,
@@ -77,7 +72,8 @@
     },
     "maxGears": 5,
     "basePP": 102,
-    "image": "/assets/cars/vaz2108.png"
+    "image": "/assets/cars/vaz2108.png",
+    "priceCoins": 5000
   },
   {
     "id": 5,
@@ -85,8 +81,6 @@
     "class": "C",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 12000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 250,
@@ -97,7 +91,8 @@
     },
     "maxGears": 6,
     "basePP": 137,
-    "image": "/assets/cars/silvia_s15.png"
+    "image": "/assets/cars/silvia_s15.png",
+    "priceCoins": 12000
   },
   {
     "id": 6,
@@ -105,8 +100,6 @@
     "class": "B",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 35000,
-    "priceGold": null,
     "unlockCondition": "level:10",
     "baseStats": {
       "speed": 290,
@@ -117,7 +110,8 @@
     },
     "maxGears": 6,
     "basePP": 165,
-    "image": "/assets/cars/supra_mk4.png"
+    "image": "/assets/cars/supra_mk4.png",
+    "priceCoins": 35000
   },
   {
     "id": 7,
@@ -125,8 +119,6 @@
     "class": "A",
     "drivetrain": "awd",
     "isStarter": false,
-    "priceSilver": null,
-    "priceGold": 500,
     "unlockCondition": "level:20",
     "baseStats": {
       "speed": 330,
@@ -137,7 +129,8 @@
     },
     "maxGears": 6,
     "basePP": 232,
-    "image": "/assets/cars/gtr_r35.png"
+    "image": "/assets/cars/gtr_r35.png",
+    "priceCoins": 50000
   },
   {
     "id": 8,
@@ -145,8 +138,6 @@
     "class": "S",
     "drivetrain": "awd",
     "isStarter": false,
-    "priceSilver": null,
-    "priceGold": 1200,
     "unlockCondition": "level:30",
     "baseStats": {
       "speed": 345,
@@ -157,7 +148,8 @@
     },
     "maxGears": 7,
     "basePP": 245,
-    "image": "/assets/cars/huracan.png"
+    "image": "/assets/cars/huracan.png",
+    "priceCoins": 120000
   },
   {
     "id": 9,
@@ -165,8 +157,6 @@
     "class": "B",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 28000,
-    "priceGold": null,
     "unlockCondition": "wins:30",
     "baseStats": {
       "speed": 240,
@@ -177,7 +167,8 @@
     },
     "maxGears": 5,
     "basePP": 127,
-    "image": "/assets/cars/charger_rt.png"
+    "image": "/assets/cars/charger_rt.png",
+    "priceCoins": 28000
   },
   {
     "id": 10,
@@ -185,8 +176,6 @@
     "class": "B",
     "drivetrain": "awd",
     "isStarter": false,
-    "priceSilver": 25000,
-    "priceGold": null,
     "unlockCondition": "level:15",
     "baseStats": {
       "speed": 265,
@@ -197,7 +186,8 @@
     },
     "maxGears": 6,
     "basePP": 161,
-    "image": "/assets/cars/evo9.png"
+    "image": "/assets/cars/evo9.png",
+    "priceCoins": 25000
   },
   {
     "id": 11,
@@ -205,8 +195,6 @@
     "class": "D",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 1500,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 165,
@@ -217,7 +205,8 @@
     },
     "maxGears": 5,
     "basePP": 60,
-    "image": "/assets/cars/lada2107.png"
+    "image": "/assets/cars/lada2107.png",
+    "priceCoins": 1500
   },
   {
     "id": 12,
@@ -225,8 +214,6 @@
     "class": "C",
     "drivetrain": "fwd",
     "isStarter": false,
-    "priceSilver": 14000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 245,
@@ -237,7 +224,8 @@
     },
     "maxGears": 6,
     "basePP": 124,
-    "image": "/assets/cars/golf_gti.png"
+    "image": "/assets/cars/golf_gti.png",
+    "priceCoins": 14000
   },
   {
     "id": 13,
@@ -245,8 +233,6 @@
     "class": "B",
     "drivetrain": "awd",
     "isStarter": false,
-    "priceSilver": 30000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 260,
@@ -257,7 +243,8 @@
     },
     "maxGears": 6,
     "basePP": 162,
-    "image": "/assets/cars/wrx_sti.png"
+    "image": "/assets/cars/wrx_sti.png",
+    "priceCoins": 30000
   },
   {
     "id": 14,
@@ -265,8 +252,6 @@
     "class": "A",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 120000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 335,
@@ -277,7 +262,8 @@
     },
     "maxGears": 6,
     "basePP": 216,
-    "image": "/assets/cars/corvette_z06.png"
+    "image": "/assets/cars/corvette_z06.png",
+    "priceCoins": 120000
   },
   {
     "id": 15,
@@ -285,8 +271,6 @@
     "class": "S",
     "drivetrain": "rwd",
     "isStarter": false,
-    "priceSilver": 400000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 350,
@@ -297,7 +281,8 @@
     },
     "maxGears": 7,
     "basePP": 250,
-    "image": "/assets/cars/ferrari_488.png"
+    "image": "/assets/cars/ferrari_488.png",
+    "priceCoins": 400000
   },
   {
     "id": 16,
@@ -305,8 +290,6 @@
     "class": "X",
     "drivetrain": "awd",
     "isStarter": false,
-    "priceSilver": 2000000,
-    "priceGold": null,
     "unlockCondition": null,
     "baseStats": {
       "speed": 460,
@@ -317,6 +300,7 @@
     },
     "maxGears": 8,
     "basePP": 338,
-    "image": "/assets/cars/bugatti_tourbillon.png"
+    "image": "/assets/cars/bugatti_tourbillon.png",
+    "priceCoins": 2000000
   }
 ]

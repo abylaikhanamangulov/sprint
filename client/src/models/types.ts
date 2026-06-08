@@ -14,8 +14,7 @@ import type {
   Achievement,
   ShopCrate,
   Cosmetic,
-  NftDrop,
-  GoldPackage,
+  CoinPackage,
   Tuning,
   Clan,
   ClanWar,
@@ -40,8 +39,7 @@ export interface LoginResponse {
 
 export interface DailyReward {
   day: number;
-  silver: number;
-  gold: number;
+  coins: number;
   special?: string | null;
 }
 
@@ -80,7 +78,7 @@ export interface PveRaceRequest {
 }
 
 export interface CampaignReward {
-  silver: number;
+  coins: number;
   xp: number;
   special?: string;
 }
@@ -153,8 +151,7 @@ export interface ShopData {
   dailyDeal: DailyDeal | null;
   crates: ShopCrate[];
   cosmetics: Cosmetic[];
-  nftDrops: NftDrop[];
-  goldPackages: GoldPackage[];
+  coinPackages: CoinPackage[];
 }
 
 export interface CrateResult {

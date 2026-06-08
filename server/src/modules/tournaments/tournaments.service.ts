@@ -30,13 +30,12 @@ export class TournamentsService {
     const fee = tournament.entryFee;
     
     if (fee.amount > 0) {
-      const field = fee.currency === 'gold' ? 'gold' : 'silver';
-      if (user[field] < fee.amount) {
+      if (user.coins < fee.amount) {
         throw new Error('NOT_ENOUGH_FUNDS');
       }
 
       dataStore.update(FILES.USERS, currentUsers =>
-        currentUsers.map(u => u.id === userId ? { ...u, [field]: u[field] - fee.amount } : u)
+        currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - fee.amount } : u)
       );
     }
 

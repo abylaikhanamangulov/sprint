@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useSettingsViewModel } from '../../viewmodels/useSettingsViewModel';
-import type { GraphicsQuality, UserSettings } from '../../models/types';
-import { Screen, Card, Button, Row, Column, Heading, Muted, Select, Range, Toggle } from '../ui';
+import { useSettingsViewModel } from 'src/viewmodels/useSettingsViewModel';
+import type { GraphicsQuality, UserSettings } from 'src/models/types';
+import { Screen, Card, Button, Row, Column, Heading, Muted, Select, Range, Toggle } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 
 const Header = styled.div`
   display: flex;
@@ -44,12 +45,7 @@ export function SettingsView() {
 
   return (
     <Screen>
-      <Header>
-        <Heading>Настройки</Heading>
-        <Button $variant="outline" $size="sm" onClick={vm.back}>
-          Назад
-        </Button>
-      </Header>
+      <MainHeader title="Настройки" showClose={true} onClose={vm.back} />
 
       <Card style={{ marginBottom: 12 }}>
         <SectionTitle>ИГРА</SectionTitle>

@@ -4,7 +4,7 @@ import { routes } from './routes/routes';
 import { useAppViewModel } from './viewmodels/useAppViewModel';
 import { AppShell } from './views/AppShell';
 import { Loader } from './views/ui';
-import { WelcomeView } from './views/screens/WelcomeView';
+import { WelcomeView } from './components/pages/Welcome/Welcome';
 
 function App() {
   const { stage, finishOnboarding } = useAppViewModel();

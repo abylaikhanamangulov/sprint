@@ -28,8 +28,7 @@ export class AuthService {
         level: 1,
         xp: 0,
         xpToNext: 500,
-        silver: 500,
-        gold: 10,
+        coins: 1500,
         energy: 20,
         maxEnergy: 20,
         lastEnergyRegen: new Date().toISOString(),
@@ -47,7 +46,7 @@ export class AuthService {
           bestTime: 0,
           perfectShifts: 0,
           longestWinStreak: 0,
-          silverEarned: 0,
+          coinsEarned: 0,
         },
         settings: {
           language: 'ru',
@@ -91,12 +90,10 @@ export class AuthService {
     user.lastDailyReward = now.toISOString();
     
     const reward = {
-      silver: 500 + Math.min(user.dailyStreak * 100, 2000),
-      gold: user.dailyStreak > 0 && user.dailyStreak % 7 === 0 ? 5 : 0,
+      coins: 500 + Math.min(user.dailyStreak * 100, 2000) + (user.dailyStreak > 0 && user.dailyStreak % 7 === 0 ? 500 : 0),
     };
 
-    user.silver = (user.silver || 0) + reward.silver;
-    user.gold = (user.gold || 0) + reward.gold;
+    user.coins = (user.coins || 0) + reward.coins;
 
     dataStore.update(FILES.USERS, current => {
       const updated = [...current];

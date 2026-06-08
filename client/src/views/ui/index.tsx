@@ -68,7 +68,7 @@ export const Card = styled.div<{ $selected?: boolean; $clickable?: boolean }>`
 `;
 
 // ── Button ───────────────────────────────────────────────────────────────────
-type ButtonVariant = 'primary' | 'gold' | 'danger' | 'outline';
+type ButtonVariant = 'primary' | 'danger' | 'outline';
 
 export const Button = styled.button<{
   $variant?: ButtonVariant;
@@ -88,11 +88,7 @@ export const Button = styled.button<{
 
   ${({ $variant = 'primary', theme }) => {
     switch ($variant) {
-      case 'gold':
-        return css`
-          background: linear-gradient(135deg, #ffd700, #ffaa00);
-          color: #1a1a2e;
-        `;
+
       case 'danger':
         return css`
           background: ${theme.colors.red};

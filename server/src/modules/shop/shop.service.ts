@@ -1,5 +1,5 @@
 import { dataStore, FILES } from '../../core/database';
-import { ShopCrate, Cosmetic, NftDrop, GoldPackage } from '@drag-racing/shared/types';
+import { ShopCrate, Cosmetic, CoinPackage } from '@drag-racing/shared/types';
 
 export class ShopService {
   getShopCatalog() {
@@ -11,8 +11,8 @@ export class ShopService {
       car: dailyDealCar,
       discount: shop.dailyDeal.discount,
       expiresAt: shop.dailyDeal.expiresAt,
-      discountedPrice: dailyDealCar.priceSilver
-        ? Math.round(dailyDealCar.priceSilver * (1 - shop.dailyDeal.discount / 100))
+      discountedPrice: dailyDealCar.priceCoins
+        ? Math.round(dailyDealCar.priceCoins * (1 - shop.dailyDeal.discount / 100))
         : null,
     } : null;
 
@@ -20,8 +20,7 @@ export class ShopService {
       dailyDeal,
       crates: shop.crates,
       cosmetics: shop.cosmetics,
-      nftDrops: shop.nftDrops,
-      goldPackages: shop.goldPackages,
+      coinPackages: shop.coinPackages,
     };
   }
 
@@ -34,11 +33,10 @@ export class ShopService {
     const user = users.find(u => u.id === userId);
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    const field = cosmetic.price.currency === 'gold' ? 'gold' : 'silver';
-    if (user[field] < cosmetic.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
+    if (user.coins < cosmetic.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, [field]: u[field] - cosmetic.price.amount } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - cosmetic.price.amount } : u)
     );
 
     return cosmetic;
@@ -53,8 +51,7 @@ export class ShopService {
     const user = users.find(u => u.id === userId);
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    const field = crate.price.currency === 'gold' ? 'gold' : 'silver';
-    if (user[field] < crate.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
+    if (user.coins < crate.price.amount) throw new Error('NOT_ENOUGH_FUNDS');
 
     const drops: string[] = [];
     const contents = crate.contents as Record<string, number>;
@@ -68,22 +65,22 @@ export class ShopService {
     }
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, [field]: u[field] - crate.price.amount } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - crate.price.amount } : u)
     );
 
     return drops;
   }
 
-  buyGold(userId: number, packageId: string) {
+  buyCoins(userId: number, packageId: string) {
     const shop = dataStore.get(FILES.SHOP);
-    const pkg = shop.goldPackages.find(p => p.id === packageId);
+    const pkg = shop.coinPackages.find(p => p.id === packageId);
     if (!pkg) throw new Error('PACKAGE_NOT_FOUND');
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, gold: u.gold + pkg.gold } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins + pkg.coins } : u)
     );
 
-    return { goldAdded: pkg.gold };
+    return { coinsAdded: pkg.coins };
   }
 }
 

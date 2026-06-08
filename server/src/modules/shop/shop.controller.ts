@@ -42,12 +42,12 @@ export const buyCrate = (req: AuthRequest, res: Response) => {
   }
 };
 
-export const buyGold = (req: AuthRequest, res: Response) => {
+export const buyCoins = (req: AuthRequest, res: Response) => {
   try {
     const { packageId, paymentMethod } = req.body;
     if (!packageId) return res.status(400).json({ error: 'packageId обязателен' });
 
-    const result = shopService.buyGold(req.userId!, packageId);
+    const result = shopService.buyCoins(req.userId!, packageId);
     res.json({ success: true, ...result, paymentMethod });
   } catch (error) {
     handleError(res, error);

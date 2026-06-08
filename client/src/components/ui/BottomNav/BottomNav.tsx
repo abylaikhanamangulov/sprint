@@ -3,50 +3,44 @@ import { useBottomNavViewModel } from './BottomNavViewModel';
 
 const NavContainer = styled.nav`
   position: fixed;
-  bottom: calc(24px + env(safe-area-inset-bottom));
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  gap: 8px;
   
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 100px;
-  padding: 8px 12px;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
   z-index: 100;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.15); /* Top inner reflection */
 `;
 
 const TabButton = styled.button<{ $isActive: boolean }>`
-  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${({ $isActive }) => ($isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent')};
+  background: transparent;
   border: none;
-  border-radius: 100px;
-  padding: 12px 28px; /* Wide padding for the pill shape */
-  color: ${({ $isActive }) => ($isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.5)')};
+  padding: 4px;
+  color: ${({ $isActive }) => ($isActive ? '#cfff04' : '#8890a8')};
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: color 0.2s;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-
-  &:hover {
-    color: #ffffff;
-    background: ${({ $isActive }) => ($isActive ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.05)')};
-  }
+  min-width: 60px;
 
   svg {
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    margin-bottom: 4px;
   }
+`;
+
+const TabLabel = styled.span`
+  font-size: 11px;
+  font-weight: 500;
 `;
 
 export function BottomNav() {
@@ -68,9 +62,11 @@ export function BottomNav() {
           >
             <Icon 
               size={24} 
-              strokeWidth={isActive ? 2.2 : 1.5} 
-              fill="none"
+              strokeWidth={isActive ? 2.5 : 2} 
+              fill={isActive ? '#cfff04' : 'none'}
+              color={isActive ? '#cfff04' : '#8890a8'}
             />
+            <TabLabel>{tab.label}</TabLabel>
           </TabButton>
         );
       })}

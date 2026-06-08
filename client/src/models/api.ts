@@ -129,9 +129,9 @@ export const api = {
     buyCosmetic: (id: string) =>
       post<SuccessResponse>('/shop/buy-cosmetic', { cosmeticId: id }),
     buyCrate: (id: string) => post<CrateResult>('/shop/buy-crate', { crateId: id }),
-    buyGold: (packageId: string, method: string) =>
-      post<{ success: boolean; goldAdded: number; paymentMethod: string }>(
-        '/shop/buy-gold',
+    buyCoins: (packageId: string, method: string) =>
+      post<{ success: boolean; coinsAdded: number; paymentMethod: string }>(
+        '/shop/buy-coins',
         { packageId, paymentMethod: method }
       ),
   },

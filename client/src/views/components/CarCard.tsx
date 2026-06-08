@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import type { Car, CarCosmetics } from '../../models/types';
 import { Card, ClassBadge } from '../ui';
 import { CarSprite } from './CarSprite';
+import coinIcon from 'src/components/icons/assets/coin.svg';
 
 interface Props {
   car: Car;
@@ -78,10 +79,8 @@ export function CarCard({ car, cosmetics, currentPP, isSelected, onClick, showPr
       </PP>
       {showPrice && (
         <Price>
-          {car.priceSilver != null ? (
-            <span style={{ color: 'var(--silver)' }}>🪙 {car.priceSilver.toLocaleString()}</span>
-          ) : car.priceGold != null ? (
-            <span style={{ color: '#ffd700' }}>💎 {car.priceGold.toLocaleString()}</span>
+          {car.priceCoins != null ? (
+            <span style={{ color: 'var(--silver)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} /> {car.priceCoins.toLocaleString()}</span>
           ) : (
             <span style={{ color: '#2ed573' }}>Бесплатно</span>
           )}

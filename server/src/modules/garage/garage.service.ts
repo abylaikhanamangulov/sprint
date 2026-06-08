@@ -105,16 +105,15 @@ export class GarageService {
     if (currentStage >= category.maxStage) throw new Error('MAX_STAGE_REACHED');
 
     const cost = Math.round(category.baseCost * Math.pow(category.costMultiplier, currentStage));
-    const currencyField = category.currency === 'gold' ? 'gold' : 'silver';
 
     const users = dataStore.get(FILES.USERS);
     const user = users.find(u => u.id === userId);
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    if (user[currencyField] < cost) throw new Error('NOT_ENOUGH_FUNDS');
+    if (user.coins < cost) throw new Error('NOT_ENOUGH_FUNDS');
 
     dataStore.update(FILES.USERS, currentUsers =>
-      currentUsers.map(u => u.id === userId ? { ...u, [currencyField]: u[currencyField] - cost } : u)
+      currentUsers.map(u => u.id === userId ? { ...u, coins: u.coins - cost } : u)
     );
 
     dataStore.update(FILES.UPGRADES, data => {

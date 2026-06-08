@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { useClanViewModel } from '../../viewmodels/useClanViewModel';
-import type { ClanTab } from '../../viewmodels/useClanViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader, TextInput } from '../ui';
+import { useClanViewModel } from 'src/viewmodels/useClanViewModel';
+import type { ClanTab } from 'src/viewmodels/useClanViewModel';
+import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader, TextInput } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
 
 const Header = styled.div`
   display: flex;
@@ -48,7 +50,7 @@ export function ClanView() {
     if (vm.creating) {
       return (
         <Screen>
-          <Heading style={{ marginBottom: 16 }}>Создать клан</Heading>
+          <MainHeader title="Создать клан" showClose={true} onClose={() => vm.setCreating(false)} />
           <Card>
             <Field>
               <label>Название</label>
@@ -69,8 +71,8 @@ export function ClanView() {
                 placeholder="NW"
               />
             </Field>
-            <Muted $size={11} style={{ display: 'block', marginBottom: 12 }}>
-              Стоимость: 1,000 🪙
+            <Muted $size={11} style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 12 }}>
+              Стоимость: 1,000 <img src={coinIcon} alt="coin" style={{ width: 12, height: 12 }} />
             </Muted>
             <Row $gap={8}>
               <Button $variant="primary" onClick={vm.createClan}>
@@ -88,12 +90,12 @@ export function ClanView() {
 
     return (
       <Screen>
-        <Header>
-          <Heading>Кланы</Heading>
+        <MainHeader title="Кланы" />
+        <div style={{ marginBottom: 12 }}>
           <Button $variant="primary" $size="sm" onClick={() => vm.setCreating(true)}>
             + Создать
           </Button>
-        </Header>
+        </div>
         <Column $gap={8}>
           {vm.clanList.map((c) => (
             <Card key={c.id}>
@@ -127,19 +129,15 @@ export function ClanView() {
 
   return (
     <Screen>
-      <Header>
-        <div>
-          <Heading>
-            [{clan.tag}] {clan.name}
-          </Heading>
-          <Muted $size={11}>
-            Ур.{clan.level} · Казна: {clan.treasury.toLocaleString()} 🪙
-          </Muted>
-        </div>
+      <MainHeader 
+        title={`[${clan.tag}] ${clan.name}`} 
+        subtitle={`Ур.${clan.level} · Казна: ${clan.treasury.toLocaleString()} монет`} 
+      />
+      <div style={{ marginBottom: 12 }}>
         <Button $variant="danger" $size="sm" onClick={vm.leaveClan}>
-          Выйти
+          Выйти из клана
         </Button>
-      </Header>
+      </div>
 
       <Row $gap={8} style={{ marginBottom: 12 }}>
         {(['members', 'chat', 'wars'] as ClanTab[]).map((t) => (
@@ -168,7 +166,7 @@ export function ClanView() {
                       {ROLE_LABELS[m.role] || m.role}
                     </Muted>
                   </div>
-                  <Muted $size={11}>Вклад: {m.contribution} 🪙</Muted>
+                  <Muted $size={11} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>Вклад: {m.contribution} <img src={coinIcon} alt="coin" style={{ width: 12, height: 12 }} /></Muted>
                 </Row>
               </Card>
             ))}
@@ -178,7 +176,7 @@ export function ClanView() {
             <Row $gap={8}>
               {[100, 500, 1000].map((amt) => (
                 <Button key={amt} $variant="outline" $size="sm" onClick={() => vm.donate(amt)}>
-                  {amt} 🪙
+                  {amt} <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} />
                 </Button>
               ))}
             </Row>

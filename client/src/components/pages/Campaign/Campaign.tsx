@@ -1,6 +1,8 @@
 import styled from 'styled-components';
-import { useCampaignViewModel } from '../../viewmodels/useCampaignViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, Stars, ProgressBar, ProgressFill, Loader } from '../ui';
+import { useCampaignViewModel } from 'src/viewmodels/useCampaignViewModel';
+import { Screen, Card, Button, Row, Column, Heading, Muted, Stars, ProgressBar, ProgressFill, Loader } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
 
 const Header = styled.div`
   display: flex;
@@ -27,12 +29,7 @@ export function CampaignView() {
     const ch = vm.selectedChapter;
     return (
       <Screen>
-        <Header>
-          <Heading>{ch.name}</Heading>
-          <Button $variant="outline" $size="sm" onClick={vm.closeChapter}>
-            Назад
-          </Button>
-        </Header>
+        <MainHeader title={ch.name} showClose={true} onClose={vm.closeChapter} />
         <Column $gap={8}>
           {ch.nodes.map((node) => (
             <NodeCard key={node.id} $boss={node.type === 'boss'} $available={node.isAvailable}>
@@ -66,8 +63,8 @@ export function CampaignView() {
                   ) : (
                     <span style={{ fontSize: 20 }}>🔒</span>
                   )}
-                  <Muted $size={11} style={{ display: 'block', marginTop: 6 }}>
-                    🪙{node.rewards.silver} · {node.rewards.xp}XP
+                  <Muted $size={11} style={{ marginTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
+                    <img src={coinIcon} alt="coin" style={{ width: 12, height: 12 }} /> {node.rewards.coins} · {node.rewards.xp}XP
                   </Muted>
                 </div>
               </Row>
@@ -80,10 +77,7 @@ export function CampaignView() {
 
   return (
     <Screen>
-      <Header>
-        <Heading>Кампания</Heading>
-        <span style={{ fontSize: 13 }}>⚡ {vm.energy}/{vm.maxEnergy}</span>
-      </Header>
+      <MainHeader title="Кампания" subtitle={`⚡ ${vm.energy}/${vm.maxEnergy}`} />
       <Column $gap={12}>
         {vm.chapters.map((chapter) => (
           <Card

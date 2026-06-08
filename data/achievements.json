@@ -1,17 +1,182 @@
 [
-  { "id": 1, "name": "Первая кровь", "description": "Выиграй свою первую PvP гонку", "icon": "trophy", "condition": { "type": "pvp_wins", "value": 1 }, "rewardXp": 100, "rewardSilver": 200 },
-  { "id": 2, "name": "Идеальный заезд", "description": "Все переключения — Perfect в одной гонке", "icon": "star", "condition": { "type": "perfect_race", "value": 1 }, "rewardXp": 250, "rewardSilver": 500 },
-  { "id": 3, "name": "Коллекционер", "description": "Собери 10 автомобилей", "icon": "car", "condition": { "type": "cars_owned", "value": 10 }, "rewardXp": 500, "rewardSilver": 2000 },
-  { "id": 4, "name": "Большой коллекционер", "description": "Собери 20 автомобилей", "icon": "car_gold", "condition": { "type": "cars_owned", "value": 20 }, "rewardXp": 1000, "rewardSilver": 5000 },
-  { "id": 5, "name": "NOS-маньяк", "description": "Используй NOS 500 раз", "icon": "nos", "condition": { "type": "nos_used", "value": 500 }, "rewardXp": 300, "rewardSilver": 1000 },
-  { "id": 6, "name": "Герой клана", "description": "Стань лучшим вкладчиком в клановой войне", "icon": "shield", "condition": { "type": "clan_war_mvp", "value": 1 }, "rewardXp": 500, "rewardSilver": 2000 },
-  { "id": 7, "name": "Серия побед", "description": "Выиграй 5 PvP гонок подряд", "icon": "fire", "condition": { "type": "win_streak", "value": 5 }, "rewardXp": 200, "rewardSilver": 800 },
-  { "id": 8, "name": "Неудержимый", "description": "Выиграй 10 PvP гонок подряд", "icon": "fire_gold", "condition": { "type": "win_streak", "value": 10 }, "rewardXp": 500, "rewardSilver": 2000 },
-  { "id": 9, "name": "Скорость", "description": "Заверши 1/4 мили быстрее 10 секунд", "icon": "speed", "condition": { "type": "best_time", "value": 10.0 }, "rewardXp": 1000, "rewardSilver": 5000 },
-  { "id": 10, "name": "Босс-хантер", "description": "Победи всех боссов в Москве", "icon": "skull", "condition": { "type": "chapter_bosses", "value": 1 }, "rewardXp": 500, "rewardSilver": 3000 },
-  { "id": 11, "name": "Путешественник", "description": "Открой все главы кампании", "icon": "map", "condition": { "type": "chapters_unlocked", "value": 5 }, "rewardXp": 2000, "rewardSilver": 10000 },
-  { "id": 12, "name": "Сотня", "description": "Проведи 100 гонок", "icon": "counter", "condition": { "type": "total_races", "value": 100 }, "rewardXp": 300, "rewardSilver": 1000 },
-  { "id": 13, "name": "Тысячник", "description": "Проведи 1000 гонок", "icon": "counter_gold", "condition": { "type": "total_races", "value": 1000 }, "rewardXp": 2000, "rewardSilver": 10000 },
-  { "id": 14, "name": "Турнирный боец", "description": "Выиграй турнир", "icon": "medal", "condition": { "type": "tournament_wins", "value": 1 }, "rewardXp": 1000, "rewardSilver": 5000 },
-  { "id": 15, "name": "Максимальная прокачка", "description": "Полностью прокачай один автомобиль", "icon": "wrench", "condition": { "type": "max_upgrade_car", "value": 1 }, "rewardXp": 800, "rewardSilver": 3000 }
+  {
+    "id": 1,
+    "name": "Первая кровь",
+    "description": "Заверши обучение. Купи свой первый автомобиль. Выиграй первую PvP гонку.",
+    "icon": "trophy",
+    "condition": {
+      "type": "pvp_wins",
+      "value": 1
+    },
+    "rewardXp": 100,
+    "rewardCoins": 200
+  },
+  {
+    "id": 2,
+    "name": "Идеальный заезд",
+    "description": "Все переключения — Perfect в одной гонке",
+    "icon": "star",
+    "condition": {
+      "type": "perfect_race",
+      "value": 1
+    },
+    "rewardXp": 250,
+    "rewardCoins": 500
+  },
+  {
+    "id": 3,
+    "name": "Коллекционер",
+    "description": "Собери 5 автомобилей. Собери 10 автомобилей.",
+    "icon": "car",
+    "condition": {
+      "type": "cars_owned",
+      "value": 10
+    },
+    "rewardXp": 500,
+    "rewardCoins": 2000
+  },
+  {
+    "id": 4,
+    "name": "Большой коллекционер",
+    "description": "Собери 15 автомобилей. Собери 20 автомобилей.",
+    "icon": "car_gold",
+    "condition": {
+      "type": "cars_owned",
+      "value": 20
+    },
+    "rewardXp": 1000,
+    "rewardCoins": 5000
+  },
+  {
+    "id": 5,
+    "name": "Социальная активность",
+    "description": "Вступи в клан. Подпишись на наш Telegram канал <a href='#'>(перейти)</a>. Пригласи одного друга.",
+    "icon": "nos",
+    "condition": {
+      "type": "nos_used",
+      "value": 500
+    },
+    "rewardXp": 300,
+    "rewardCoins": 1000
+  },
+  {
+    "id": 6,
+    "name": "Герой клана",
+    "description": "Вступи в клан. Прими участие в клановой войне. Стань лучшим вкладчиком в клановой войне.",
+    "icon": "shield",
+    "condition": {
+      "type": "clan_war_mvp",
+      "value": 1
+    },
+    "rewardXp": 500,
+    "rewardCoins": 2000
+  },
+  {
+    "id": 7,
+    "name": "Серия побед",
+    "description": "Выиграй 5 PvP гонок подряд",
+    "icon": "fire",
+    "condition": {
+      "type": "win_streak",
+      "value": 5
+    },
+    "rewardXp": 200,
+    "rewardCoins": 800
+  },
+  {
+    "id": 8,
+    "name": "Неудержимый",
+    "description": "Выиграй 10 PvP гонок подряд",
+    "icon": "fire_gold",
+    "condition": {
+      "type": "win_streak",
+      "value": 10
+    },
+    "rewardXp": 500,
+    "rewardCoins": 2000
+  },
+  {
+    "id": 9,
+    "name": "Скорость",
+    "description": "Заверши 1/4 мили быстрее 10 секунд",
+    "icon": "speed",
+    "condition": {
+      "type": "best_time",
+      "value": 10
+    },
+    "rewardXp": 1000,
+    "rewardCoins": 5000
+  },
+  {
+    "id": 10,
+    "name": "Босс-хантер",
+    "description": "Победи всех боссов в Москве",
+    "icon": "skull",
+    "condition": {
+      "type": "chapter_bosses",
+      "value": 1
+    },
+    "rewardXp": 500,
+    "rewardCoins": 3000
+  },
+  {
+    "id": 11,
+    "name": "Путешественник",
+    "description": "Открой 2 главы кампании. Открой 4 главы кампании. Открой все главы кампании.",
+    "icon": "map",
+    "condition": {
+      "type": "chapters_unlocked",
+      "value": 5
+    },
+    "rewardXp": 2000,
+    "rewardCoins": 10000
+  },
+  {
+    "id": 12,
+    "name": "Сотня",
+    "description": "Проведи 100 гонок",
+    "icon": "counter",
+    "condition": {
+      "type": "total_races",
+      "value": 100
+    },
+    "rewardXp": 300,
+    "rewardCoins": 1000
+  },
+  {
+    "id": 13,
+    "name": "Тысячник",
+    "description": "Проведи 1000 гонок",
+    "icon": "counter_gold",
+    "condition": {
+      "type": "total_races",
+      "value": 1000
+    },
+    "rewardXp": 2000,
+    "rewardCoins": 10000
+  },
+  {
+    "id": 14,
+    "name": "Турнирный боец",
+    "description": "Зарегистрируйся в турнире. Выйди в финал. Выиграй турнир.",
+    "icon": "medal",
+    "condition": {
+      "type": "tournament_wins",
+      "value": 1
+    },
+    "rewardXp": 1000,
+    "rewardCoins": 5000
+  },
+  {
+    "id": 15,
+    "name": "Максимальная прокачка",
+    "description": "Купи деталь 1 уровня. Купи деталь 5 уровня. Полностью прокачай один автомобиль.",
+    "icon": "wrench",
+    "condition": {
+      "type": "max_upgrade_car",
+      "value": 1
+    },
+    "rewardXp": 800,
+    "rewardCoins": 3000
+  }
 ]

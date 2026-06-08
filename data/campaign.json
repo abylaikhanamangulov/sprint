@@ -17,8 +17,8 @@
           "recommendedPP": 60,
           "energyCost": 1,
           "rewards": {
-            "silver": 100,
-            "xp": 50
+            "xp": 50,
+            "coins": 100
           },
           "starThresholds": [
             15,
@@ -38,8 +38,8 @@
           "recommendedPP": 75,
           "energyCost": 1,
           "rewards": {
-            "silver": 120,
-            "xp": 60
+            "xp": 60,
+            "coins": 120
           },
           "starThresholds": [
             14.5,
@@ -59,8 +59,8 @@
           "recommendedPP": 85,
           "energyCost": 1,
           "rewards": {
-            "silver": 150,
-            "xp": 70
+            "xp": 70,
+            "coins": 150
           },
           "starThresholds": [
             14,
@@ -80,8 +80,8 @@
           "recommendedPP": 95,
           "energyCost": 1,
           "rewards": {
-            "silver": 180,
-            "xp": 80
+            "xp": 80,
+            "coins": 180
           },
           "starThresholds": [
             13.5,
@@ -101,8 +101,8 @@
           "recommendedPP": 105,
           "energyCost": 1,
           "rewards": {
-            "silver": 200,
-            "xp": 90
+            "xp": 90,
+            "coins": 200
           },
           "starThresholds": [
             13,
@@ -122,8 +122,8 @@
           "recommendedPP": 120,
           "energyCost": 1,
           "rewards": {
-            "silver": 250,
-            "xp": 100
+            "xp": 100,
+            "coins": 250
           },
           "starThresholds": [
             12.5,
@@ -143,8 +143,8 @@
           "recommendedPP": 130,
           "energyCost": 1,
           "rewards": {
-            "silver": 280,
-            "xp": 110
+            "xp": 110,
+            "coins": 280
           },
           "starThresholds": [
             12,
@@ -164,8 +164,8 @@
           "recommendedPP": 145,
           "energyCost": 1,
           "rewards": {
-            "silver": 300,
-            "xp": 120
+            "xp": 120,
+            "coins": 300
           },
           "starThresholds": [
             11.5,
@@ -187,9 +187,9 @@
           "recommendedPP": 170,
           "energyCost": 2,
           "rewards": {
-            "silver": 1000,
             "xp": 500,
-            "special": "boss_car_blueprint:vaz2106_boss"
+            "special": "boss_car_blueprint:vaz2106_boss",
+            "coins": 1000
           },
           "starThresholds": [
             11,
@@ -217,8 +217,8 @@
           "recommendedPP": 190,
           "energyCost": 1,
           "rewards": {
-            "silver": 350,
-            "xp": 130
+            "xp": 130,
+            "coins": 350
           },
           "starThresholds": [
             11.5,
@@ -238,8 +238,8 @@
           "recommendedPP": 210,
           "energyCost": 1,
           "rewards": {
-            "silver": 400,
-            "xp": 150
+            "xp": 150,
+            "coins": 400
           },
           "starThresholds": [
             11,
@@ -261,9 +261,9 @@
           "recommendedPP": 320,
           "energyCost": 2,
           "rewards": {
-            "silver": 2000,
             "xp": 800,
-            "special": "boss_car_blueprint:350z_boss"
+            "special": "boss_car_blueprint:350z_boss",
+            "coins": 2000
           },
           "starThresholds": [
             10.5,

@@ -4,7 +4,7 @@ import {
   User, Car, Clan, ClanMember, ClanWar, ClanMessage, 
   Tournament, CampaignChapter, CampaignProgress, 
   RaceResult, Notification, Achievement, ShopCrate, 
-  Cosmetic, NftDrop, GoldPackage, UpgradeCategory, 
+  Cosmetic, CoinPackage, UpgradeCategory, 
   UserUpgrade, Tuning 
 } from '@drag-racing/shared/types';
 
@@ -34,8 +34,8 @@ export interface DatabaseSchema {
     dailyDeal: { carId: number; discount: number; expiresAt: string };
     crates: ShopCrate[];
     cosmetics: Cosmetic[];
-    nftDrops: NftDrop[];
-    goldPackages: GoldPackage[];
+
+    coinPackages: CoinPackage[];
   };
   'achievements.json': Achievement[];
   'races.json': RaceResult[];

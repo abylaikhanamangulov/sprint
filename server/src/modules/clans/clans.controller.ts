@@ -5,7 +5,7 @@ import { AuthRequest } from '../../core/middlewares/auth.middleware';
 const handleError = (res: Response, error: any) => {
   if (error.message === 'CLAN_NOT_FOUND') return res.status(404).json({ error: 'Клан не найден' });
   if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: 'Пользователь не найден' });
-  if (error.message === 'NOT_ENOUGH_SILVER') return res.status(400).json({ error: 'Недостаточно серебра' });
+  if (error.message === 'NOT_ENOUGH_COINS') return res.status(400).json({ error: 'Недостаточно coins' });
   if (error.message === 'ALREADY_IN_CLAN') return res.status(400).json({ error: 'Вы уже в клане' });
   
   console.error('[Clans Controller] Error:', error);

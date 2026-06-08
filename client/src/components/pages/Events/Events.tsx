@@ -1,5 +1,7 @@
-import { useEventsViewModel } from '../../viewmodels/useEventsViewModel';
-import { Screen, Card, Button, Row, Column, Heading, Muted, Loader } from '../ui';
+import { useEventsViewModel } from 'src/viewmodels/useEventsViewModel';
+import { Screen, Card, Button, Row, Column, Heading, Muted, Loader } from 'src/views/ui';
+import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
+import coinIcon from 'src/components/icons/assets/coin.svg';
 
 const STATUS_LABELS: Record<string, { text: string; color: string }> = {
   active: { text: 'Активен', color: '#2ed573' },
@@ -18,7 +20,7 @@ export function EventsView() {
 
   return (
     <Screen>
-      <Heading style={{ marginBottom: 16 }}>Турниры и События</Heading>
+      <MainHeader title="События" />
       <Column $gap={12}>
         {vm.tournaments.map((t) => {
           const status = STATUS_LABELS[t.status] ?? STATUS_LABELS.upcoming;
@@ -50,14 +52,14 @@ export function EventsView() {
                 Осталось: {hoursLeft.toFixed(0)}ч · Участников: {t.participants.length}
               </Muted>
               {t.entryFee.amount > 0 && (
-                <div style={{ fontSize: 11, marginBottom: 8 }}>
-                  Вход: {t.entryFee.amount} {t.entryFee.currency === 'gold' ? '💎' : '🪙'}
+                <div style={{ fontSize: 11, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  Вход: {t.entryFee.amount} {t.entryFee.currency === 'stars' ? '⭐' : <img src={coinIcon} alt="coin" style={{ width: 12, height: 12 }} />}
                 </div>
               )}
               <Row $gap={8} style={{ marginBottom: 8, fontSize: 11, color: '#8890a8', flexWrap: 'wrap' }}>
                 {t.prizePool.map((p) => (
-                  <span key={p.place}>
-                    #{p.place}: {p.silver}🪙{p.gold > 0 ? ` ${p.gold}💎` : ''}
+                  <span key={p.place} style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
+                    #{p.place}: {p.coins}<img src={coinIcon} alt="coin" style={{ width: 12, height: 12 }} />
                   </span>
                 ))}
               </Row>

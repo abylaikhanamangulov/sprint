@@ -133,7 +133,7 @@ export class CampaignService {
       player2: { userId: null, carId: null, time: aiResult.time, shifts: aiResult.shifts },
       winnerId: playerWon ? userId : 0,
       distance: 'quarter', 
-      rewards: playerWon ? { winner: { silver: node.rewards.silver, xp: node.rewards.xp } } : {},
+      rewards: playerWon ? { winner: { coins: node.rewards.coins, xp: node.rewards.xp } } : {},
       createdAt: new Date().toISOString(),
     };
 
@@ -143,7 +143,7 @@ export class CampaignService {
       currentUsers.map(u => u.id === userId ? {
         ...u,
         energy: u.energy - node.energyCost,
-        silver: playerWon ? u.silver + node.rewards.silver : u.silver,
+        coins: playerWon ? u.coins + node.rewards.coins : u.coins,
         xp: playerWon ? u.xp + node.rewards.xp : u.xp,
         stats: {
           ...u.stats,

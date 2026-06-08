@@ -86,7 +86,7 @@ export const DailyReward: Story = {
     description: (
       <>
         Вы зашли в игру <strong>3 дня подряд</strong>!<br/>
-        Получите бонус: <span style={{ color: '#e8eaf0' }}>200 🪙</span> и <span style={{ color: '#ffd700' }}>5 💎</span>
+        Получите бонус: <span style={{ color: '#e8eaf0' }}>200 монет</span> и <span style={{ color: '#ffd700' }}>5 💎</span>
       </>
     ),
     actionText: 'Забрать',
