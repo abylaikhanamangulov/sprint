@@ -35,8 +35,8 @@ async function seedCollection(col: any, filename: string, extractArray?: (data: 
       await col.insertMany(sanitized);
       logger.info(`[Seed] Seeded ${sanitized.length} items into ${col.collectionName} from ${filename}`);
     }
-  } catch (error) {
-    logger.error(`[Seed] Error seeding ${filename}:`, error);
+  } catch (error: any) {
+    logger.error(`[Seed] Error seeding ${filename}: ${error.message || error}`);
   }
 }
 

@@ -152,6 +152,156 @@ export class AdminService {
     
     return newStatus;
   }
+
+  // --- GOD MODE FEATURES ---
+  async addCoins(userId: number, amount: number) {
+    await usersCol.updateOne({ id: userId }, { $inc: { coins: amount } });
+  }
+
+  async removeCoins(userId: number, amount: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+    const newCoins = Math.max(0, user.coins - amount);
+    await usersCol.updateOne({ id: userId }, { $set: { coins: newCoins } });
+  }
+
+  async addXp(userId: number, amount: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+    
+    let newXp = user.xp + amount;
+    let newLevel = user.level;
+    let newXpToNext = user.xpToNext;
+
+    while (newXp >= newXpToNext) {
+      newXp -= newXpToNext;
+      newLevel++;
+      newXpToNext = Math.floor(newXpToNext * 1.5);
+    }
+
+    await usersCol.updateOne({ id: userId }, { $set: { xp: newXp, level: newLevel, xpToNext: newXpToNext } });
+  }
+
+  async setLevel(userId: number, level: number) {
+    if (level < 1) throw new Error('INVALID_LEVEL');
+    const xpToNext = 100 * Math.pow(1.5, level - 1); // rough formula
+    await usersCol.updateOne({ id: userId }, { $set: { level, xp: 0, xpToNext: Math.floor(xpToNext) } });
+  }
+
+  async removeCar(userId: number, carId: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+    
+    if (!user.ownedCars || !user.ownedCars.includes(carId)) {
+      throw new Error('CAR_NOT_OWNED');
+    }
+    
+    const newCars = user.ownedCars.filter(id => id !== carId);
+    let selectedCarId = user.selectedCarId;
+    if (selectedCarId === carId) {
+      selectedCarId = newCars.length > 0 ? newCars[0] : null;
+    }
+    
+    await usersCol.updateOne({ id: userId }, { $set: { ownedCars: newCars, selectedCarId } });
+  }
+
+  async wipeUser(userId: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+    
+    // Reset everything except registration data
+    await usersCol.updateOne({ id: userId }, {
+      $set: {
+        level: 1,
+        xp: 0,
+        xpToNext: 100,
+        coins: 0,
+        energy: 20,
+        rankPoints: 0,
+        rankTier: 1,
+        selectedCarId: null,
+        ownedCars: [],
+        clanId: null,
+        dailyStreak: 0,
+        'stats.totalRaces': 0,
+        'stats.pvpWins': 0,
+        'stats.pvpLosses': 0,
+        'stats.coinsEarned': 0
+      }
+    });
+  }
+
+  async giveAchievement(userId: number, achievementId: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+    // Basic stub - implementation depends on actual achievement systems
+  }
+
+  // --- CLAN GOD MODE ---
+  async renameClan(clanId: number, newName: string) {
+    const clan = await clansCol.findOne({ id: clanId });
+    if (!clan) throw new Error('CLAN_NOT_FOUND');
+    const existing = await clansCol.findOne({ name: newName });
+    if (existing && existing.id !== clanId) throw new Error('NAME_ALREADY_TAKEN');
+    await clansCol.updateOne({ id: clanId }, { $set: { name: newName } });
+  }
+
+  async changeClanLeader(clanId: number, newLeaderId: number) {
+    const clan = await clansCol.findOne({ id: clanId });
+    if (!clan) throw new Error('CLAN_NOT_FOUND');
+    
+    const member = await clanMembersCol.findOne({ clanId, userId: newLeaderId });
+    if (!member) throw new Error('USER_NOT_IN_CLAN');
+    
+    // Demote old leader
+    await clanMembersCol.updateOne({ clanId, userId: clan.leaderId }, { $set: { role: 'officer' } });
+    // Promote new leader
+    await clanMembersCol.updateOne({ clanId, userId: newLeaderId }, { $set: { role: 'leader' } });
+    // Update clan doc
+    await clansCol.updateOne({ id: clanId }, { $set: { leaderId: newLeaderId } });
+  }
+
+  async kickClanMember(clanId: number, targetUserId: number) {
+    const member = await clanMembersCol.findOne({ clanId, userId: targetUserId });
+    if (!member) throw new Error('USER_NOT_IN_CLAN');
+    const clan = await clansCol.findOne({ id: clanId });
+    if (clan && clan.leaderId === targetUserId) {
+      throw new Error('CANNOT_KICK_LEADER'); // Must change leader first
+    }
+    
+    await clanMembersCol.deleteOne({ clanId, userId: targetUserId });
+    await usersCol.updateOne({ id: targetUserId }, { $set: { clanId: null } });
+  }
+
+  async addClanXp(clanId: number, amount: number) {
+    const clan = await clansCol.findOne({ id: clanId });
+    if (!clan) throw new Error('CLAN_NOT_FOUND');
+    
+    let newXp = clan.xp + amount;
+    let newLevel = clan.level;
+    let newXpToNext = clan.xpToNext;
+
+    while (newXp >= newXpToNext) {
+      newXp -= newXpToNext;
+      newLevel++;
+      newXpToNext = Math.floor(newXpToNext * 1.5);
+    }
+
+    await clansCol.updateOne({ id: clanId }, { $set: { xp: newXp, level: newLevel, xpToNext: newXpToNext } });
+  }
+
+  // --- SYSTEM CONTROL ---
+  async setMaintenanceMode(enabled: boolean) {
+    // dynamically import to avoid circular dependencies if necessary, but we can just require or import at top
+    const { systemSettingsCol } = require('../../core/database');
+    await systemSettingsCol.updateOne({ id: 'global' }, { $set: { maintenanceMode: enabled } }, { upsert: true });
+  }
+
+  async getSystemSettings() {
+    const { systemSettingsCol } = require('../../core/database');
+    const settings = await systemSettingsCol.findOne({ id: 'global' });
+    return settings || { maintenanceMode: false };
+  }
 }
 
 export const adminService = new AdminService();

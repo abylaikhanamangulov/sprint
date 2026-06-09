@@ -46,9 +46,16 @@ export let upgradesCol: Collection<UpgradeCategory>;
 export let userUpgradesCol: Collection<UserUpgrade>;
 export let userTuningCol: Collection<Tuning>;
 export let userCosmeticsCol: Collection<CarCosmetics>;
+export interface SystemSettings {
+  id: string;
+  maintenanceMode: boolean;
+  maintenanceMessage?: string;
+}
+
 export let campaignChaptersCol: Collection<CampaignChapter>;
 export let campaignProgressCol: Collection<CampaignProgress>;
 export let notificationsCol: Collection<Notification>;
+export let systemSettingsCol: Collection<SystemSettings>;
 
 export async function connectDB() {
   let uri = process.env.MONGO_URI;
@@ -82,6 +89,13 @@ export async function connectDB() {
   campaignChaptersCol = db.collection<CampaignChapter>('campaignChapters');
   campaignProgressCol = db.collection<CampaignProgress>('campaignProgress');
   notificationsCol = db.collection<Notification>('notifications');
+  systemSettingsCol = db.collection<SystemSettings>('systemSettings');
+
+  // Initialize system settings if they don't exist
+  const existingSettings = await systemSettingsCol.findOne({ id: 'global' });
+  if (!existingSettings) {
+    await systemSettingsCol.insertOne({ id: 'global', maintenanceMode: false });
+  }
 
   // Create indexes for performance
   await usersCol.createIndex({ id: 1 }, { unique: true });
