@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useSettingsViewModel } from 'src/viewmodels/useSettingsViewModel';
+import { useSettingsViewModel } from 'src/components/pages/Settings/SettingsViewModel';
 import type { GraphicsQuality, UserSettings } from 'src/models/types';
 import { Screen, Card, Button, Row, Column, Heading, Muted, Select, Range, Toggle } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';

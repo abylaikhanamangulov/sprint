@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useCampaignViewModel } from 'src/viewmodels/useCampaignViewModel';
+import { useCampaignViewModel } from 'src/components/pages/Campaign/CampaignViewModel';
 import { Screen, Card, Button, Row, Column, Heading, Muted, Stars, ProgressBar, ProgressFill, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 import coinIcon from 'src/components/icons/assets/coin.svg';

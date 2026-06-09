@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useGameStore } from 'src/models/store';
-import { useRaceViewModel, RACE_LENGTHS, OVERHEAT_LIMIT } from 'src/viewmodels/useRaceViewModel';
+import { useRaceViewModel, RACE_LENGTHS, OVERHEAT_LIMIT } from 'src/components/pages/Race/RaceViewModel';
 import type { Drivetrain } from 'src/models/types';
 import { Screen, Card, Button, Column, Heading, Muted, Stars, ClassBadge } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';

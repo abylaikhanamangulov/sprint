@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../models/api';
-import { useGameStore, ScreenId } from '../models/store';
-import type { DailyRewardResponse, MyCar } from '../models/types';
+import { api } from 'src/models/api';
+import { useGameStore, ScreenId } from 'src/models/store';
+import type { DailyRewardResponse, MyCar } from 'src/models/types';
 
 interface HubViewModel {
   dailyAvailable: boolean;

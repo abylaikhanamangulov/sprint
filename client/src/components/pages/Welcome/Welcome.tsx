@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useWelcomeViewModel } from 'src/viewmodels/useWelcomeViewModel';
+import { useWelcomeViewModel } from 'src/components/pages/Welcome/WelcomeViewModel';
 import { Screen, Button } from 'src/views/ui';
 import { CarCard } from 'src/views/components/CarCard';
 

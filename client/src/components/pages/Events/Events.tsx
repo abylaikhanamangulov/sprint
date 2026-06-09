@@ -1,4 +1,4 @@
-import { useEventsViewModel } from 'src/viewmodels/useEventsViewModel';
+import { useEventsViewModel } from 'src/components/pages/Events/EventsViewModel';
 import { Screen, Card, Button, Row, Column, Heading, Muted, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 import coinIcon from 'src/components/icons/assets/coin.svg';

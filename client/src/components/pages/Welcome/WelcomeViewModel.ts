@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../models/api';
-import { useGameStore } from '../models/store';
-import type { Car } from '../models/types';
+import { api } from 'src/models/api';
+import { useGameStore } from 'src/models/store';
+import type { Car } from 'src/models/types';
 
 interface WelcomeViewModel {
   firstName: string;

@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { renderRoutes } from './routes/renderRoutes';
 import { routes } from './routes/routes';
-import { useAppViewModel } from './viewmodels/useAppViewModel';
+import { useAppViewModel } from './AppViewModel';
 import { AppShell } from './views/AppShell';
 import { Loader } from './views/ui';
 import { WelcomeView } from './components/pages/Welcome/Welcome';

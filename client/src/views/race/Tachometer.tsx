@@ -1,5 +1,5 @@
-import { MAX_RPM, REDLINE } from '../../viewmodels/useRaceViewModel';
-import type { ShiftZones } from '../../viewmodels/useRaceViewModel';
+import { MAX_RPM, REDLINE } from 'src/components/pages/Race/RaceViewModel';
+import type { ShiftZones } from 'src/components/pages/Race/RaceViewModel';
 
 interface Props {
   rpm: number;

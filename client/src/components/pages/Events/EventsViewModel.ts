@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../models/api';
-import { getErrorMessage } from '../models/errors';
-import type { Tournament } from '../models/types';
+import { api } from 'src/models/api';
+import { getErrorMessage } from 'src/models/errors';
+import type { Tournament } from 'src/models/types';
 
 interface EventsViewModel {
   tournaments: Tournament[];

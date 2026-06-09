@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../models/api';
-import { getErrorMessage } from '../models/errors';
-import { useGameStore } from '../models/store';
-import { DEFAULT_COSMETICS } from '../models/types';
+import { api } from 'src/models/api';
+import { getErrorMessage } from 'src/models/errors';
+import { useGameStore } from 'src/models/store';
+import { DEFAULT_COSMETICS } from 'src/models/types';
 import type {
   Car,
   CarCosmetics,
@@ -13,7 +13,7 @@ import type {
   ShiftQuality,
   WarGhost,
   WarRaceResult,
-} from '../models/types';
+} from 'src/models/types';
 
 export type RacePhase =
   | 'menu'

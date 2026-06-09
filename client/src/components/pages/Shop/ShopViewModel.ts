@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { api } from '../models/api';
-import { getErrorMessage } from '../models/errors';
-import { useGameStore } from '../models/store';
-import type { ShopData } from '../models/types';
+import { api } from 'src/models/api';
+import { getErrorMessage } from 'src/models/errors';
+import { useGameStore } from 'src/models/store';
+import type { ShopData } from 'src/models/types';
 
 export type ShopTab = 'deals' | 'crates' | 'cosmetics';
 

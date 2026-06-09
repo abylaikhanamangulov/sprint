@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useNotificationsViewModel } from 'src/viewmodels/useNotificationsViewModel';
+import { useNotificationsViewModel } from 'src/components/pages/Notifications/NotificationsViewModel';
 import type { NotificationType } from 'src/models/types';
 import { Screen, Card, Button, Row, Column, Heading, Muted, EmptyState, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useGameStore } from '../models/store';
-import { useTelegram } from '../hooks/useTelegram';
+import { useGameStore } from 'src/models/store';
+import { useTelegram } from 'src/hooks/useTelegram';
 
 type AppStage = 'splash' | 'loading' | 'welcome' | 'ready';
 

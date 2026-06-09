@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { useHubViewModel } from 'src/viewmodels/useHubViewModel';
+import { useHubViewModel } from 'src/components/pages/Hub/HubViewModel';
 import { Screen, Card, Button, Grid, ClassBadge } from 'src/views/ui';
 import { CarSprite } from 'src/views/components/CarSprite';
 import { GlassModal } from 'src/components/ui/GlassModal/GlassModal';

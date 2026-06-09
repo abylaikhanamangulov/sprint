@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api } from '../models/api';
-import { useGameStore } from '../models/store';
-import type { CampaignChapterDetail, CampaignChapterListItem } from '../models/types';
+import { api } from 'src/models/api';
+import { useGameStore } from 'src/models/store';
+import type { CampaignChapterDetail, CampaignChapterListItem } from 'src/models/types';
 
 interface CampaignViewModel {
   chapters: CampaignChapterListItem[];

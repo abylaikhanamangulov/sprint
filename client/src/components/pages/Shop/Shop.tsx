@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useShopViewModel } from 'src/viewmodels/useShopViewModel';
-import type { ShopTab } from 'src/viewmodels/useShopViewModel';
+import { useShopViewModel } from 'src/components/pages/Shop/ShopViewModel';
+import type { ShopTab } from 'src/components/pages/Shop/ShopViewModel';
 import { Screen, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 import coinIcon from 'src/components/icons/assets/coin.svg';

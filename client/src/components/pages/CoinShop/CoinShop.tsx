@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCoinShopViewModel } from 'src/viewmodels/useCoinShopViewModel';
+import { useCoinShopViewModel } from 'src/components/pages/CoinShop/CoinShopViewModel';
 import { Screen, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 import coinIcon from 'src/components/icons/assets/coin.svg';
