@@ -53,7 +53,7 @@ export function registerAdminMenuRoutes(bot: TelegramBot) {
     const userId = query.from.id;
 
     // Check admin rights
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (!user || !user.isAdmin) return;
 
     if (query.data === 'admin_main_menu') {

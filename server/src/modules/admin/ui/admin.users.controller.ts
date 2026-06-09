@@ -86,7 +86,7 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
     const chatId = query.message.chat.id;
     const userId = query.from.id;
 
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (!user || !user.isAdmin) return;
 
     const ctx = getAdminContext(userId);
@@ -188,7 +188,7 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
 
     if (!userId || !text || text.startsWith('/')) return;
 
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (!user || !user.isAdmin) return;
 
     const ctx = getAdminContext(userId);

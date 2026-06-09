@@ -44,7 +44,7 @@ bot.onText(/\/start/, async (msg) => {
 
   // Maintenance check
   const settings = await adminService.getSystemSettings();
-  const user = await usersCol.findOne({ id: userId });
+  const user = await usersCol.findOne({ telegramId: userId });
   if (settings.maintenanceMode && (!user || !user.isAdmin)) {
     await bot.sendMessage(chatId, '🛠 **Ведутся технические работы.** Сервер временно недоступен. Пожалуйста, зайдите позже.', { parse_mode: 'Markdown' });
     return;
@@ -94,7 +94,7 @@ bot.on('callback_query', async (query) => {
 
     // Maintenance check
     const settings = await adminService.getSystemSettings();
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (settings.maintenanceMode && (!user || !user.isAdmin)) {
       await bot.answerCallbackQuery(query.id, { text: 'Ведутся технические работы.', show_alert: true });
       return;
@@ -143,7 +143,7 @@ bot.onText(/\/admin(.*)/, async (msg, match) => {
 
   if (!userId) return;
 
-  const user = await usersCol.findOne({ id: userId });
+  const user = await usersCol.findOne({ telegramId: userId });
   if (!user || !user.isAdmin) {
     // Secret fallback to set the first admin if none exist
     const adminCount = await usersCol.countDocuments({ isAdmin: true });

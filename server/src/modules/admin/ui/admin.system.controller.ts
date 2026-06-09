@@ -35,7 +35,7 @@ export function registerAdminSystemRoutes(bot: TelegramBot) {
     const chatId = query.message.chat.id;
     const userId = query.from.id;
 
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (!user || !user.isAdmin) return;
 
     if (query.data === 'admin_menu_system') {
@@ -87,7 +87,7 @@ export function registerAdminSystemRoutes(bot: TelegramBot) {
     
     if (!userId || msg.text?.startsWith('/')) return;
 
-    const user = await usersCol.findOne({ id: userId });
+    const user = await usersCol.findOne({ telegramId: userId });
     if (!user || !user.isAdmin) return;
 
     const ctx = getAdminContext(userId);
