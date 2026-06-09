@@ -114,6 +114,26 @@ export class AuthService {
       reward,
     };
   }
+
+  async selectStarter(userId: number, carId: number) {
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('User not found');
+    if (user.selectedCarId) throw new Error('Starter car already selected');
+
+    const { carsCol } = await import('../../core/database');
+    const car = await carsCol.findOne({ id: carId, isStarter: true });
+    if (!car) throw new Error('Invalid starter car');
+
+    await usersCol.updateOne(
+      { id: userId },
+      { 
+        $set: { selectedCarId: carId },
+        $addToSet: { ownedCars: carId }
+      }
+    );
+
+    return { success: true, carId };
+  }
 }
 
 export const authService = new AuthService();

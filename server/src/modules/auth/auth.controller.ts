@@ -43,3 +43,22 @@ export const dailyReward = async (req: AuthRequest, res: Response): Promise<void
     res.status(400).json({ error: error.message || MESSAGES.errors.dailyRewardError });
   }
 };
+
+export const selectStarter = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: MESSAGES.errors.unauthorized });
+      return;
+    }
+    const { carId } = req.body;
+    if (!carId) {
+      res.status(400).json({ error: 'Car ID is required' });
+      return;
+    }
+    const result = await authService.selectStarter(req.user.id, carId);
+    res.json(result);
+  } catch (error: any) {
+    console.error('[Auth Controller]', error);
+    res.status(400).json({ error: error.message || 'Failed to select starter car' });
+  }
+};

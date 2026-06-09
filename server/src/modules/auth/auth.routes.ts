@@ -10,4 +10,6 @@ router.get('/me', authMiddleware, authController.getMe);
 
 router.post('/daily-reward', authMiddleware, authController.dailyReward);
 
+router.post('/select-starter', authMiddleware, authController.selectStarter);
+
 export default router;
