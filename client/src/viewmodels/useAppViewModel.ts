@@ -25,14 +25,14 @@ export function useAppViewModel(): AppViewModel {
   useEffect(() => {
     if (user) {
       fetchNotifications();
-      if (!isNew && user.selectedCarId) setOnboarded(true);
+      if (user.selectedCarId) setOnboarded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   let stage: AppStage;
   if (loading) stage = 'loading';
-  else if (isNew || (user && !user.selectedCarId)) stage = 'welcome';
+  else if (user && !user.selectedCarId) stage = 'welcome';
   else if (!onboarded || !user) stage = 'loading';
   else stage = 'ready';
 
