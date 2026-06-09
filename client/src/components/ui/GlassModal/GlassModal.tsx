@@ -61,29 +61,6 @@ const ModalContainer = styled.div<{ $isClosing: boolean }>`
   text-align: center;
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-`;
-
 const IconWrapper = styled.div`
   margin-bottom: 20px;
   display: flex;
@@ -212,10 +189,6 @@ export function GlassModal({
   return (
     <Overlay $isClosing={isClosing} onClick={handleClose}>
       <ModalContainer $isClosing={isClosing} onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={handleClose} aria-label="Закрыть">
-          <X size={18} strokeWidth={2.5} />
-        </CloseButton>
-        
         {(icon || imageSrc) && (
           <IconWrapper>
             {imageSrc ? <img src={imageSrc} alt="" /> : icon}

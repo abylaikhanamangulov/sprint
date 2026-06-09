@@ -63,23 +63,7 @@ const Title = styled.h2`
   color: #fff;
 `;
 
-const CloseButton = styled.button`
-  background: #2a2a2a;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  color: #888;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s;
-  &:hover {
-    background: #3a3a3a;
-  }
-`;
+
 
 export interface BottomModalProps {
   isOpen: boolean;
@@ -112,7 +96,6 @@ export const BottomModal: React.FC<BottomModalProps> = ({ isOpen, onClose, title
       <ModalContent $isClosing={isClosing} onClick={(e) => e.stopPropagation()}>
         <Header>
           <Title>{title}</Title>
-          <CloseButton onClick={handleClose}>✕</CloseButton>
         </Header>
         {children}
       </ModalContent>

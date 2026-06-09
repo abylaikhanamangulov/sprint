@@ -10,32 +10,6 @@ const HeaderContainer = styled.div`
   padding: 16px 0 24px 0;
   padding-top: calc(16px + env(safe-area-inset-top));
 `;
-
-const TopRow = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 16px;
-`;
-
-const CloseButton = styled.button`
-  background: #2a2a2a;
-  border: none;
-  border-radius: 20px;
-  padding: 6px 14px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #3a3a3a;
-  }
-`;
-
 const MainRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -135,15 +109,24 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
     }
   };
 
+  React.useEffect(() => {
+    if (showClose) {
+      window.Telegram?.WebApp.BackButton.show();
+      const tgBack = () => {
+        handleClose();
+      };
+      window.Telegram?.WebApp.BackButton.onClick(tgBack);
+      return () => {
+        window.Telegram?.WebApp.BackButton.offClick(tgBack);
+        window.Telegram?.WebApp.BackButton.hide();
+      };
+    } else {
+      window.Telegram?.WebApp.BackButton.hide();
+    }
+  }, [showClose, onClose]);
+
   return (
     <HeaderContainer>
-      {showClose && (
-        <TopRow>
-          <CloseButton onClick={handleClose}>
-            ✕ Close
-          </CloseButton>
-        </TopRow>
-      )}
       
       <MainRow>
         <TitleContainer>

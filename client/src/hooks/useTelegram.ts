@@ -16,6 +16,13 @@ declare global {
         expand: () => void;
         openInvoice?: (url: string, callback?: (status: string) => void) => void;
         close: () => void;
+        BackButton: {
+          isVisible: boolean;
+          onClick: (cb: () => void) => void;
+          offClick: (cb: () => void) => void;
+          show: () => void;
+          hide: () => void;
+        };
         HapticFeedback: {
           impactOccurred: (style: 'light' | 'medium' | 'heavy') => void;
           notificationOccurred: (type: 'error' | 'success' | 'warning') => void;
