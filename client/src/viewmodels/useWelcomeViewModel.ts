@@ -25,9 +25,22 @@ export function useWelcomeViewModel(onDone: () => void): WelcomeViewModel {
   const confirm = async () => {
     if (!selected) return;
     setLoading(true);
-    await api.auth.selectStarter(selected);
-    await fetchUser();
-    onDone();
+    try {
+      await api.auth.selectStarter(selected);
+      await fetchUser();
+      onDone();
+    } catch (e: any) {
+      console.error(e);
+      // Если сервер говорит, что машина уже выбрана (или что-то пошло не так), 
+      // просто обновляем стейт и идем дальше.
+      if (e.message?.includes('already selected') || e.message?.includes('уже выбрана')) {
+        await fetchUser();
+        onDone();
+      } else {
+        setLoading(false);
+        // В идеале тут бы показать тост с ошибкой
+      }
+    }
   };
 
   return {
