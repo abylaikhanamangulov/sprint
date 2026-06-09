@@ -10,7 +10,7 @@ export function useCoinShopViewModel() {
   const fetchShop = async () => {
     try {
       setLoading(true);
-      const data = await api.shop.getShop();
+      const data = await api.shop.get();
       setShop(data);
     } catch (e) {
       console.error('Failed to load coin shop:', e);
