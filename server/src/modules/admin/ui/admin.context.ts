@@ -1,5 +1,21 @@
 export type AdminState = 
+  | 'IDLE'
   | 'AUTHENTICATED'
+  | 'WAITING_BAN_ID'
+  | 'WAITING_GIVE_CAR_ID'
+  | 'WAITING_RESTORE_ENERGY_ID'
+  | 'WAITING_ADD_COINS_ID'
+  | 'WAITING_ADD_COINS_AMOUNT'
+  | 'WAITING_REMOVE_COINS_ID'
+  | 'WAITING_REMOVE_COINS_AMOUNT'
+  | 'WAITING_ADD_XP_ID'
+  | 'WAITING_ADD_XP_AMOUNT'
+  | 'WAITING_SET_LEVEL_ID'
+  | 'WAITING_SET_LEVEL_AMOUNT'
+  | 'WAITING_BROADCAST_MESSAGE'
+  | 'WAITING_SHOP_COINS'
+  | 'WAITING_SHOP_PRICE'
+  | 'WAITING_SHOP_DISC'
   // Users
   | 'WAITING_USER_SEARCH'
   | 'WAITING_USER_ADD_COINS'
@@ -23,6 +39,7 @@ export type AdminState =
 export interface AdminContext {
   state: AdminState;
   targetUserId?: number;
+  packageId?: string;
   targetClanId?: number;
   targetCarId?: number;
 }

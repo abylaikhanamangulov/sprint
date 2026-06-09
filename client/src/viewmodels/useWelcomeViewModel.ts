@@ -29,11 +29,11 @@ export function useWelcomeViewModel(onDone: () => void): WelcomeViewModel {
       await api.auth.selectStarter(selected);
       await fetchUser();
       onDone();
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       // Если сервер говорит, что машина уже выбрана (или что-то пошло не так), 
       // просто обновляем стейт и идем дальше.
-      if (e.message?.includes('already selected') || e.message?.includes('уже выбрана')) {
+      if ((e as Error).message?.includes('already selected') || (e as Error).message?.includes('уже выбрана')) {
         await fetchUser();
         onDone();
       } else {

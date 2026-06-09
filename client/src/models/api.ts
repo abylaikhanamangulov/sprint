@@ -141,11 +141,8 @@ export const api = {
     buyCosmetic: (id: string) =>
       post<SuccessResponse>('/shop/buy-cosmetic', { cosmeticId: id }),
     buyCrate: (id: string) => post<CrateResult>('/shop/buy-crate', { crateId: id }),
-    buyCoins: (packageId: string, method: string) =>
-      post<{ success: boolean; coinsAdded: number; paymentMethod: string }>(
-        '/shop/buy-coins',
-        { packageId, paymentMethod: method }
-      ),
+    createInvoice: (packageId: string) =>
+      post<{ success: boolean; url: string }>('/shop/create-invoice', { packageId }),
   },
   profile: {
     get: () => get<ProfileData>('/profile'),

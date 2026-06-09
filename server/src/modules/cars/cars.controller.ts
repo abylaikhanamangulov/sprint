@@ -26,10 +26,10 @@ export const buy = async (req: AuthRequest, res: Response) => {
     const result = await carsService.buyCar(req.userId!, carId); 
     
     res.json({ success: true, ...result });
-  } catch (error: any) {
-    if (error.message === 'CAR_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.carNotFound });
-    if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
-    if (error.message.includes('NOT_ENOUGH')) return res.status(400).json({ error: MESSAGES.errors.notEnoughFunds });
+  } catch (error) {
+    if ((error as Error).message === 'CAR_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.carNotFound });
+    if ((error as Error).message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
+    if ((error as Error).message.includes('NOT_ENOUGH')) return res.status(400).json({ error: MESSAGES.errors.notEnoughFunds });
 
     console.error('[Cars Controller] buy error:', error);
     res.status(500).json({ error: MESSAGES.errors.internalServer });

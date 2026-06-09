@@ -1,5 +1,6 @@
 import { usersCol } from '../../core/database';
 import { User } from '@drag-racing/shared/types';
+import { WithId } from 'mongodb';
 import { MESSAGES } from '../../constants/messages';
 
 interface LoginPayload {
@@ -65,7 +66,7 @@ export class AuthService {
       };
 
       await usersCol.insertOne(newUser);
-      user = newUser as any;
+      user = newUser as unknown as WithId<User>;
     } else {
       user.lastLoginAt = new Date().toISOString();
       await usersCol.updateOne({ _id: user._id }, { $set: { lastLoginAt: user.lastLoginAt } });

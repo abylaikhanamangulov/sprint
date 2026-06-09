@@ -6,6 +6,7 @@ import { registerAdminMenuRoutes } from './modules/admin/ui/admin.menu.controlle
 import { registerAdminUsersRoutes } from './modules/admin/ui/admin.users.controller';
 import { registerAdminClansRoutes } from './modules/admin/ui/admin.clans.controller';
 import { registerAdminSystemRoutes } from './modules/admin/ui/admin.system.controller';
+import { registerAdminShopRoutes } from './modules/admin/ui/admin.shop.controller';
 import { adminService } from './modules/admin/admin.service';
 
 dotenv.config();
@@ -56,8 +57,8 @@ bot.onText(/\/start/, async (msg) => {
     try {
       const chatMember = await bot.getChatMember(CHANNEL_USERNAME, userId);
       isSubscribed = ['creator', 'administrator', 'member'].includes(chatMember.status);
-    } catch (e: any) {
-      if (e.response && e.response.statusCode === 400) {
+    } catch (e) {
+      if ((e as any).response && (e as any).response.statusCode === 400) {
         isSubscribed = false;
       } else {
         throw e;
@@ -106,8 +107,8 @@ bot.on('callback_query', async (query) => {
       try {
         const chatMember = await bot.getChatMember(CHANNEL_USERNAME, userId);
         isSubscribed = ['creator', 'administrator', 'member'].includes(chatMember.status);
-      } catch (e: any) {
-        if (e.response && e.response.statusCode === 400) {
+      } catch (e) {
+        if ((e as any).response && (e as any).response.statusCode === 400) {
           isSubscribed = false;
         } else {
           throw e;
@@ -117,7 +118,7 @@ bot.on('callback_query', async (query) => {
       if (isSubscribed) {
         await bot.editMessageText(MESSAGES.bot.subThanks, {
           chat_id: chatId,
-          message_id: query.message.message_id,
+          message_id: query.message?.message_id,
           reply_markup: {
             inline_keyboard: [
               [{ text: MESSAGES.bot.playButton, web_app: { url: WEBAPP_URL } }]
@@ -172,5 +173,29 @@ registerAdminMenuRoutes(bot);
 registerAdminUsersRoutes(bot);
 registerAdminClansRoutes(bot);
 registerAdminSystemRoutes(bot);
+registerAdminShopRoutes(bot);
+
+bot.on('pre_checkout_query', (query) => {
+  bot.answerPreCheckoutQuery(query.id, true).catch(console.error);
+});
+
+bot.on('successful_payment', async (msg) => {
+  const payload = msg.successful_payment?.invoice_payload;
+  if (!payload) return;
+
+  const match = payload.match(/^pkg_(.+)_user_(\d+)$/);
+  if (!match) return;
+
+  const [, packageId, userIdStr] = match;
+  const userId = parseInt(userIdStr, 10);
+
+  try {
+    const { shopService } = await import('./modules/shop/shop.service');
+    await shopService.buyCoins(userId, packageId);
+    console.log(`[Payment] Successfully credited package ${packageId} to user ${userId}`);
+  } catch (error) {
+    console.error(`[Payment Error] Failed to credit package ${packageId} to user ${userId}`, error);
+  }
+});
 
 console.log(MESSAGES.bot.botInit);

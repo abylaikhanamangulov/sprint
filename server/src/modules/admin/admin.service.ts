@@ -30,7 +30,7 @@ export class AdminService {
   }
 
   async broadcastMessage(bot: TelegramBot, text: string) {
-    const users = await usersCol.find({ telegramId: { $exists: true, $ne: null as any } }).toArray();
+    const users = await usersCol.find(({ telegramId: { $type: 'number' } } as any)).toArray();
     let sent = 0;
     let failed = 0;
     

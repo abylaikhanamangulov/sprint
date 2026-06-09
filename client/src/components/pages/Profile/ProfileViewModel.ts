@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from 'src/models/api';
 import { useGameStore } from 'src/models/store';
 import { RANK_TIERS } from 'src/models/types';
-import type { LeaderboardEntry, ProfileData, RankTier, User } from 'src/models/types';
+import type { LeaderboardEntry, ProfileData, RankTier, User, AchievementView } from 'src/models/types';
 import type { ProfileTab, DailyBonusDay } from './Profile.types';
 
 export interface ProfileViewModel {
@@ -13,8 +13,8 @@ export interface ProfileViewModel {
   isTasksModalOpen: boolean;
   isStatsModalOpen: boolean;
   isHistoryModalOpen: boolean;
-  inProcessAchievements: any[]; // Using AchievementView
-  completedAchievements: any[];
+  inProcessAchievements: AchievementView[];
+  completedAchievements: AchievementView[];
   tier: RankTier | undefined;
   winRate: number;
   dailyBonusDays: DailyBonusDay[];

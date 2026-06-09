@@ -3,11 +3,11 @@ import { tournamentsService } from './tournaments.service';
 import { AuthRequest } from '../../core/middlewares/auth.middleware';
 import { MESSAGES } from '../../constants/messages';
 
-const handleError = (res: Response, error: any) => {
-  if (error.message === 'TOURNAMENT_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.tournamentNotFound });
-  if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
-  if (error.message === 'ALREADY_PARTICIPATING') return res.status(400).json({ error: MESSAGES.errors.alreadyParticipating });
-  if (error.message === 'NOT_ENOUGH_FUNDS') return res.status(400).json({ error: MESSAGES.errors.notEnoughFundsFee });
+const handleError = (res: Response, error: unknown) => {
+  if ((error as Error).message === 'TOURNAMENT_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.tournamentNotFound });
+  if ((error as Error).message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
+  if ((error as Error).message === 'ALREADY_PARTICIPATING') return res.status(400).json({ error: MESSAGES.errors.alreadyParticipating });
+  if ((error as Error).message === 'NOT_ENOUGH_FUNDS') return res.status(400).json({ error: MESSAGES.errors.notEnoughFundsFee });
   
   console.error('[Tournaments Controller] Error:', error);
   res.status(500).json({ error: MESSAGES.errors.internalServer });

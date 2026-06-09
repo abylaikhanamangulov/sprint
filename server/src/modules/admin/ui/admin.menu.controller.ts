@@ -37,7 +37,7 @@ export async function showAdminMenu(bot: TelegramBot, chatId: number, userId: nu
       inline_keyboard: [
         [{ text: '📊 Статистика сервера', callback_data: 'admin_server_stats' }],
         [{ text: '👥 Пользователи', callback_data: 'admin_menu_users' }, { text: '🛡️ Кланы', callback_data: 'admin_menu_clans' }],
-        [{ text: '🏆 Турниры', callback_data: 'admin_menu_tournaments' }],
+        [{ text: '🏆 Турниры', callback_data: 'admin_menu_tournaments' }, { text: '🛒 Магазин', callback_data: 'admin_shop_menu' }],
         [{ text: '📢 Рассылка', callback_data: 'admin_broadcast' }, { text: '⚙️ Система', callback_data: 'admin_menu_system' }],
         [{ text: '📖 Инструкция', callback_data: 'admin_help' }],
         [{ text: '❌ Закрыть админку', callback_data: 'admin_close' }]

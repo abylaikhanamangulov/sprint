@@ -42,8 +42,8 @@ async function seed() {
 
   console.log('[Seed] Inserting Coin Packages...');
   const coinPackages: CoinPackage[] = [
-    { id: 'coins_1000', name: 'Starter Pack', coins: 1000, priceStars: 100 },
-    { id: 'coins_5000', name: 'Racer Pack', coins: 5000, priceStars: 400 },
+    { id: 'coins_1000', name: 'Starter Pack', coins: 1000, priceStars: 100, discount: 0 },
+    { id: 'coins_5000', name: 'Racer Pack', coins: 5000, priceStars: 400, discount: 20 },
   ];
   await coinPackagesCol.insertMany(coinPackages);
 

@@ -14,6 +14,7 @@ declare global {
         };
         ready: () => void;
         expand: () => void;
+        openInvoice?: (url: string, callback?: (status: string) => void) => void;
         close: () => void;
         HapticFeedback: {
           impactOccurred: (style: 'light' | 'medium' | 'heavy') => void;

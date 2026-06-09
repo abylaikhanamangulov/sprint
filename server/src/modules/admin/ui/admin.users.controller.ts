@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { usersCol } from '../../../core/database';
-import { getAdminContext, setAdminState } from './admin.context';
+import { getAdminContext, setAdminState, clearAdminState, AdminState } from './admin.context';
 import { adminService } from '../admin.service';
 
 export async function showAdminUsersMenu(bot: TelegramBot, chatId: number, userId: number, messageId?: number) {
@@ -97,14 +97,14 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
       if (ctx.targetUserId) {
         await showUserCard(bot, chatId, userId, ctx.targetUserId);
       } else {
-        await showAdminUsersMenu(bot, chatId, userId, query.message.message_id);
+        await showAdminUsersMenu(bot, chatId, userId, query.message?.message_id);
       }
-      await bot.deleteMessage(chatId, query.message.message_id).catch(() => {});
+      await bot.deleteMessage(chatId, query.message?.message_id).catch(() => {});
       return bot.answerCallbackQuery(query.id);
     }
 
     if (query.data === 'admin_menu_users') {
-      await showAdminUsersMenu(bot, chatId, userId, query.message.message_id);
+      await showAdminUsersMenu(bot, chatId, userId, query.message?.message_id);
       await bot.answerCallbackQuery(query.id);
     }
 
@@ -121,7 +121,7 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
     if (query.data === 'admin_user_toggle_ban') {
       if (ctx.targetUserId) {
         await adminService.toggleBan(ctx.targetUserId);
-        await showUserCard(bot, chatId, userId, ctx.targetUserId, query.message.message_id);
+        await showUserCard(bot, chatId, userId, ctx.targetUserId, query.message?.message_id);
       }
       await bot.answerCallbackQuery(query.id, { text: 'Статус бана изменен!' });
     }
@@ -129,13 +129,13 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
     if (query.data === 'admin_user_full_energy') {
       if (ctx.targetUserId) {
         await adminService.restoreEnergy(ctx.targetUserId);
-        await showUserCard(bot, chatId, userId, ctx.targetUserId, query.message.message_id);
+        await showUserCard(bot, chatId, userId, ctx.targetUserId, query.message?.message_id);
       }
       await bot.answerCallbackQuery(query.id, { text: 'Энергия восстановлена!' });
     }
 
     // Money & XP prompt routes
-    const promptMap: Record<string, { state: any, msg: string }> = {
+    const promptMap: Record<string, { state: AdminState, msg: string }> = {
       'admin_user_add_coins': { state: 'WAITING_USER_ADD_COINS', msg: '💰 Введите количество монет для ВЫДАЧИ:' },
       'admin_user_rem_coins': { state: 'WAITING_USER_REMOVE_COINS', msg: '💸 Введите количество монет для ИЗЪЯТИЯ:' },
       'admin_user_add_xp': { state: 'WAITING_USER_ADD_XP', msg: '📈 Введите количество Опыта (XP) для выдачи:' },
@@ -176,7 +176,7 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
         await bot.sendMessage(chatId, '✅ Прогресс пользователя успешно сброшен.');
         await showUserCard(bot, chatId, userId, ctx.targetUserId);
       }
-      await bot.deleteMessage(chatId, query.message.message_id).catch(() => {});
+      await bot.deleteMessage(chatId, query.message?.message_id).catch(() => {});
       await bot.answerCallbackQuery(query.id);
     }
   });
@@ -232,8 +232,8 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
           await bot.sendMessage(chatId, `✅ Достижение выдано.`);
           await showUserCard(bot, chatId, userId, ctx.targetUserId);
         }
-      } catch (e: any) {
-        await bot.sendMessage(chatId, `❌ Ошибка: ${e.message}`);
+      } catch (e) {
+        await bot.sendMessage(chatId, `❌ Ошибка: ${(e as Error).message}`);
         setAdminState(userId, 'AUTHENTICATED'); // reset
         await showUserCard(bot, chatId, userId, ctx.targetUserId);
       }

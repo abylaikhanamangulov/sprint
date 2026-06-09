@@ -1,6 +1,11 @@
 import { carsCol, upgradesCol, userUpgradesCol, userTuningCol, userCosmeticsCol, usersCol } from '../../core/database';
 import { CarStats, UserUpgrade, UpgradeCategory, Tuning, CarCosmetics, DEFAULT_COSMETICS } from '@drag-racing/shared/types';
 
+export interface UserCosmetics extends CarCosmetics {
+  userId: number;
+  carId: number;
+}
+
 export class GarageService {
   public calculatePP(baseStats: CarStats, upgrades: UserUpgrade[], categories: UpgradeCategory[]): { pp: number; stats: CarStats } {
     const stats = { ...baseStats };
@@ -147,7 +152,7 @@ export class GarageService {
   }
 
   async saveCosmetics(userId: number, carId: number, cosmeticsData: Omit<CarCosmetics, 'userId' | 'carId'>) {
-    const cosmetics: any = { userId, carId, ...cosmeticsData };
+    const cosmetics: UserCosmetics = { userId, carId, ...cosmeticsData };
     const existing = await userCosmeticsCol.findOne({ userId, carId });
 
     if (existing) {

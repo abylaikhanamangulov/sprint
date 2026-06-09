@@ -38,9 +38,9 @@ export const dailyReward = async (req: AuthRequest, res: Response): Promise<void
     }
     const result = await authService.claimDailyReward(req.user.id);
     res.json(result);
-  } catch (error: any) {
+  } catch (error) {
     console.error('[Auth Controller]', error);
-    res.status(400).json({ error: error.message || MESSAGES.errors.dailyRewardError });
+    res.status(400).json({ error: (error as Error).message || MESSAGES.errors.dailyRewardError });
   }
 };
 
@@ -57,8 +57,8 @@ export const selectStarter = async (req: AuthRequest, res: Response): Promise<vo
     }
     const result = await authService.selectStarter(req.user.id, carId);
     res.json(result);
-  } catch (error: any) {
+  } catch (error) {
     console.error('[Auth Controller]', error);
-    res.status(400).json({ error: error.message || 'Failed to select starter car' });
+    res.status(400).json({ error: (error as Error).message || 'Failed to select starter car' });
   }
 };

@@ -6,8 +6,8 @@ import { MESSAGES } from '../../constants/messages';
 export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     res.json(await profileService.getProfile(req.userId!));
-  } catch (error: any) {
-    if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
+  } catch (error) {
+    if ((error as Error).message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
     console.error('[Profile Controller] getProfile error:', error);
     res.status(500).json({ error: MESSAGES.errors.internalServer });
   }

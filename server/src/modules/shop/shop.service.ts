@@ -1,4 +1,5 @@
 import { shopCratesCol, cosmeticsCol, coinPackagesCol, carsCol, usersCol, db } from '../../core/database';
+import { bot } from '../../bot';
 
 export class ShopService {
   async getShopCatalog() {
@@ -77,6 +78,29 @@ export class ShopService {
     await usersCol.updateOne({ id: userId }, { $inc: { coins: pkg.coins } });
 
     return { coinsAdded: pkg.coins };
+  }
+
+  async createInvoice(userId: number, packageId: string) {
+    const pkg = await coinPackagesCol.findOne({ id: packageId });
+    if (!pkg) throw new Error('PACKAGE_NOT_FOUND');
+
+    const title = pkg.name;
+    const description = `Покупка ${pkg.coins} монет`;
+    const payload = `pkg_${packageId}_user_${userId}`;
+    const providerToken = ''; // Empty for Telegram Stars
+    const currency = 'XTR';
+    const prices = [{ label: pkg.name, amount: pkg.priceStars }];
+
+    const url = await bot.createInvoiceLink(
+      title,
+      description,
+      payload,
+      providerToken,
+      currency,
+      prices
+    );
+
+    return url;
   }
 }
 

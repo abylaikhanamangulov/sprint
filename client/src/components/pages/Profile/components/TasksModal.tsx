@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MaskIcon } from '../Profile.styles';
 import { BottomModal } from 'src/components/ui/BottomModal/BottomModal';
+import { AchievementView } from 'src/models/types';
 
 // Icons 
 import addCircleIcon from 'src/components/icons/assets/add-circle.svg';
@@ -188,8 +189,8 @@ const ActionButton = styled.button<{ $completed: boolean }>`
 interface TasksModalProps {
   isOpen: boolean;
   onClose: () => void;
-  inProcess: any[];
-  completed: any[];
+  inProcess: AchievementView[];
+  completed: AchievementView[];
 }
 
 export const TasksModal: React.FC<TasksModalProps> = ({ isOpen, onClose, inProcess, completed }) => {
@@ -197,7 +198,7 @@ export const TasksModal: React.FC<TasksModalProps> = ({ isOpen, onClose, inProce
 
   const currentList = activeTab === 'in_process' ? inProcess : completed;
 
-  const getSubTasks = (ach: any) => {
+  const getSubTasks = (ach: AchievementView) => {
     const isAchCompleted = ach.unlocked || activeTab === 'completed';
     
     // Разбиваем описание ачивки на подзадачи по предложениям
@@ -252,7 +253,7 @@ export const TasksModal: React.FC<TasksModalProps> = ({ isOpen, onClose, inProce
           {currentList.map((ach) => {
             const subTasks = getSubTasks(ach);
             const totalTasks = subTasks.length;
-            const completedCount = subTasks.filter((t: any) => t.completed).length;
+            const completedCount = subTasks.filter((t) => t.completed).length;
             const percentage = Math.round((completedCount / totalTasks) * 100);
             
             return (
@@ -271,7 +272,7 @@ export const TasksModal: React.FC<TasksModalProps> = ({ isOpen, onClose, inProce
                 <Divider />
 
                 <SubTasksContainer>
-                  {subTasks.map((task: any, index: number) => {
+                  {subTasks.map((task, index: number) => {
                     const isLast = index === subTasks.length - 1;
                     const isLineCompleted = task.completed && (index + 1 < subTasks.length ? subTasks[index + 1].completed : false);
 

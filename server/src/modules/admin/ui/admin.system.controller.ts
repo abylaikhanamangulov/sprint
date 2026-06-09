@@ -112,7 +112,7 @@ export function registerAdminSystemRoutes(bot: TelegramBot) {
       setAdminState(userId, 'AUTHENTICATED');
       
       // If photo, sendPhoto, else sendMessage
-      const users = await usersCol.find({ telegramId: { $exists: true, $ne: null as any } }).toArray();
+      const users = await usersCol.find(({ telegramId: { $type: 'number' } } as any)).toArray();
       let sent = 0, failed = 0;
       
       for (const u of users) {

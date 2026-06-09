@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useGameStore } from 'src/models/store';
 import { api } from 'src/models/api';
+import { ShopData } from 'src/models/types';
 
 export function useCoinShopViewModel() {
   const [loading, setLoading] = useState(true);
-  const [shop, setShop] = useState<any>(null);
+  const [shop, setShop] = useState<ShopData | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const fetchShop = async () => {
@@ -25,14 +26,25 @@ export function useCoinShopViewModel() {
 
   const buyCoins = async (id: string) => {
     try {
-      const res = await api.shop.buyCoins(id, 'stars');
-      if (res.success) {
-        useGameStore.getState().updateUser({ coins: useGameStore.getState().user!.coins + res.coinsAdded });
-        setMessage(`Куплено ${res.coinsAdded.toLocaleString()} монет!`);
-        setTimeout(() => setMessage(null), 3000);
+      const res = await api.shop.createInvoice(id);
+      if (res.success && res.url) {
+        if (window.Telegram?.WebApp?.openInvoice) {
+          window.Telegram.WebApp.openInvoice(res.url, async (status: string) => {
+            if (status === 'paid') {
+              await useGameStore.getState().fetchUser();
+              setMessage(`Покупка успешно завершена!`);
+              setTimeout(() => setMessage(null), 3000);
+            } else {
+              console.log('Payment status:', status);
+            }
+          });
+        } else {
+          // Fallback if not in Telegram
+          alert(`Telegram Invoice URL (для отладки):\n${res.url}`);
+        }
       }
-    } catch (e: any) {
-      alert(e.message || 'Ошибка при покупке');
+    } catch (e) {
+      alert((e as Error).message || 'Ошибка при создании счета');
     }
   };
 

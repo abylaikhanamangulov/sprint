@@ -26,8 +26,8 @@ export const getChapter = async (req: AuthRequest, res: Response) => {
     const chapterId = Number(req.params.id);
     const chapter = await campaignService.getChapterById(req.user.id, chapterId);
     res.json(chapter);
-  } catch (error: any) {
-    if (error.message === 'CHAPTER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.chapterNotFound });
+  } catch (error) {
+    if ((error as Error).message === 'CHAPTER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.chapterNotFound });
     res.status(500).json({ error: MESSAGES.errors.internalServer });
   }
 };
@@ -46,11 +46,11 @@ export const playPvE = async (req: AuthRequest, res: Response) => {
 
     const result = await campaignService.playPvE(req.userId!, dto);
     res.json(result);
-  } catch (error: any) {
-    if (error.message === 'CHAPTER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.chapterNotFound });
-    if (error.message === 'NODE_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.nodeNotFound });
-    if (error.message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
-    if (error.message === 'NOT_ENOUGH_ENERGY') return res.status(400).json({ error: MESSAGES.errors.notEnoughEnergy });
+  } catch (error) {
+    if ((error as Error).message === 'CHAPTER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.chapterNotFound });
+    if ((error as Error).message === 'NODE_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.nodeNotFound });
+    if ((error as Error).message === 'USER_NOT_FOUND') return res.status(404).json({ error: MESSAGES.errors.userNotFound });
+    if ((error as Error).message === 'NOT_ENOUGH_ENERGY') return res.status(400).json({ error: MESSAGES.errors.notEnoughEnergy });
     
     console.error('[Campaign Controller] playPvE error:', error);
     res.status(500).json({ error: MESSAGES.errors.internalServer });

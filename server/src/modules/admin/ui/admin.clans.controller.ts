@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { clansCol, clanMembersCol, usersCol } from '../../../core/database';
-import { getAdminContext, setAdminState } from './admin.context';
+import { getAdminContext, setAdminState, clearAdminState, AdminState } from './admin.context';
 import { adminService } from '../admin.service';
 
 export async function showAdminClansMenu(bot: TelegramBot, chatId: number, userId: number, messageId?: number) {
@@ -81,7 +81,7 @@ export function registerAdminClansRoutes(bot: TelegramBot) {
     const ctx = getAdminContext(userId);
 
     if (query.data === 'admin_menu_clans') {
-      await showAdminClansMenu(bot, chatId, userId, query.message.message_id);
+      await showAdminClansMenu(bot, chatId, userId, query.message?.message_id);
       await bot.answerCallbackQuery(query.id);
     }
 
@@ -95,7 +95,7 @@ export function registerAdminClansRoutes(bot: TelegramBot) {
       await bot.answerCallbackQuery(query.id);
     }
 
-    const promptMap: Record<string, { state: any, msg: string }> = {
+    const promptMap: Record<string, { state: AdminState, msg: string }> = {
       'admin_clan_rename': { state: 'WAITING_CLAN_NEW_NAME', msg: '✏️ Введите новое название для клана:' },
       'admin_clan_change_leader': { state: 'WAITING_CLAN_NEW_LEADER', msg: '🔄 Введите ID нового лидера (должен быть участником клана):' },
       'admin_clan_add_xp': { state: 'WAITING_CLAN_ADD_XP', msg: '📈 Введите количество XP для выдачи клану:' },
@@ -133,7 +133,7 @@ export function registerAdminClansRoutes(bot: TelegramBot) {
         await bot.sendMessage(chatId, '✅ Клан успешно распущен и удалён.');
         await showAdminClansMenu(bot, chatId, userId);
       }
-      await bot.deleteMessage(chatId, query.message.message_id).catch(() => {});
+      await bot.deleteMessage(chatId, query.message?.message_id).catch(() => {});
       await bot.answerCallbackQuery(query.id);
     }
   });
@@ -184,8 +184,8 @@ export function registerAdminClansRoutes(bot: TelegramBot) {
             await showClanCard(bot, chatId, userId, ctx.targetClanId);
           }
         }
-      } catch (e: any) {
-        await bot.sendMessage(chatId, `❌ Ошибка: ${e.message}`);
+      } catch (e) {
+        await bot.sendMessage(chatId, `❌ Ошибка: ${(e as Error).message}`);
         setAdminState(userId, 'AUTHENTICATED'); // reset
         await showClanCard(bot, chatId, userId, ctx.targetClanId);
       }

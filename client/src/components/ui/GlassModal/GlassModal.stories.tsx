@@ -26,7 +26,7 @@ const OpenButton = styled.button`
 `;
 
 // A wrapper to handle the isOpen state for Storybook
-const ModalWrapper = (props: any) => {
+const ModalWrapper = (props: React.ComponentProps<typeof GlassModal>) => {
   const [isOpen, setIsOpen] = useState(true);
   
   return (

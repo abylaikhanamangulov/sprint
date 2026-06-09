@@ -9,5 +9,6 @@ router.get('/', shopController.getCatalog);
 router.post('/buy-cosmetic', authMiddleware, shopController.buyCosmetic);
 router.post('/buy-crate', authMiddleware, shopController.buyCrate);
 router.post('/buy-coins', authMiddleware, shopController.buyCoins);
+router.post('/create-invoice', authMiddleware, shopController.createInvoice);
 
 export default router;

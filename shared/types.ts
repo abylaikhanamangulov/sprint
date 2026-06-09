@@ -277,6 +277,7 @@ export interface CoinPackage {
   name: string;
   priceStars: number;
   coins: number;
+  discount?: number;
 }
 
 export interface Notification {

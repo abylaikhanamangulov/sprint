@@ -4,6 +4,7 @@ import { useCoinShopViewModel } from 'src/viewmodels/useCoinShopViewModel';
 import { Screen, Loader } from 'src/views/ui';
 import { MainHeader } from 'src/components/ui/MainHeader/MainHeader';
 import coinIcon from 'src/components/icons/assets/coin.svg';
+import { CoinPackage } from 'src/models/types';
 
 const ShopContainer = styled.div`
   display: flex;
@@ -95,14 +96,14 @@ const CoinsCard = styled.div`
   }
 `;
 
-const TestRibbon = styled.div`
+const DiscountRibbon = styled.div`
   position: absolute;
   top: 10px;
   right: -25px;
-  background: #ff0000;
+  background: #ff4757;
   color: white;
   padding: 4px 25px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   transform: rotate(45deg);
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -206,9 +207,9 @@ export function CoinShopView() {
         </BonusBanner>
 
         <PremiumGrid>
-          {shop.coinPackages.map((pkg: any) => (
+          {shop.coinPackages.map((pkg: CoinPackage) => (
             <CoinsCard key={pkg.id}>
-              <TestRibbon>Test</TestRibbon>
+              {(pkg.discount || 0) > 0 && <DiscountRibbon>-{pkg.discount}%</DiscountRibbon>}
               <IconCircle $bg="linear-gradient(135deg, #ffd700, #ffa502)">
                 <img src={coinIcon} alt="coin" style={{ width: 32, height: 32 }} />
               </IconCircle>
