@@ -35,10 +35,22 @@ const BASE = '/api';
 
 type JsonBody = Record<string, unknown>;
 
+function getTelegramId(): string {
+  const tg = window.Telegram?.WebApp;
+  const id = tg?.initDataUnsafe?.user?.id;
+  return id ? id.toString() : '100001';
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'x-telegram-id': getTelegramId(),
+    ...(options?.headers as Record<string, string> || {})
+  };
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...options,
+    headers,
   });
   if (!res.ok) {
     const err = (await res.json().catch(() => ({ error: 'Ошибка сервера' }))) as {
