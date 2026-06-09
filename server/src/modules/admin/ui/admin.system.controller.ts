@@ -9,11 +9,11 @@ export async function showAdminSystemMenu(bot: TelegramBot, chatId: number, user
   
   const settings = await adminService.getSystemSettings();
   
-  let text = '⚙️ **Системное Управление**\n';
+  let text = '⚙️ <b>Системное Управление</b>\n';
   text += `Режим тех. работ (Maintenance): ${settings.maintenanceMode ? '🔴 ВКЛЮЧЕН (Игроки не могут зайти)' : '🟢 ВЫКЛЮЧЕН'}\n`;
 
   const opts = {
-    parse_mode: 'Markdown' as const,
+    parse_mode: 'HTML' as const,
     reply_markup: {
       inline_keyboard: [
         [{ text: settings.maintenanceMode ? '🟢 Отключить тех. работы' : '🔴 Включить тех. работы', callback_data: 'admin_sys_toggle_maint' }],
@@ -50,10 +50,18 @@ export function registerAdminSystemRoutes(bot: TelegramBot) {
       await bot.answerCallbackQuery(query.id, { text: `Тех. работы ${!settings.maintenanceMode ? 'включены' : 'выключены'}` });
     }
 
+    if (query.data === 'admin_system_maintenance_toggle') {
+      await bot.sendMessage(chatId, `⚠️ <b>Подтвердите действие</b>\n\nВы уверены, что хотите изменить статус тех. работ?`, {
+        parse_mode: 'HTML',
+        reply_markup: { inline_keyboard: [[{ text: '🔙 Назад', callback_data: 'admin_main_menu' }]] }
+      });
+      await bot.answerCallbackQuery(query.id);
+    }
+
     if (query.data === 'admin_server_stats') {
       const stats = await adminService.getServerStats();
       await bot.sendMessage(chatId, MESSAGES.bot.adminServerStats(stats.totalUsers, stats.dau, stats.totalRaces), {
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: [[{ text: '🔙 Назад', callback_data: 'admin_main_menu' }]] }
       });
       await bot.answerCallbackQuery(query.id);

@@ -19,17 +19,20 @@ const server = http.createServer(app);
 setupWebSocket(server);
 
 async function bootstrap() {
-  try {
-    await connectDB();
-    startBot();
-    
-    server.listen(PORT, () => {
-      logger.info(MESSAGES.server.apiStarted(PORT));
-      logger.info(MESSAGES.server.wsStarted(PORT));
-    });
-  } catch (error) {
-    logger.error({ err: error }, '[Server] Failed to connect to MongoDB');
-    process.exit(1);
+  while (true) {
+    try {
+      await connectDB();
+      startBot();
+      
+      server.listen(PORT, () => {
+        logger.info(MESSAGES.server.apiStarted(PORT));
+        logger.info(MESSAGES.server.wsStarted(PORT));
+      });
+      break;
+    } catch (error) {
+      logger.error({ err: error }, '[Server] Failed to connect to MongoDB, retrying in 5s...');
+      await new Promise(res => setTimeout(res, 5000));
+    }
   }
 }
 
@@ -62,3 +65,11 @@ async function shutdown(signal: string) {
 
 process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Server] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('[Server] Uncaught Exception:', error);
+});

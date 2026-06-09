@@ -46,7 +46,7 @@ bot.onText(/\/start/, async (msg) => {
   const settings = await adminService.getSystemSettings();
   const user = await usersCol.findOne({ telegramId: userId });
   if (settings.maintenanceMode && (!user || !user.isAdmin)) {
-    await bot.sendMessage(chatId, '🛠 **Ведутся технические работы.** Сервер временно недоступен. Пожалуйста, зайдите позже.', { parse_mode: 'Markdown' });
+    await bot.sendMessage(chatId, '🛠 <b>Ведутся технические работы.</b> Сервер временно недоступен. Пожалуйста, зайдите позже.', { parse_mode: 'HTML' });
     return;
   }
 

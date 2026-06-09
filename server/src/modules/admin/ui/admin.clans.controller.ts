@@ -6,9 +6,9 @@ import { adminService } from '../admin.service';
 export async function showAdminClansMenu(bot: TelegramBot, chatId: number, userId: number, messageId?: number) {
   setAdminState(userId, 'AUTHENTICATED');
   
-  const text = '🛡️ **Управление Кланами**\nВыберите действие:';
+  const text = '🛡️ <b>Управление Кланами</b>\nВыберите действие:';
   const opts = {
-    parse_mode: 'Markdown' as const,
+    parse_mode: 'HTML' as const,
     reply_markup: {
       inline_keyboard: [
         [{ text: '🔍 Найти клан (по ID)', callback_data: 'admin_clans_search' }],
@@ -34,16 +34,16 @@ export async function showClanCard(bot: TelegramBot, chatId: number, adminId: nu
   setAdminState(adminId, 'AUTHENTICATED', { targetClanId });
 
   const membersCount = await clanMembersCol.countDocuments({ clanId: targetClanId });
-  let text = `🛡️ **Карточка Клана**\n`;
-  text += `ID: \`${clan.id}\`\n`;
+  let text = `🛡️ <b>Карточка Клана</b>\n`;
+  text += `ID: <code>${clan.id}</code>\n`;
   text += `Название: ${clan.name} [${clan.tag}]\n`;
   text += `Уровень: ${clan.level} (XP: ${clan.xp}/${clan.xpToNext})\n`;
   text += `Казна: 💰 ${clan.treasury}\n`;
-  text += `Лидер (ID): \`${clan.leaderId}\`\n`;
+  text += `Лидер (ID): <code>${clan.leaderId}</code>\n`;
   text += `Участников: 👥 ${membersCount}\n`;
 
   const opts = {
-    parse_mode: 'Markdown' as const,
+    parse_mode: 'HTML' as const,
     reply_markup: {
       inline_keyboard: [
         [
@@ -114,8 +114,8 @@ export function registerAdminClansRoutes(bot: TelegramBot) {
 
     if (query.data === 'admin_clan_delete') {
       if (ctx.targetClanId) {
-        await bot.sendMessage(chatId, `⚠️ **ВНИМАНИЕ!** Вы уверены что хотите РАСПУСТИТЬ клан ${ctx.targetClanId}? Все его данные будут удалены.`, {
-          parse_mode: 'Markdown',
+        await bot.sendMessage(chatId, `⚠️ <b>ВНИМАНИЕ!</b> Вы уверены что хотите РАСПУСТИТЬ клан ${ctx.targetClanId}? Все его данные будут удалены.`, {
+          parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
               [{ text: '💀 ДА, УДАЛИТЬ КЛАН', callback_data: 'admin_clan_delete_confirm' }],

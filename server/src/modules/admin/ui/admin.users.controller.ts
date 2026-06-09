@@ -6,9 +6,9 @@ import { adminService } from '../admin.service';
 export async function showAdminUsersMenu(bot: TelegramBot, chatId: number, userId: number, messageId?: number) {
   setAdminState(userId, 'AUTHENTICATED');
   
-  const text = '👥 **Управление Пользователями**\nВыберите действие:';
+  const text = '👥 <b>Управление Пользователями</b>\nВыберите действие:';
   const opts = {
-    parse_mode: 'Markdown' as const,
+    parse_mode: 'HTML' as const,
     reply_markup: {
       inline_keyboard: [
         [{ text: '🔍 Найти пользователя (по ID)', callback_data: 'admin_users_search' }],
@@ -34,18 +34,18 @@ export async function showUserCard(bot: TelegramBot, chatId: number, adminId: nu
   setAdminState(adminId, 'AUTHENTICATED', { targetUserId });
 
   const carsCount = user.ownedCars ? user.ownedCars.length : 0;
-  let text = `👤 **Карточка Пользователя**\n`;
-  text += `ID: \`${user.id}\`\n`;
+  let text = `👤 <b>Карточка Пользователя</b>\n`;
+  text += `ID: <code>${user.id}</code>\n`;
   text += `Ник: @${user.username || 'unknown'} (${user.firstName || 'Нет имени'})\n`;
   text += `Уровень: ${user.level} (XP: ${user.xp}/${user.xpToNext})\n`;
   text += `Монеты: 💰 ${user.coins}\n`;
   text += `Энергия: ⚡ ${user.energy}/${user.maxEnergy}\n`;
   text += `Гараж: 🚗 ${carsCount} авто\n`;
   text += `Бан: ${user.isBanned ? '🔴 ДА' : '🟢 НЕТ'}\n`;
-  if (user.isAdmin) text += `👑 **АДМИНИСТРАТОР**\n`;
+  if (user.isAdmin) text += `👑 <b>АДМИНИСТРАТОР</b>\n`;
 
   const opts = {
-    parse_mode: 'Markdown' as const,
+    parse_mode: 'HTML' as const,
     reply_markup: {
       inline_keyboard: [
         [
@@ -157,8 +157,8 @@ export function registerAdminUsersRoutes(bot: TelegramBot) {
 
     if (query.data === 'admin_user_wipe') {
       if (ctx.targetUserId) {
-        await bot.sendMessage(chatId, `⚠️ **ВНИМАНИЕ!** Вы уверены что хотите полностью сбросить прогресс пользователя ${ctx.targetUserId}? Это необратимо!`, {
-          parse_mode: 'Markdown',
+        await bot.sendMessage(chatId, `⚠️ <b>ВНИМАНИЕ!</b> Вы уверены что хотите полностью сбросить прогресс пользователя ${ctx.targetUserId}? Это необратимо!`, {
+          parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
               [{ text: '💀 ДА, УДАЛИТЬ ВСЕ', callback_data: 'admin_user_wipe_confirm' }],
