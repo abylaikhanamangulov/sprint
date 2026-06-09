@@ -4,7 +4,6 @@ import { setupWebSocket } from './websocket';
 import { bot, startBot } from './bot';
 import { MESSAGES } from './constants/messages';
 import { connectDB, client } from './core/database';
-import { seedDatabase } from './core/seed';
 import { logger } from './core/logger';
 
 const PORT = process.env.PORT || 3001;
@@ -22,7 +21,6 @@ setupWebSocket(server);
 async function bootstrap() {
   try {
     await connectDB();
-    await seedDatabase();
     startBot();
     
     server.listen(PORT, () => {
