@@ -157,6 +157,7 @@ bot.onText(/\/admin(.*)/, async (msg, match) => {
       await bot.sendMessage(chatId, '👑 Вы получили права Администратора. Введите /admin для входа в панель.');
       return;
     }
+    await bot.sendMessage(chatId, '❌ У вас нет прав администратора.');
     return;
   }
 
