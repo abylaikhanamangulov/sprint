@@ -9,6 +9,7 @@ export const MAPPING = Object.freeze({
   EVENTS: { path: '/events', access: [AUTH_ACCESS] },
   CLAN: { path: '/clan', access: [AUTH_ACCESS] },
   SHOP: { path: '/shop', access: [AUTH_ACCESS] },
+  COIN_SHOP: { path: '/buy-coins', access: [AUTH_ACCESS] },
   PROFILE: { path: '/profile', access: [AUTH_ACCESS] },
   SETTINGS: { path: '/settings', access: [AUTH_ACCESS] },
   NOTIFICATIONS: { path: '/notifications', access: [AUTH_ACCESS] },

@@ -152,7 +152,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
         </TitleContainer>
         
         {user && (
-          <BalanceBadge onClick={() => navigate(PATHS.SHOP)}>
+          <BalanceBadge onClick={() => navigate(PATHS.COIN_SHOP)}>
             <img src={coinIcon} alt="coin" style={{ width: 22, height: 22 }} />
             <BalanceText>
               {user.coins.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

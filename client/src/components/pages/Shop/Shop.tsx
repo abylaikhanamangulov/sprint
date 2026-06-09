@@ -103,11 +103,7 @@ const CratesCard = styled(PremiumCard)`
   }
 `;
 
-const CoinsCard = styled(PremiumCard)`
-  &::before {
-    background: linear-gradient(90deg, #ffd700, #ffa502);
-  }
-`;
+
 
 const ItemTitle = styled.div`
   font-size: 15px;
@@ -244,7 +240,6 @@ const TABS: { id: ShopTab; label: string }[] = [
   { id: 'deals', label: 'Скидки' },
   { id: 'crates', label: 'Кейсы' },
   { id: 'cosmetics', label: 'Тюнинг' },
-  { id: 'coins', label: 'Монеты' },
 ];
 
 export function ShopView() {
@@ -348,26 +343,7 @@ export function ShopView() {
           </PremiumGrid>
         )}
 
-        {vm.tab === 'coins' && (
-          <PremiumGrid>
-            {shop.coinPackages.map((pkg) => (
-              <CoinsCard key={pkg.id}>
-                <IconCircle $bg="linear-gradient(135deg, #ffd700, #ffa502)">
-                  <img src={coinIcon} alt="coin" style={{ width: 32, height: 32 }} />
-                </IconCircle>
-                <ItemTitle>{pkg.coins.toLocaleString()} Монет</ItemTitle>
-                <ItemDesc>{pkg.name}</ItemDesc>
-                <div style={{ flex: 1 }} />
-                <BuyButton 
-                  $currency="stars"
-                  onClick={() => vm.buyCoins(pkg.id)}
-                >
-                  {pkg.priceStars} ⭐
-                </BuyButton>
-              </CoinsCard>
-            ))}
-          </PremiumGrid>
-        )}
+
       </ShopContainer>
     </Screen>
   );

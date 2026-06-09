@@ -11,6 +11,7 @@ import { ShopView } from 'src/components/pages/Shop/Shop';
 import { Profile } from 'src/components/pages/Profile';
 import { SettingsView } from 'src/components/pages/Settings/Settings';
 import { NotificationsView } from 'src/components/pages/Notifications/Notifications';
+import { CoinShopView } from 'src/components/pages/CoinShop/CoinShop';
 
 import { VIEWS, getPath } from './paths';
 import { RenderRoutesInnerProps, RouteData } from './types';
@@ -25,6 +26,7 @@ export const routes: RouteData[] = [
       { view: 'EVENTS', component: <EventsView /> },
       { view: 'CLAN', component: <ClanView /> },
       { view: 'SHOP', component: <ShopView /> },
+      { view: 'COIN_SHOP', component: <CoinShopView /> },
       { view: 'PROFILE', component: <Profile /> },
       { view: 'SETTINGS', component: <SettingsView /> },
       { view: 'NOTIFICATIONS', component: <NotificationsView /> },
