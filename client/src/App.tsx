@@ -3,7 +3,7 @@ import { renderRoutes } from './routes/renderRoutes';
 import { routes } from './routes/routes';
 import { useAppViewModel } from './AppViewModel';
 import { AppShell } from './views/AppShell';
-import { Loader } from './views/ui';
+import { SplashLoader } from './views/ui';
 import { WelcomeView } from './components/pages/Welcome/Welcome';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
 
   const renderInitContent = () => {
     if (stage === 'loading') {
-      return <Loader />;
+      return <SplashLoader />;
     }
     if (stage === 'welcome') return <WelcomeView onDone={finishOnboarding} />;
     

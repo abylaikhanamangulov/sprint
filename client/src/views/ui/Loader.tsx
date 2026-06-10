@@ -75,7 +75,7 @@ const StyledSvg = styled.svg`
   }
 `;
 
-export const Loader = memo(function Loader() {
+export const SplashLoader = memo(function SplashLoader() {
   return (
     <Container>
       <LogoWrapper>
@@ -85,4 +85,8 @@ export const Loader = memo(function Loader() {
       </LogoWrapper>
     </Container>
   );
+});
+
+export const Loader = memo(function Loader() {
+  return null;
 });
