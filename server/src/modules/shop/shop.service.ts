@@ -173,12 +173,12 @@ export class ShopService {
       
       let fRoll = Math.random() * fragSum;
       let fCurrent = 0;
-      let selectedClass = 'D';
+      let selectedClass = 'D' as import('@shared/types').CarClass;
       
       for (const [cls, prob] of Object.entries(fragProbs)) {
         fCurrent += (prob as number);
         if (fRoll <= fCurrent) {
-          selectedClass = cls;
+          selectedClass = cls as import('@shared/types').CarClass;
           break;
         }
       }
@@ -201,7 +201,7 @@ export class ShopService {
 
       const existing = await inventoryCol.findOne({
         userId,
-        type: drop.type,
+        type: drop.type as import('@shared/types').InventoryItemType,
         ...(drop.data.category ? { 'data.category': drop.data.category } : {}),
         ...(drop.data.carId ? { 'data.carId': drop.data.carId } : {})
       });
@@ -212,10 +212,10 @@ export class ShopService {
         await inventoryCol.insertOne({
           id: Math.random().toString(36).substring(7),
           userId,
-          type: drop.type as any,
-          data: drop.data,
+          type: drop.type as import('@shared/types').InventoryItemType,
+          data: drop.data as any,
           amount: drop.amount
-        });
+        } as import('@shared/types').UserInventoryItem);
       }
     }
 

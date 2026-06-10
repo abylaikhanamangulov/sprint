@@ -72,7 +72,7 @@ export const openPack = async (req: AuthRequest, res: Response) => {
     const { packId } = req.params;
     if (!packId) return res.status(400).json({ error: 'PACK_ID_REQUIRED' });
 
-    const drops = await shopService.openPack(req.userId!, packId);
+    const drops = await shopService.openPack(req.userId!, packId as string);
     res.json({ success: true, drops });
   } catch (error) {
     handleError(res, error);
