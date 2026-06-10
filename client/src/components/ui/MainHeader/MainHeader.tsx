@@ -1,19 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useGameStore } from 'src/models/store';
-import { PATHS } from 'src/routes/paths';
 
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 16px 0 24px 0;
-  padding-top: calc(16px + env(safe-area-inset-top));
+  padding: 8px 0 16px 0;
 `;
+
 const MainRow = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
 `;
 
 const TitleContainer = styled.div`
@@ -23,7 +21,7 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   color: #fff;
   margin: 0;
@@ -32,56 +30,11 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.span`
-  font-size: 24px;
-  font-weight: 700;
-  color: #444;
+  font-size: 18px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin: 0;
 `;
-
-const BalanceBadge = styled.div`
-  background: #1a1a1a;
-  border-radius: 24px;
-  padding: 6px 6px 6px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-  
-  &:hover {
-    background: #2a2a2a;
-  }
-`;
-
-const BalanceText = styled.span`
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.5px;
-  margin-right: 4px;
-`;
-
-const PlusCircle = styled.div`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #cfff04;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-// Simple plus SVG
-const PlusIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7 1V13M1 7H13" stroke="black" strokeWidth="2.5" strokeLinecap="round"/>
-  </svg>
-);
-
-import coinIcon from 'src/components/icons/assets/coin.svg';
 
 interface MainHeaderProps {
   title: string;
@@ -99,7 +52,6 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
   children
 }) => {
   const navigate = useNavigate();
-  const user = useGameStore((state) => state.user);
 
   const handleClose = () => {
     if (onClose) {
@@ -127,31 +79,19 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
 
   return (
     <HeaderContainer>
-      
       <MainRow>
         <TitleContainer>
           <Title>{title}</Title>
           {subtitle && <Subtitle>{subtitle}</Subtitle>}
         </TitleContainer>
-        
-        {user && (
-          <BalanceBadge onClick={() => navigate(PATHS.COIN_SHOP)}>
-            <img src={coinIcon} alt="coin" style={{ width: 22, height: 22 }} />
-            <BalanceText>
-              {user.coins.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </BalanceText>
-            <PlusCircle>
-              <PlusIcon />
-            </PlusCircle>
-          </BalanceBadge>
-        )}
       </MainRow>
       
       {children && (
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 12 }}>
           {children}
         </div>
       )}
     </HeaderContainer>
   );
 };
+

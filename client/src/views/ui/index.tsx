@@ -57,13 +57,16 @@ export const Card = styled.div<{ $selected?: boolean; $clickable?: boolean }>`
   border-radius: ${({ theme }) => theme.radii.xl};
   padding: 16px;
   border: ${({ $selected, theme }) =>
-    $selected ? `2px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`};
+    $selected ? `1.5px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`};
   box-shadow: ${({ theme }) => theme.shadow};
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   ${({ $clickable }) => $clickable && css`cursor: pointer;`}
-  transition: background 0.2s;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   &:hover {
     background: ${({ theme }) => theme.colors.bgCardHover};
+    ${({ $clickable }) => $clickable && css`transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);`}
   }
 `;
 
@@ -79,33 +82,48 @@ export const Button = styled.button<{
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-weight: 600;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   ${({ $size }) =>
     $size === 'sm'
-      ? css`padding: 6px 12px; font-size: 12px; border-radius: 8px;`
-      : css`padding: 10px 20px; font-size: 14px; border-radius: 10px;`}
+      ? css`padding: 8px 16px; font-size: 13px; border-radius: 12px;`
+      : css`padding: 12px 24px; font-size: 15px; border-radius: 14px;`}
   ${({ $block }) => $block && css`width: 100%;`}
 
   ${({ $variant = 'primary', theme }) => {
     switch ($variant) {
-
       case 'danger':
         return css`
-          background: ${theme.colors.red};
+          background: linear-gradient(135deg, ${theme.colors.red}, #d63031);
           color: white;
+          border: none;
+          box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+          }
         `;
       case 'outline':
         return css`
-          background: transparent;
-          color: ${theme.colors.accent};
-          border: 1px solid ${theme.colors.accent};
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(8px);
+          color: ${theme.colors.textPrimary};
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+          }
         `;
       default:
         return css`
           background: ${theme.colors.accent};
-          color: white;
+          color: #000000;
+          border: none;
+          box-shadow: 0 4px 15px rgba(207, 255, 4, 0.3);
           &:hover {
             background: ${theme.colors.accentHover};
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(207, 255, 4, 0.4);
           }
         `;
     }
@@ -114,6 +132,12 @@ export const Button = styled.button<{
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  &:active {
+    transform: scale(0.96);
   }
 `;
 
