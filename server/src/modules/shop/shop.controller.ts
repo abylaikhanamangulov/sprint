@@ -66,3 +66,15 @@ export const createInvoice = async (req: AuthRequest, res: Response) => {
     handleError(res, error);
   }
 };
+
+export const openPack = async (req: AuthRequest, res: Response) => {
+  try {
+    const { packId } = req.params;
+    if (!packId) return res.status(400).json({ error: 'PACK_ID_REQUIRED' });
+
+    const drops = await shopService.openPack(req.userId!, packId);
+    res.json({ success: true, drops });
+  } catch (error) {
+    handleError(res, error);
+  }
+};

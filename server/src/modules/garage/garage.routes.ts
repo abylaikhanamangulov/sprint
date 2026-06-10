@@ -18,4 +18,7 @@ router.post('/tuning/:carId', garageController.saveTuning);
 router.get('/cosmetics/:carId', garageController.getCosmetics);
 router.post('/cosmetics/:carId', garageController.saveCosmetics);
 
+router.post('/craft', garageController.craftCar);
+router.get('/inventory', garageController.getInventory);
+
 export default router;

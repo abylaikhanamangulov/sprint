@@ -10,6 +10,7 @@ import { GarageOverview } from './components/GarageOverview';
 import { GarageUpgrades } from './components/GarageUpgrades';
 import { GarageTuning } from './components/GarageTuning';
 import { GarageCosmetics } from './components/GarageCosmetics';
+import { GarageInventory } from './components/GarageInventory';
 
 const TabButton = styled(Button).attrs({ $size: 'sm' as const })``;
 
@@ -18,6 +19,7 @@ const TAB_LABELS: Record<GarageTab, string> = {
   upgrades: 'Апгрейды',
   tuning: 'Тюнинг',
   look: 'Внешка',
+  inventory: 'Инвентарь',
 };
 
 export function GarageView() {
@@ -54,7 +56,7 @@ export function GarageView() {
       {entry && (
         <>
           <Row $gap={6} style={{ marginBottom: 16, flexWrap: 'wrap' }}>
-            {(['overview', 'upgrades', 'tuning', 'look'] as GarageTab[]).map((t) => (
+            {(['overview', 'upgrades', 'tuning', 'look', 'inventory'] as GarageTab[]).map((t) => (
               <TabButton
                 key={t}
                 $variant={vm.tab === t ? 'primary' : 'outline'}
@@ -69,6 +71,7 @@ export function GarageView() {
           {vm.tab === 'upgrades' && <GarageUpgrades vm={vm} />}
           {vm.tab === 'tuning' && <GarageTuning vm={vm} />}
           {vm.tab === 'look' && <GarageCosmetics vm={vm} entry={entry} />}
+          {vm.tab === 'inventory' && <GarageInventory vm={vm} />}
         </>
       )}
       {vm.error && <Muted style={{ color: '#ff4757' }}>{vm.error}</Muted>}

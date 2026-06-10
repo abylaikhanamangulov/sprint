@@ -106,6 +106,8 @@ export const api = {
     getCosmetics: (carId: number) => get<CarCosmetics>(`/garage/cosmetics/${carId}`),
     saveCosmetics: (carId: number, cosmetics: CarCosmetics) =>
       post<SuccessResponse>(`/garage/cosmetics/${carId}`, { ...cosmetics }),
+    craftCar: (carId: number) => post<{ success: boolean; car: Car }>('/garage/craft', { carId }),
+    inventory: () => get<UserInventoryItem[]>('/garage/inventory'),
   },
   races: {
     pve: (data: PveRaceRequest) =>
@@ -141,6 +143,7 @@ export const api = {
     buyCosmetic: (id: string) =>
       post<SuccessResponse>('/shop/buy-cosmetic', { cosmeticId: id }),
     buyCrate: (id: string) => post<CrateResult>('/shop/buy-crate', { crateId: id }),
+    openPack: (id: string) => post<{ success: boolean; drops: any[] }>(`/shop/packs/${id}/open`),
     createInvoice: (packageId: string) =>
       post<{ success: boolean; url: string }>('/shop/create-invoice', { packageId }),
   },

@@ -85,3 +85,24 @@ export const saveCosmetics = async (req: AuthRequest, res: Response) => {
     handleError(res, error);
   }
 };
+
+export const craftCar = async (req: AuthRequest, res: Response) => {
+  try {
+    const { carId } = req.body;
+    if (!carId) return res.status(400).json({ error: 'CAR_ID_REQUIRED' });
+
+    const result = await garageService.craftCar(req.userId!, Number(carId));
+    res.json(result);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+export const getInventory = async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await garageService.getInventory(req.userId!);
+    res.json(result);
+  } catch (error) {
+    handleError(res, error);
+  }
+};

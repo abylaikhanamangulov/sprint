@@ -21,6 +21,8 @@ import {
   UserUpgrade,
   Tuning,
   CarCosmetics,
+  UserInventoryItem,
+  CardPack,
 } from '@drag-racing/shared/types';
 import { logger } from './logger';
 
@@ -46,6 +48,9 @@ export let upgradesCol: Collection<UpgradeCategory>;
 export let userUpgradesCol: Collection<UserUpgrade>;
 export let userTuningCol: Collection<Tuning>;
 export let userCosmeticsCol: Collection<CarCosmetics>;
+export let inventoryCol: Collection<UserInventoryItem>;
+export let cardPacksCol: Collection<CardPack>;
+
 export interface SystemSettings {
   id: string;
   maintenanceMode: boolean;
@@ -86,6 +91,8 @@ export async function connectDB() {
   userUpgradesCol = db.collection<UserUpgrade>('userUpgrades');
   userTuningCol = db.collection<Tuning>('userTuning');
   userCosmeticsCol = db.collection<CarCosmetics>('userCosmetics');
+  inventoryCol = db.collection<UserInventoryItem>('inventory');
+  cardPacksCol = db.collection<CardPack>('cardPacks');
   campaignChaptersCol = db.collection<CampaignChapter>('campaignChapters');
   campaignProgressCol = db.collection<CampaignProgress>('campaignProgress');
   notificationsCol = db.collection<Notification>('notifications');

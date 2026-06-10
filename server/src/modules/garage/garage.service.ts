@@ -162,6 +162,35 @@ export class GarageService {
     }
     return { success: true };
   }
+
+  async craftCar(userId: number, carId: number) {
+    const { inventoryCol, carsCol, usersCol } = await import('../../core/database');
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+
+    if (user.ownedCars && user.ownedCars.includes(carId)) {
+      throw new Error('CAR_ALREADY_OWNED');
+    }
+
+    const fragment = await inventoryCol.findOne({ userId, type: 'car_fragment', 'data.carId': carId });
+    if (!fragment || fragment.amount < 6) {
+      throw new Error('NOT_ENOUGH_FRAGMENTS');
+    }
+
+    const car = await carsCol.findOne({ id: carId });
+    if (!car) throw new Error('CAR_NOT_FOUND');
+
+    await inventoryCol.updateOne({ _id: fragment._id }, { $inc: { amount: -6 } });
+    await usersCol.updateOne({ id: userId }, { $addToSet: { ownedCars: carId } });
+
+    return { success: true, car };
+  }
+
+  async getInventory(userId: number) {
+    const { inventoryCol } = await import('../../core/database');
+    const items = await inventoryCol.find({ userId, amount: { $gt: 0 } }).toArray();
+    return items;
+  }
 }
 
 export const garageService = new GarageService();

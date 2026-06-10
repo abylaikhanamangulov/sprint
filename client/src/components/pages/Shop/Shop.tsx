@@ -238,6 +238,7 @@ const IconCircle = styled.div<{ $bg: string }>`
 
 const TABS: { id: ShopTab; label: string }[] = [
   { id: 'deals', label: 'Скидки' },
+  { id: 'packs', label: 'Паки' },
   { id: 'crates', label: 'Кейсы' },
   { id: 'cosmetics', label: 'Тюнинг' },
 ];
@@ -293,6 +294,34 @@ export function ShopView() {
               Купить по акции
             </BuyButton>
           </DealCard>
+        )}
+
+        {vm.tab === 'packs' && (
+          <PremiumGrid>
+            {shop.cardPacks?.map((pack) => {
+              const bg = pack.tier === 'silver' ? 'linear-gradient(135deg, #bdc3c7, #2c3e50)'
+                : pack.tier === 'gold' ? 'linear-gradient(135deg, #f1c40f, #f39c12)'
+                : pack.tier === 'platinum' ? 'linear-gradient(135deg, #00d2d3, #0abde3)'
+                : 'linear-gradient(135deg, #9b59b6, #8e44ad)';
+              return (
+                <CratesCard key={pack.id}>
+                  <IconCircle $bg={bg}>
+                    🎴
+                  </IconCircle>
+                  <ItemTitle>{pack.name}</ItemTitle>
+                  <ItemDesc>{pack.slots} слотов<br/>Шанс на авто!</ItemDesc>
+                  <div style={{ flex: 1 }} />
+                  <BuyButton 
+                    $currency={pack.price.currency}
+                    onClick={() => vm.openPack(pack.id)}
+                  >
+                    {pack.price.amount}
+                    {pack.price.currency === 'stars' ? '⭐' : pack.price.currency === 'points' ? '⚡' : <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} />}
+                  </BuyButton>
+                </CratesCard>
+              );
+            })}
+          </PremiumGrid>
         )}
 
         {vm.tab === 'crates' && (

@@ -1,5 +1,5 @@
-import { connectDB, db, carsCol, upgradesCol, cosmeticsCol, coinPackagesCol, shopCratesCol, achievementsCol, campaignChaptersCol, client } from './core/database';
-import { Car, UpgradeCategory, Cosmetic, CoinPackage, ShopCrate, Achievement, CampaignChapter } from '@drag-racing/shared/types';
+import { connectDB, db, carsCol, upgradesCol, cosmeticsCol, coinPackagesCol, shopCratesCol, cardPacksCol, achievementsCol, campaignChaptersCol, client } from './core/database';
+import { Car, UpgradeCategory, Cosmetic, CoinPackage, ShopCrate, CardPack, Achievement, CampaignChapter } from '@drag-racing/shared/types';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,6 +14,7 @@ async function seed() {
   await cosmeticsCol.deleteMany({});
   await coinPackagesCol.deleteMany({});
   await shopCratesCol.deleteMany({});
+  await cardPacksCol.deleteMany({});
   await achievementsCol.deleteMany({});
   await campaignChaptersCol.deleteMany({});
 
@@ -53,6 +54,15 @@ async function seed() {
     { id: 'crate_premium', name: 'Premium Crate', description: 'Rare parts', price: { amount: 2000, currency: 'coins' }, contents: { common: 1, rare: 2, epicChance: 0.1 }, image: '/assets/crates/premium.png' },
   ];
   await shopCratesCol.insertMany(crates);
+
+  console.log('[Seed] Inserting Card Packs...');
+  const packs: CardPack[] = [
+    { id: 'pack_silver', tier: 'silver', name: 'Silver Pack', price: { currency: 'coins', amount: 500 }, slots: 2, slotProbabilities: { partCard: 51, x2Card: 28, points: 14, ecuCard: 4, fragmentClass: { B: 2, A: 1 } as any } },
+    { id: 'pack_gold', tier: 'gold', name: 'Gold Pack', price: { currency: 'coins', amount: 1500 }, slots: 3, slotProbabilities: { partCard: 41, x2Card: 29, points: 18, ecuCard: 9, fragmentClass: { A: 2, S: 1 } as any } },
+    { id: 'pack_platinum', tier: 'platinum', name: 'Platinum Pack', price: { currency: 'coins', amount: 3000 }, slots: 4, slotProbabilities: { partCard: 35, x2Card: 27, points: 21, ecuCard: 14, fragmentClass: { S: 2, X: 1 } as any } },
+    { id: 'pack_diamond', tier: 'diamond', name: 'Diamond Pack', price: { currency: 'stars', amount: 100 }, slots: 5, slotProbabilities: { partCard: 28, x2Card: 26, points: 21, ecuCard: 22, fragmentClass: { X: 3 } as any } },
+  ];
+  await cardPacksCol.insertMany(packs);
 
   console.log('[Seed] Inserting Achievements...');
   const achievements: Achievement[] = [

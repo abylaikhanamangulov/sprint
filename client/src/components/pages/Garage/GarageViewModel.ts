@@ -5,7 +5,7 @@ import { useGameStore } from 'src/models/store';
 import { DEFAULT_COSMETICS } from 'src/models/types';
 import type { Car, CarCosmetics, MyCar, Tuning, UpgradeCategoryView } from 'src/models/types';
 
-export type GarageTab = 'overview' | 'upgrades' | 'tuning' | 'look';
+export type GarageTab = 'overview' | 'upgrades' | 'tuning' | 'look' | 'inventory';
 
 interface GarageViewModel {
   myCars: MyCar[];
@@ -16,6 +16,7 @@ interface GarageViewModel {
   tab: GarageTab;
   showDealership: boolean;
   available: Car[];
+  inventory: import('src/models/types').UserInventoryItem[];
   error: string | null;
   cosmeticsSaved: boolean;
   setTab: (t: GarageTab) => void;
@@ -28,6 +29,7 @@ interface GarageViewModel {
   setCosmeticField: <K extends keyof CarCosmetics>(key: K, value: CarCosmetics[K]) => void;
   saveCosmetics: () => Promise<void>;
   buyCar: (carId: number) => Promise<void>;
+  craftCar: (carId: number) => Promise<void>;
 }
 
 export function useGarageViewModel(): GarageViewModel {
@@ -42,8 +44,11 @@ export function useGarageViewModel(): GarageViewModel {
   const [showDealership, setShowDealership] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [inventory, setInventory] = useState<import('src/models/types').UserInventoryItem[]>([]);
+
   useEffect(() => {
     fetchMyCars();
+    api.garage.inventory().then(setInventory);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -120,6 +125,18 @@ export function useGarageViewModel(): GarageViewModel {
     }
   };
 
+  const craftCar = async (carId: number) => {
+    try {
+      await api.garage.craftCar(carId);
+      await selectCar(carId);
+      const inv = await api.garage.inventory();
+      setInventory(inv);
+      fetchUser();
+    } catch (e: unknown) {
+      setError(getErrorMessage(e));
+    }
+  };
+
   const ownedIds = myCars.map((c) => c.carId);
   const available = allCars.filter((c) => !c.isStarter && !ownedIds.includes(c.id));
 
@@ -133,6 +150,7 @@ export function useGarageViewModel(): GarageViewModel {
     tab,
     showDealership,
     available,
+    inventory,
     error,
     setTab,
     selectEntry: (carId) => {
@@ -147,5 +165,6 @@ export function useGarageViewModel(): GarageViewModel {
     setCosmeticField,
     saveCosmetics,
     buyCar,
+    craftCar,
   };
 }

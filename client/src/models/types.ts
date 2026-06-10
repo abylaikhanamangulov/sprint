@@ -22,6 +22,8 @@ import type {
   Tournament,
   CampaignChapter,
   CampaignNode,
+  CardPack,
+  UserInventoryItem,
 } from '@shared/types';
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
@@ -150,6 +152,7 @@ export interface DailyDeal {
 export interface ShopData {
   dailyDeal: DailyDeal | null;
   crates: ShopCrate[];
+  cardPacks: CardPack[];
   cosmetics: Cosmetic[];
   coinPackages: CoinPackage[];
 }

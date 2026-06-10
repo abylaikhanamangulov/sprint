@@ -32,6 +32,7 @@ export class AuthService {
         xp: 0,
         xpToNext: 500,
         coins: 1500,
+        points: 0,
         energy: 20,
         maxEnergy: 20,
         lastEnergyRegen: new Date().toISOString(),

@@ -31,7 +31,7 @@ export type NosDuration = 'short' | 'medium' | 'long';
 export type GraphicsQuality = 'low' | 'medium' | 'high';
 export type TournamentStatus = 'upcoming' | 'active' | 'completed';
 export type WarStatus = 'pending' | 'active' | 'completed';
-export type Currency = 'coins' | 'stars';
+export type Currency = 'coins' | 'stars' | 'points';
 export type NotificationType = 'clan_war' | 'daily_reward' | 'tournament' | 'challenge' | 'upgrade' | 'nft_drop' | 'clan_invite';
 
 export interface CarStats {
@@ -87,6 +87,7 @@ export interface User {
   xp: number;
   xpToNext: number;
   coins: number;
+  points: number;
   energy: number;
   maxEnergy: number;
   lastEnergyRegen: string;
@@ -103,6 +104,43 @@ export interface User {
   isAdmin?: boolean;
   isBanned?: boolean;
   lastLoginAt?: string;
+}
+
+export type InventoryItemType = 'upgrade_card' | 'ecu_card' | 'car_fragment';
+
+export interface UpgradeCardData {
+  category: string;
+}
+
+export interface CarFragmentData {
+  carId: number;
+}
+
+export interface UserInventoryItem {
+  id: string;
+  userId: number;
+  type: InventoryItemType;
+  data: UpgradeCardData | CarFragmentData | Record<string, never>;
+  amount: number;
+}
+
+export type PackTier = 'silver' | 'gold' | 'platinum' | 'diamond';
+
+export interface PackSlotProbability {
+  partCard: number;
+  x2Card: number;
+  points: number;
+  ecuCard: number;
+  fragmentClass: Record<CarClass, number>;
+}
+
+export interface CardPack {
+  id: string;
+  tier: PackTier;
+  name: string;
+  price: { currency: Currency; amount: number };
+  slots: number;
+  slotProbabilities: PackSlotProbability;
 }
 
 export interface Tuning {
