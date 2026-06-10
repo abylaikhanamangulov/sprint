@@ -62,10 +62,10 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
               return (
                 <ItemCard key={f.id}>
                   <ItemIcon>🚗</ItemIcon>
-                  <div style={{ fontSize: 14, fontWeight: 'bold' }}>{car ? car.name : \`Car \${carId}\`}</div>
+                  <div style={{ fontSize: 14, fontWeight: 'bold' }}>{car ? car.name : `Car ${carId}`}</div>
                   <div style={{ fontSize: 12, color: '#aaa' }}>{amount} / 6</div>
                   <ProgressBar>
-                    <div style={{ width: \`\${percent}%\`, background: isReady ? '#2ed573' : '#3498db' }} />
+                    <div style={{ width: `${percent}%`, background: isReady ? '#2ed573' : '#3498db' }} />
                   </ProgressBar>
                   <Button 
                     $variant="primary" 
@@ -90,7 +90,7 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
               <ItemCard key={c.id}>
                 <ItemIcon>🃏</ItemIcon>
                 <div style={{ fontSize: 14, fontWeight: 'bold' }}>
-                  {c.type === 'upgrade_card' ? \`Карта улучшения (\${c.data.category})\` : 'ЭБУ карта'}
+                  {c.type === 'upgrade_card' ? `Карта улучшения (${c.data.category})` : 'ЭБУ карта'}
                 </div>
                 <div style={{ fontSize: 16, color: '#f1c40f' }}>x{c.amount}</div>
               </ItemCard>
