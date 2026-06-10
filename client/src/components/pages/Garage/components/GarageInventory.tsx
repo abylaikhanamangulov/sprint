@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Surface } from 'src/views/ui';
+import { Button } from 'src/views/ui';
 
 const Grid = styled.div`
   display: grid;
@@ -8,7 +8,9 @@ const Grid = styled.div`
   margin-top: 12px;
 `;
 
-const ItemCard = styled(Surface)`
+const ItemCard = styled.div`
+  background: rgba(28, 33, 55, 0.6);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,11 +42,11 @@ const ProgressBar = styled.div`
 
 export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../GarageViewModel').useGarageViewModel> }) {
   if (vm.inventory.length === 0) {
-    return <Surface style={{ textAlign: 'center', padding: 32 }}>Инвентарь пуст</Surface>;
+    return <div style={{ textAlign: 'center', padding: 32 }}>Инвентарь пуст</div>;
   }
 
   const fragments = vm.inventory.filter(i => i.type === 'car_fragment');
-  const cards = vm.inventory.filter(i => i.type !== 'car_fragment' && i.type !== 'points');
+  const cards = vm.inventory.filter(i => i.type !== 'car_fragment');
 
   return (
     <div>
@@ -53,7 +55,8 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
           <h3 style={{ marginTop: 16, marginBottom: 8 }}>Фрагменты машин</h3>
           <Grid>
             {fragments.map(f => {
-              const carId = f.data.carId;
+              const data = f.data as import('src/models/types').CarFragmentData;
+              const carId = data.carId;
               const car = vm.available.find(c => c.id === carId) || vm.myCars.find(c => c.carId === carId)?.car;
               const amount = f.amount;
               const isReady = amount >= 6;
@@ -71,7 +74,7 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
                     $variant="primary" 
                     $size="sm" 
                     disabled={!isReady} 
-                    onClick={() => vm.craftCar(carId!)}
+                    onClick={() => vm.craftCar(carId)}
                   >
                     Собрать
                   </Button>
@@ -86,15 +89,19 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
         <>
           <h3 style={{ marginTop: 24, marginBottom: 8 }}>Карточки</h3>
           <Grid>
-            {cards.map(c => (
-              <ItemCard key={c.id}>
-                <ItemIcon>🃏</ItemIcon>
-                <div style={{ fontSize: 14, fontWeight: 'bold' }}>
-                  {c.type === 'upgrade_card' ? `Карта улучшения (${c.data.category})` : 'ЭБУ карта'}
-                </div>
-                <div style={{ fontSize: 16, color: '#f1c40f' }}>x{c.amount}</div>
-              </ItemCard>
-            ))}
+            {cards.map(c => {
+              const isUpgrade = c.type === 'upgrade_card';
+              const cat = isUpgrade ? (c.data as import('src/models/types').UpgradeCardData).category : '';
+              return (
+                <ItemCard key={c.id}>
+                  <ItemIcon>🃏</ItemIcon>
+                  <div style={{ fontSize: 14, fontWeight: 'bold' }}>
+                    {isUpgrade ? `Карта улучшения (${cat})` : 'ЭБУ карта'}
+                  </div>
+                  <div style={{ fontSize: 16, color: '#f1c40f' }}>x{c.amount}</div>
+                </ItemCard>
+              );
+            })}
           </Grid>
         </>
       )}

@@ -29,6 +29,7 @@ import type {
   SuccessResponse,
   UserSettings,
   User,
+  UserInventoryItem,
 } from './types';
 
 const BASE = '/api';
