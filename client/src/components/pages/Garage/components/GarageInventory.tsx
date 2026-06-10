@@ -1,59 +1,23 @@
-import styled from 'styled-components';
-import { Button } from 'src/views/ui';
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 12px;
-`;
-
-const ItemCard = styled.div`
-  background: rgba(28, 33, 55, 0.6);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  gap: 8px;
-`;
-
-const ItemIcon = styled.div`
-  font-size: 32px;
-  margin-bottom: 8px;
-`;
-
-const ProgressBar = styled.div`
-  width: 100%;
-  height: 6px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 8px;
-
-  & > div {
-    height: 100%;
-    background: #2ed573;
-    width: 0%;
-  }
-`;
+import { Button, Card, ProgressBar as UIProgressBar, ProgressFill, Grid as UIGrid, Heading, Muted } from 'src/views/ui';
 
 export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../GarageViewModel').useGarageViewModel> }) {
   if (vm.inventory.length === 0) {
-    return <div style={{ textAlign: 'center', padding: 32 }}>Инвентарь пуст</div>;
+    return (
+      <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <Muted $size={14}>Инвентарь пуст</Muted>
+      </div>
+    );
   }
 
   const fragments = vm.inventory.filter(i => i.type === 'car_fragment');
   const cards = vm.inventory.filter(i => i.type !== 'car_fragment');
 
   return (
-    <div>
+    <div style={{ paddingBottom: 24 }}>
       {fragments.length > 0 && (
-        <>
-          <h3 style={{ marginTop: 16, marginBottom: 8 }}>Фрагменты машин</h3>
-          <Grid>
+        <div style={{ marginBottom: 24 }}>
+          <Heading $size={16} style={{ marginBottom: 16 }}>Фрагменты машин</Heading>
+          <UIGrid $cols={2} $gap={12}>
             {fragments.map(f => {
               const data = f.data as import('src/models/types').CarFragmentData;
               const carId = data.carId;
@@ -63,47 +27,56 @@ export function GarageInventory({ vm }: { vm: ReturnType<typeof import('../Garag
               const percent = Math.min((amount / 6) * 100, 100);
 
               return (
-                <ItemCard key={f.id}>
-                  <ItemIcon>🚗</ItemIcon>
-                  <div style={{ fontSize: 14, fontWeight: 'bold' }}>{car ? car.name : `Car ${carId}`}</div>
-                  <div style={{ fontSize: 12, color: '#aaa' }}>{amount} / 6</div>
-                  <ProgressBar>
-                    <div style={{ width: `${percent}%`, background: isReady ? '#2ed573' : '#3498db' }} />
-                  </ProgressBar>
+                <Card key={f.id} style={{ display: 'flex', flexDirection: 'column', padding: 16 }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>
+                      {car ? car.name : `Car ${carId}`}
+                    </div>
+                    <Muted $size={12}>{amount} из 6 фрагментов</Muted>
+                  </div>
+                  
+                  <div style={{ marginBottom: 16 }}>
+                    <UIProgressBar $height={4}>
+                      <ProgressFill $pct={percent} $bg={isReady ? '#cfff04' : '#a1a1aa'} />
+                    </UIProgressBar>
+                  </div>
+                  
                   <Button 
-                    $variant="primary" 
+                    $variant={isReady ? 'primary' : 'outline'}
                     $size="sm" 
+                    $block
                     disabled={!isReady} 
                     onClick={() => vm.craftCar(carId)}
                   >
                     Собрать
                   </Button>
-                </ItemCard>
+                </Card>
               );
             })}
-          </Grid>
-        </>
+          </UIGrid>
+        </div>
       )}
 
       {cards.length > 0 && (
-        <>
-          <h3 style={{ marginTop: 24, marginBottom: 8 }}>Карточки</h3>
-          <Grid>
+        <div>
+          <Heading $size={16} style={{ marginBottom: 16 }}>Карточки улучшений</Heading>
+          <UIGrid $cols={2} $gap={12}>
             {cards.map(c => {
               const isUpgrade = c.type === 'upgrade_card';
               const cat = isUpgrade ? (c.data as import('src/models/types').UpgradeCardData).category : '';
+              
               return (
-                <ItemCard key={c.id}>
-                  <ItemIcon>🃏</ItemIcon>
-                  <div style={{ fontSize: 14, fontWeight: 'bold' }}>
-                    {isUpgrade ? `Карта улучшения (${cat})` : 'ЭБУ карта'}
+                <Card key={c.id} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '24px 16px' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#a1a1aa', marginBottom: 8, textAlign: 'center' }}>
+                    {isUpgrade ? `Улучшение` : 'ЭБУ'}
+                    {isUpgrade && <div style={{ fontSize: 11, marginTop: 2 }}>{cat}</div>}
                   </div>
-                  <div style={{ fontSize: 16, color: '#f1c40f' }}>x{c.amount}</div>
-                </ItemCard>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: '#cfff04' }}>x{c.amount}</div>
+                </Card>
               );
             })}
-          </Grid>
-        </>
+          </UIGrid>
+        </div>
       )}
     </div>
   );

@@ -14,25 +14,23 @@ const TopBarContainer = styled.div`
   padding: 12px 16px;
   padding-top: calc(12px + env(safe-area-inset-top));
   
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
 const UserSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
-  padding: 4px 12px 4px 4px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.03);
-  transition: background 0.2s;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 20px;
+  transition: opacity 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
+    opacity: 0.8;
   }
 `;
 
@@ -40,11 +38,10 @@ const Avatar = styled.div<{ $url?: string }>`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #333;
+  background-color: #222;
   background-image: url(\${({ $url }) => $url || ''});
   background-size: cover;
   background-position: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,52 +55,48 @@ const UserInfo = styled.div`
 
 const UserName = styled.span`
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   line-height: 1.2;
 `;
 
 const UserLevel = styled.span`
-  font-size: 11px;
-  font-weight: 600;
-  color: #cfff04;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
 `;
 
 const BalanceBadge = styled.div`
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(207, 255, 4, 0.3);
-  border-radius: 20px;
-  padding: 4px 4px 4px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 4px 6px 4px 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   
   &:hover {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: #cfff04;
+    background: rgba(255, 255, 255, 0.12);
   }
 `;
 
 const BalanceText = styled.span`
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
 `;
 
 const PlusCircle = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #cfff04;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #000;
-  box-shadow: 0 0 10px rgba(207, 255, 4, 0.4);
 `;
 
 const PlusIcon = () => (

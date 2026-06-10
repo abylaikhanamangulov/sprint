@@ -4,25 +4,18 @@ import { ChevronRight } from 'lucide-react';
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: #111111;
+  border: 1px solid #27272a;
+  border-radius: 16px;
   padding: 16px;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.15); /* Top inner reflection */
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    background: #18181b;
+    border-color: #3f3f46;
   }
 `;
 

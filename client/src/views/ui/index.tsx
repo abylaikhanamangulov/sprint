@@ -54,19 +54,18 @@ export const ScrollRow = styled.div<{ $gap?: number }>`
 // ── Card ─────────────────────────────────────────────────────────────────────
 export const Card = styled.div<{ $selected?: boolean; $clickable?: boolean }>`
   background: ${({ theme }) => theme.colors.bgCard};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border-radius: ${({ theme }) => theme.radii.lg};
   padding: 16px;
-  border: ${({ $selected, theme }) =>
-    $selected ? `1.5px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`};
-  box-shadow: ${({ theme }) => theme.shadow};
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid ${({ $selected, theme }) =>
+    $selected ? theme.colors.accent : theme.colors.border};
   ${({ $clickable }) => $clickable && css`cursor: pointer;`}
-  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.bgCardHover};
-    ${({ $clickable }) => $clickable && css`transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);`}
+    ${({ $clickable, theme }) => $clickable && css`
+      background: ${theme.colors.bgCardHover};
+      border-color: rgba(255, 255, 255, 0.2);
+    `}
   }
 `;
 
@@ -81,59 +80,50 @@ export const Button = styled.button<{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  font-weight: 700;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  gap: 8px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  transition: all 0.15s ease-in-out;
   ${({ $size }) =>
     $size === 'sm'
-      ? css`padding: 8px 16px; font-size: 13px; border-radius: 12px;`
-      : css`padding: 12px 24px; font-size: 15px; border-radius: 14px;`}
+      ? css`padding: 8px 16px; font-size: 13px; border-radius: 8px;`
+      : css`padding: 14px 24px; font-size: 16px; border-radius: 12px;`}
   ${({ $block }) => $block && css`width: 100%;`}
 
   ${({ $variant = 'primary', theme }) => {
     switch ($variant) {
       case 'danger':
         return css`
-          background: linear-gradient(135deg, ${theme.colors.red}, #d63031);
+          background: ${theme.colors.red};
           color: white;
-          border: none;
-          box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-          &:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
-          }
+          &:hover { background: #dc2626; }
         `;
       case 'outline':
         return css`
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(8px);
+          background: transparent;
           color: ${theme.colors.textPrimary};
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid ${theme.colors.border};
           &:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
           }
         `;
       default:
         return css`
           background: ${theme.colors.accent};
           color: #000000;
-          border: none;
-          box-shadow: 0 4px 15px rgba(207, 255, 4, 0.3);
           &:hover {
             background: ${theme.colors.accentHover};
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(207, 255, 4, 0.4);
+            transform: scale(0.98);
           }
         `;
     }
   }}
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
   }
   
   &:active {
@@ -172,18 +162,17 @@ export const ClassBadge = styled(Badge).attrs<{ $class: CarClass }>(({ $class, t
 // ── Progress ─────────────────────────────────────────────────────────────────
 export const ProgressBar = styled.div<{ $height?: number }>`
   width: 100%;
-  height: ${({ $height }) => $height ?? 8}px;
+  height: ${({ $height }) => $height ?? 6}px;
   background: ${({ theme }) => theme.colors.bgPrimary};
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
 `;
 
 export const ProgressFill = styled.div<{ $pct: number; $bg?: string }>`
   height: 100%;
   width: ${({ $pct }) => Math.min(100, Math.max(0, $pct))}%;
-  border-radius: 4px;
   background: ${({ $bg, theme }) => $bg ?? theme.colors.accent};
-  transition: width 0.5s ease;
+  transition: width 0.3s ease-out;
 `;
 
 // ── Text helpers ─────────────────────────────────────────────────────────────

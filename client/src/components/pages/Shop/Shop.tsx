@@ -25,19 +25,18 @@ const TabBar = styled.div`
 
 const TabButton = styled.button<{ $active: boolean }>`
   padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 700;
+  border-radius: 10px;
+  font-weight: 600;
   font-size: 14px;
   white-space: nowrap;
   transition: all 0.2s ease;
   background: ${({ $active, theme }) =>
-    $active ? 'linear-gradient(135deg, #4e7cff, #7c4dff)' : 'rgba(255, 255, 255, 0.05)'};
-  color: ${({ $active }) => ($active ? '#ffffff' : '#a0a5b5')};
-  border: 1px solid ${({ $active }) => ($active ? 'transparent' : 'rgba(255,255,255,0.1)')};
-  box-shadow: ${({ $active }) => ($active ? '0 4px 15px rgba(124, 77, 255, 0.3)' : 'none')};
+    $active ? theme.colors.accent : 'transparent'};
+  color: ${({ $active }) => ($active ? '#000000' : '#a1a1aa')};
+  border: 1px solid ${({ $active }) => ($active ? 'transparent' : '#27272a')};
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
 `;
 
@@ -66,10 +65,9 @@ const PremiumGrid = styled.div`
 `;
 
 const PremiumCard = styled.div`
-  background: rgba(28, 33, 55, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: #111111;
+  border: 1px solid #27272a;
+  border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -79,29 +77,13 @@ const PremiumCard = styled.div`
   position: relative;
   overflow: hidden;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #4e7cff, #c4b5ff);
-    opacity: 0.5;
-  }
-
   &:hover {
-    transform: translateY(-4px);
-    background: rgba(28, 33, 55, 0.8);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #18181b;
+    border-color: #3f3f46;
   }
 `;
 
-const CratesCard = styled(PremiumCard)`
-  &::before {
-    background: linear-gradient(90deg, #9b59b6, #e056fd);
-  }
-`;
+const CratesCard = styled(PremiumCard)``;
 
 
 
@@ -122,53 +104,39 @@ const ItemDesc = styled.div`
 const BuyButton = styled.button<{ $currency?: string }>`
   width: 100%;
   padding: 10px;
-  border-radius: 10px;
-  font-weight: 700;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   
-  background: ${({ $currency }) => 
-    $currency === 'stars' 
-      ? 'linear-gradient(135deg, #0088cc, #005580)' 
-      : 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'};
+  background: ${({ theme }) => theme.colors.bgPrimary};
   color: #ffffff;
-  border: 1px solid ${({ $currency }) => 
-    $currency === 'stars' ? 'transparent' : 'rgba(255,255,255,0.2)'};
+  border: 1px solid #3f3f46;
 
   &:hover {
-    filter: brightness(1.1);
+    background: #27272a;
+    border-color: #52525b;
   }
   
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
 `;
 
 const DealCard = styled.div`
-  background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(46, 213, 115, 0.05));
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  border-radius: 20px;
+  background: #111111;
+  border: 1px solid #27272a;
+  border-radius: 16px;
   padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
-    pointer-events: none;
-  }
 `;
 
 const DealBadge = styled.div`

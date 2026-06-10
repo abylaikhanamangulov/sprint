@@ -10,10 +10,10 @@ const NavContainer = styled.nav`
   justify-content: space-around;
   align-items: center;
   
-  background: rgba(18, 18, 18, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
   z-index: 100;
 `;
