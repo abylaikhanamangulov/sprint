@@ -4,9 +4,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-async function seed() {
+export async function runSeed(closeClient = true) {
   console.log('[Seed] Connecting to MongoDB...');
-  await connectDB();
+  if (!client) {
+     await connectDB();
+  }
   
   console.log('[Seed] Clearing existing initial collections...');
   await carsCol.deleteMany({});
@@ -81,11 +83,16 @@ async function seed() {
   await campaignChaptersCol.insertMany(chapters);
 
   console.log('[Seed] Seeding completed!');
-  await client.close();
-  process.exit(0);
+  if (closeClient && client) {
+    await client.close();
+  }
 }
 
-seed().catch(err => {
-  console.error('[Seed] Error during seeding:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  runSeed(true)
+    .then(() => process.exit(0))
+    .catch(err => {
+      console.error('[Seed] Error during seeding:', err);
+      process.exit(1);
+    });
+}

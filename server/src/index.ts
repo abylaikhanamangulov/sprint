@@ -3,8 +3,9 @@ import app from './app';
 import { setupWebSocket } from './websocket'; 
 import { bot, startBot } from './bot';
 import { MESSAGES } from './constants/messages';
-import { connectDB, client } from './core/database';
+import { connectDB, client, carsCol } from './core/database';
 import { logger } from './core/logger';
+import { runSeed } from './seed';
 
 const PORT = process.env.PORT || 3001;
 
@@ -22,6 +23,13 @@ async function bootstrap() {
   while (true) {
     try {
       await connectDB();
+      
+      const carCount = await carsCol.countDocuments();
+      if (carCount === 0) {
+        logger.info('[Server] Database is empty. Running automatic seed...');
+        await runSeed(false);
+      }
+      
       startBot();
       
       server.listen(PORT, () => {
