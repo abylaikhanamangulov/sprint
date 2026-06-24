@@ -240,10 +240,11 @@ export function RaceView() {
     };
   }, [vm]);
 
+  const userEnergy = useGameStore((s) => s.user?.energy) || 0;
+
   // ── MENU ──────────────────────────────────────────────────────────────────
   if (vm.phase === 'menu') {
     const car = vm.selectedCar;
-    const userEnergy = useGameStore((s) => s.user?.energy) || 0;
     return (
       <Screen>
         <MainHeader title="Гонки" />
@@ -252,12 +253,12 @@ export function RaceView() {
             $variant="primary" 
             $block 
             onClick={vm.chooseRace}
-            disabled={userEnergy < 1}
+            disabled={userEnergy < 1 || !car}
           >
-            🏁 Заезд (PvE) {userEnergy < 1 && '(Нет энергии)'}
+            🏁 Заезд (PvE) {!car ? '(Нужно авто)' : userEnergy < 1 ? '(Нет энергии)' : ''}
           </Button>
-          <Button $variant="primary" $block onClick={vm.chooseFree}>
-            ♾️ Свободный заезд
+          <Button $variant="primary" $block onClick={vm.chooseFree} disabled={!car}>
+            ♾️ Свободный заезд {!car && '(Нужно авто)'}
           </Button>
           <Button $variant="outline" $block disabled>
             ⚔️ PvP (скоро)
