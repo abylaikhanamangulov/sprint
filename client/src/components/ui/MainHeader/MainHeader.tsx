@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -12,6 +12,26 @@ const MainRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+`;
+
+const BackBtn = styled.button`
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -52,12 +72,13 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
   children
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClose = () => {
     if (onClose) {
       onClose();
     } else {
-      navigate(-1);
+      navigate('/hub');
     }
   };
 
@@ -77,9 +98,19 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
     }
   }, [showClose, onClose]);
 
+  const isHub = location.pathname === '/hub' || location.pathname === '/';
+  const shouldShowBack = !isHub || showClose;
+
   return (
     <HeaderContainer>
       <MainRow>
+        {shouldShowBack && (
+          <BackBtn onClick={handleClose} title="Назад в меню">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </BackBtn>
+        )}
         <TitleContainer>
           <Title>{title}</Title>
           {subtitle && <Subtitle>{subtitle}</Subtitle>}
@@ -94,4 +125,3 @@ export const MainHeader: React.FC<MainHeaderProps> = ({
     </HeaderContainer>
   );
 };
-
