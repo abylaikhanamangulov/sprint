@@ -20,6 +20,31 @@ const TopBarContainer = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
+const LeftGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const EnergyBadge = styled.div`
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const EnergyText = styled.span`
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+`;
+
+const EnergyIcon = styled.span`
+  font-size: 14px;
+`;
+
 const UserSection = styled.div`
   display: flex;
   align-items: center;
@@ -113,15 +138,22 @@ export function GlobalTopBar() {
 
   return (
     <TopBarContainer>
-      <UserSection onClick={() => navigate(PATHS.PROFILE)}>
-        <Avatar $url={user.avatarUrl}>
-          {!user.avatarUrl && user.firstName?.[0]}
-        </Avatar>
-        <UserInfo>
-          <UserName>{user.firstName || 'Гонщик'}</UserName>
-          <UserLevel>Lvl {user.level || 1}</UserLevel>
-        </UserInfo>
-      </UserSection>
+      <LeftGroup>
+        <UserSection onClick={() => navigate(PATHS.PROFILE)}>
+          <Avatar $url={user.avatarUrl}>
+            {!user.avatarUrl && user.firstName?.[0]}
+          </Avatar>
+          <UserInfo>
+            <UserName>{user.firstName || 'Гонщик'}</UserName>
+            <UserLevel>Lvl {user.level || 1}</UserLevel>
+          </UserInfo>
+        </UserSection>
+
+        <EnergyBadge>
+          <EnergyIcon>⚡</EnergyIcon>
+          <EnergyText>{user.energy}/{user.maxEnergy}</EnergyText>
+        </EnergyBadge>
+      </LeftGroup>
 
       <BalanceBadge onClick={() => navigate(PATHS.COIN_SHOP)}>
         <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} />

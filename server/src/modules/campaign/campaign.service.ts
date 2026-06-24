@@ -1,5 +1,6 @@
 import { campaignChaptersCol, campaignProgressCol, usersCol, racesCol } from '../../core/database';
 import { ShiftQuality, RaceResult, CampaignChapter, CampaignNode, CampaignProgress } from '@drag-racing/shared/types';
+import { energyService } from '../../core/energy.service';
 
 export interface PlayPvEDto {
   chapterId: number;
@@ -99,7 +100,8 @@ export class CampaignService {
     const user = await usersCol.findOne({ id: userId });
     if (!user) throw new Error('USER_NOT_FOUND');
 
-    if (user.energy < node.energyCost) throw new Error('NOT_ENOUGH_ENERGY');
+    const hasEnergy = await energyService.deductEnergy(userId, node.energyCost);
+    if (!hasEnergy) throw new Error('NOT_ENOUGH_ENERGY');
 
     const distFactor = (dto.distanceMeters || 402) / 402;
     const difficulty = node.type === 'boss' ? 0.85 : 0.6;
@@ -140,7 +142,6 @@ export class CampaignService {
 
     await usersCol.updateOne({ id: userId }, {
       $inc: {
-        energy: -node.energyCost,
         coins: playerWon ? node.rewards.coins : 0,
         xp: playerWon ? node.rewards.xp : 0,
         'stats.totalRaces': 1

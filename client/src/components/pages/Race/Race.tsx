@@ -243,12 +243,18 @@ export function RaceView() {
   // ── MENU ──────────────────────────────────────────────────────────────────
   if (vm.phase === 'menu') {
     const car = vm.selectedCar;
+    const userEnergy = useGameStore((s) => s.user?.energy) || 0;
     return (
       <Screen>
         <MainHeader title="Гонки" />
         <Column $gap={12} style={{ maxWidth: 300, margin: '0 auto' }}>
-          <Button $variant="primary" $block onClick={vm.chooseRace}>
-            🏁 Заезд (PvE)
+          <Button 
+            $variant="primary" 
+            $block 
+            onClick={vm.chooseRace}
+            disabled={userEnergy < 1}
+          >
+            🏁 Заезд (PvE) {userEnergy < 1 && '(Нет энергии)'}
           </Button>
           <Button $variant="primary" $block onClick={vm.chooseFree}>
             ♾️ Свободный заезд

@@ -122,10 +122,10 @@ export function HubView() {
           <TileLabel>Магазин</TileLabel>
           <TileSub>Тачки и тюнинг</TileSub>
         </Tile>
-        <Tile $clickable onClick={() => vm.go('campaign')}>
-          <TileIcon>🗺️</TileIcon>
+        <Tile style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+          <TileIcon style={{ filter: 'grayscale(100%)' }}>🗺️</TileIcon>
           <TileLabel>Кампания</TileLabel>
-          <TileSub>⚡ {vm.energy}/{vm.maxEnergy}</TileSub>
+          <TileSub>В разработке</TileSub>
         </Tile>
       </Grid>
     </Screen>

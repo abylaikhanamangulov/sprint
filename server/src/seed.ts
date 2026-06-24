@@ -76,8 +76,8 @@ export async function runSeed(closeClient = true) {
   console.log('[Seed] Inserting Campaign Chapters...');
   const chapters: CampaignChapter[] = [
     { id: 1, name: 'The Beginning', city: 'Moscow', unlockCondition: '', nodes: [
-      { id: 1, type: 'race', opponentCar: { name: 'Vaz 2101', class: 'D', pp: 100, image: '/assets/cars/vaz.png' }, recommendedPP: 120, energyCost: 2, rewards: { coins: 100, xp: 10 }, starThresholds: [22, 20, 18] },
-      { id: 2, type: 'boss', bossName: 'Sergey', bossDialogue: 'Show me what you got!', opponentCar: { name: 'Priora', class: 'D', pp: 160, image: '/assets/cars/priora.png' }, recommendedPP: 150, energyCost: 3, rewards: { coins: 300, xp: 50 }, starThresholds: [18, 16, 14] },
+      { id: 1, type: 'race', opponentCar: { name: 'Vaz 2101', class: 'D', pp: 100, image: '/assets/cars/vaz.png' }, recommendedPP: 120, energyCost: 1, rewards: { coins: 100, xp: 10 }, starThresholds: [22, 20, 18] },
+      { id: 2, type: 'boss', bossName: 'Sergey', bossDialogue: 'Show me what you got!', opponentCar: { name: 'Priora', class: 'D', pp: 160, image: '/assets/cars/priora.png' }, recommendedPP: 150, energyCost: 1, rewards: { coins: 300, xp: 50 }, starThresholds: [18, 16, 14] },
     ] },
   ];
   await campaignChaptersCol.insertMany(chapters);
