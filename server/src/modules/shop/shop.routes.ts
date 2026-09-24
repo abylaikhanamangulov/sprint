@@ -11,5 +11,6 @@ router.post('/buy-crate', authMiddleware, shopController.buyCrate);
 router.post('/buy-coins', authMiddleware, shopController.buyCoins);
 router.post('/create-invoice', authMiddleware, shopController.createInvoice);
 router.post('/packs/:packId/open', authMiddleware, shopController.openPack);
+router.post('/refill-energy', authMiddleware, shopController.refillEnergy);
 
 export default router;

@@ -78,3 +78,14 @@ export const openPack = async (req: AuthRequest, res: Response) => {
     handleError(res, error);
   }
 };
+
+export const refillEnergy = async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await shopService.refillEnergy(req.userId!);
+    res.json(result);
+  } catch (error: any) {
+    if (error.message === 'NOT_ENOUGH_POINTS') return res.status(400).json({ error: 'Недостаточно Звезд для заправки' });
+    if (error.message === 'ALREADY_MAX_ENERGY') return res.status(400).json({ error: 'Бак уже полон' });
+    handleError(res, error);
+  }
+};
