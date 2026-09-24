@@ -7,5 +7,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get('/history', racesController.getHistory);
+router.post('/match', racesController.findMatch);
+router.post('/finish', racesController.finishRace);
 
 export default router;
