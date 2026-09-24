@@ -10,11 +10,13 @@ const Title = styled.h1`
 
 const CarRow = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
-  padding: 8px 0;
-  justify-content: center;
-  flex-wrap: wrap;
+  padding: 16px 8px;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 interface Props {

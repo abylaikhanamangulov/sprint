@@ -85,10 +85,10 @@ export async function runSeed(closeClient = true) {
 
   console.log('[Seed] Inserting Card Packs...');
   const packs: CardPack[] = [
-    { id: 'pack_silver', tier: 'silver', name: 'Silver Pack', price: { currency: 'coins', amount: 500 }, slots: 2, slotProbabilities: { partCard: 51, x2Card: 28, points: 14, ecuCard: 4, fragmentClass: { B: 2, A: 1 } as any } },
-    { id: 'pack_gold', tier: 'gold', name: 'Gold Pack', price: { currency: 'coins', amount: 1500 }, slots: 3, slotProbabilities: { partCard: 41, x2Card: 29, points: 18, ecuCard: 9, fragmentClass: { A: 2, S: 1 } as any } },
-    { id: 'pack_platinum', tier: 'platinum', name: 'Platinum Pack', price: { currency: 'coins', amount: 3000 }, slots: 4, slotProbabilities: { partCard: 35, x2Card: 27, points: 21, ecuCard: 14, fragmentClass: { S: 2, X: 1 } as any } },
-    { id: 'pack_diamond', tier: 'diamond', name: 'Diamond Pack', price: { currency: 'stars', amount: 100 }, slots: 5, slotProbabilities: { partCard: 28, x2Card: 26, points: 21, ecuCard: 22, fragmentClass: { X: 3 } as any } },
+    { id: 'pack_silver', tier: 'silver', name: 'Малый Пак', price: { currency: 'coins', amount: 500 }, slots: 2, slotProbabilities: { partCard: 51, x2Card: 28, points: 14, ecuCard: 4, fragmentClass: { B: 2, A: 1 } as any } },
+    { id: 'pack_gold', tier: 'gold', name: 'Средний Пак', price: { currency: 'coins', amount: 1500 }, slots: 8, slotProbabilities: { partCard: 41, x2Card: 29, points: 18, ecuCard: 9, fragmentClass: { A: 2, S: 1 } as any } },
+    { id: 'pack_platinum', tier: 'platinum', name: 'Большой Пак', price: { currency: 'coins', amount: 3000 }, slots: 20, slotProbabilities: { partCard: 35, x2Card: 27, points: 21, ecuCard: 14, fragmentClass: { S: 2, X: 1 } as any } },
+    { id: 'pack_diamond', tier: 'diamond', name: 'Мега Пак', price: { currency: 'coins', amount: 6000 }, slots: 48, slotProbabilities: { partCard: 28, x2Card: 26, points: 21, ecuCard: 22, fragmentClass: { X: 3 } as any } },
   ];
   await cardPacksCol.insertMany(packs);
 
