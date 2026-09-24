@@ -113,7 +113,7 @@ export class ShopService {
     const maxEnergy = user.maxEnergy || 15;
     if (user.energy >= maxEnergy) throw new Error('ALREADY_MAX_ENERGY');
     
-    const refillCost = 5; // Звезд
+    const refillCost = 50; // Звезд
     if ((user.points || 0) < refillCost) throw new Error('NOT_ENOUGH_POINTS');
 
     await usersCol.updateOne(

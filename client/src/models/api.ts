@@ -147,6 +147,7 @@ export const api = {
     openPack: (id: string) => post<{ success: boolean; drops: any[] }>(`/shop/packs/${id}/open`),
     createInvoice: (packageId: string) =>
       post<{ success: boolean; url: string }>('/shop/create-invoice', { packageId }),
+    refillEnergy: () => post<{ success: boolean; newEnergy: number; cost: number }>('/shop/refill-energy'),
   },
   profile: {
     get: () => get<ProfileData>('/profile'),

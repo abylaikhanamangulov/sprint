@@ -15,6 +15,7 @@ interface ShopViewModel {
   buyCosmetic: (id: string) => Promise<void>;
   buyCrate: (id: string) => Promise<void>;
   openPack: (id: string) => Promise<void>;
+  refillEnergy: () => Promise<void>;
   clearMessage: () => void;
 }
 
@@ -71,6 +72,16 @@ export function useShopViewModel(): ShopViewModel {
     }
   };
 
+  const refillEnergy = async () => {
+    try {
+      const result = await api.shop.refillEnergy();
+      setMessage(`Бак заправлен! Списано Звезд: ${result.cost}. Текущая энергия: ${result.newEnergy}`);
+      fetchUser();
+    } catch (e: unknown) {
+      setMessage(getErrorMessage(e));
+    }
+  };
+
   return {
     shop,
     loading,
@@ -80,6 +91,7 @@ export function useShopViewModel(): ShopViewModel {
     buyCosmetic,
     buyCrate,
     openPack,
+    refillEnergy,
     clearMessage: () => setMessage(null),
   };
 }

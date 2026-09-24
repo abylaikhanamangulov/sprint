@@ -239,29 +239,49 @@ export function ShopView() {
       </TabBar>
 
       <ShopContainer>
-        {vm.tab === 'deals' && shop.dailyDeal && (
-          <DealCard>
-            <DealBadge>-{shop.dailyDeal.discount}% СКИДКА</DealBadge>
-            <ItemTitle style={{ fontSize: 22, zIndex: 2 }}>{shop.dailyDeal.car.name}</ItemTitle>
-            <ItemDesc style={{ zIndex: 2, marginBottom: 0 }}>Уникальное предложение дня</ItemDesc>
-            
-            <CarImage src={shop.dailyDeal.car.image || '/mustang.png'} alt="Daily Deal Car" />
-            
-            <PriceTag>
-              <OldPrice>
-                {shop.dailyDeal.car.priceCoins?.toLocaleString()} <img src={coinIcon} alt="coin" style={{ width: 14, height: 14 }} />
-              </OldPrice>
-              <NewPrice>
-                {shop.dailyDeal.discountedPrice?.toLocaleString()} <img src={coinIcon} alt="coin" style={{ width: 20, height: 20 }} />
-              </NewPrice>
-            </PriceTag>
-            <BuyButton 
-              style={{ marginTop: 24, zIndex: 2 }}
-              onClick={() => console.log('Buy Deal clicked')} // Implement buy logic if needed
-            >
-              Купить по акции
-            </BuyButton>
-          </DealCard>
+        {vm.tab === 'deals' && (
+          <>
+            {shop.dailyDeal && (
+              <DealCard>
+                <DealBadge>-{shop.dailyDeal.discount}% СКИДКА</DealBadge>
+                <ItemTitle style={{ fontSize: 22, zIndex: 2 }}>{shop.dailyDeal.car.name}</ItemTitle>
+                <ItemDesc style={{ zIndex: 2, marginBottom: 0 }}>Уникальное предложение дня</ItemDesc>
+                
+                <CarImage src={shop.dailyDeal.car.image || '/mustang.png'} alt="Daily Deal Car" />
+                
+                <PriceTag>
+                  <OldPrice>
+                    {shop.dailyDeal.car.priceCoins?.toLocaleString()} <img src={coinIcon} alt="coin" style={{ width: 14, height: 14 }} />
+                  </OldPrice>
+                  <NewPrice>
+                    {shop.dailyDeal.discountedPrice?.toLocaleString()} <img src={coinIcon} alt="coin" style={{ width: 20, height: 20 }} />
+                  </NewPrice>
+                </PriceTag>
+                <BuyButton 
+                  style={{ marginTop: 24, zIndex: 2 }}
+                  onClick={() => console.log('Buy Deal clicked')} // Implement buy logic if needed
+                >
+                  Купить по акции
+                </BuyButton>
+              </DealCard>
+            )}
+
+            <DealCard style={{ marginTop: shop.dailyDeal ? 20 : 0 }}>
+              <ItemTitle style={{ fontSize: 22, zIndex: 2 }}>Полный Бак ⛽</ItemTitle>
+              <ItemDesc style={{ zIndex: 2, marginBottom: 0 }}>Мгновенное восстановление 15 ед. бензина</ItemDesc>
+              <PriceTag>
+                <NewPrice>
+                  50 ⭐
+                </NewPrice>
+              </PriceTag>
+              <BuyButton 
+                style={{ marginTop: 24, zIndex: 2 }}
+                onClick={() => vm.refillEnergy()}
+              >
+                Купить за 50 Звезд
+              </BuyButton>
+            </DealCard>
+          </>
         )}
 
         {vm.tab === 'packs' && (
