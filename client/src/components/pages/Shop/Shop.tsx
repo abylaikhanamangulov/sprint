@@ -207,7 +207,6 @@ const IconCircle = styled.div<{ $bg: string }>`
 const TABS: { id: ShopTab; label: string }[] = [
   { id: 'deals', label: 'Скидки' },
   { id: 'packs', label: 'Паки' },
-  { id: 'crates', label: 'Кейсы' },
   { id: 'cosmetics', label: 'Тюнинг' },
 ];
 
@@ -312,27 +311,7 @@ export function ShopView() {
           </PremiumGrid>
         )}
 
-        {vm.tab === 'crates' && (
-          <PremiumGrid>
-            {shop.crates.map((crate) => (
-              <CratesCard key={crate.id}>
-                <IconCircle $bg="linear-gradient(135deg, #9b59b6, #e056fd)">
-                  📦
-                </IconCircle>
-                <ItemTitle>{crate.name}</ItemTitle>
-                <ItemDesc>{crate.description}</ItemDesc>
-                <div style={{ flex: 1 }} />
-                <BuyButton 
-                  $currency={crate.price.currency}
-                  onClick={() => vm.buyCrate(crate.id)}
-                >
-                  {crate.price.amount}
-                  {crate.price.currency === 'stars' ? '⭐' : <img src={coinIcon} alt="coin" style={{ width: 16, height: 16 }} />}
-                </BuyButton>
-              </CratesCard>
-            ))}
-          </PremiumGrid>
-        )}
+
 
         {vm.tab === 'cosmetics' && (
           <PremiumGrid>

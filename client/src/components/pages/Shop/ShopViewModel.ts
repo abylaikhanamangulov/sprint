@@ -4,7 +4,7 @@ import { getErrorMessage } from 'src/models/errors';
 import { useGameStore } from 'src/models/store';
 import type { ShopData } from 'src/models/types';
 
-export type ShopTab = 'deals' | 'packs' | 'crates' | 'cosmetics';
+export type ShopTab = 'deals' | 'packs' | 'cosmetics';
 
 interface ShopViewModel {
   shop: ShopData | null;
