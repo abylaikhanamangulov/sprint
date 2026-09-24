@@ -390,16 +390,23 @@ export function useRaceViewModel(): RaceViewModel {
   const finishRace = useCallback(
     async (timeSec: number, finalShifts: ShiftQuality[], usedNos: boolean) => {
       try {
-        const res = await api.races.pve({
-          chapterId: 1,
-          nodeId: 1,
-          playerTime: Math.round(timeSec * 1000) / 1000,
-          playerShifts: finalShifts,
-          usedNos,
-          distanceMeters: distanceMetersRef.current,
+        const isWinner = timeSec < (opponentRef.current?.targetTime ?? 999);
+        const distMap: Record<number, string> = { 201: 'eighth', 402: 'quarter', 804: 'half' };
+        const distStr = distMap[distanceMetersRef.current] || 'quarter';
+        
+        const res = await api.races.finish(isWinner, distStr);
+
+        setResult({
+          success: true,
+          isWin: isWinner,
+          time: timeSec,
           opponentTime: opponentRef.current?.targetTime ?? 0,
+          rewards: {
+            coins: res.silver,
+            xp: res.xp,
+          },
+          newRecord: false
         });
-        setResult(res);
         fetchUser();
       } catch (e: unknown) {
         setError(getErrorMessage(e));
@@ -677,7 +684,7 @@ export function useRaceViewModel(): RaceViewModel {
 
   const RIVAL_NAMES = ['Кенджи', 'Виктор', 'Макс', 'Лео', 'Дитер', 'Хуан'];
   const makeRival = useCallback(
-    (length: RaceLength): OpponentInfo => {
+    (length: RaceLength, username?: string): OpponentInfo => {
       const meters = metersForLength(length);
       // Pick a DIFFERENT real car, closest in PP to the player, so the opponent
       // is visibly its own model (not a clone of the player's car).
@@ -701,7 +708,7 @@ export function useRaceViewModel(): RaceViewModel {
         meters
       );
       return {
-        name: RIVAL_NAMES[Math.floor(Math.random() * RIVAL_NAMES.length)],
+        name: username || RIVAL_NAMES[Math.floor(Math.random() * RIVAL_NAMES.length)],
         car,
         cosmetics: { ...DEFAULT_COSMETICS, paintType: 'matte', paintColor: '#e23b3b' },
         targetTime: rivalTime * (0.97 + Math.random() * 0.06),
@@ -721,16 +728,24 @@ export function useRaceViewModel(): RaceViewModel {
   const cancelSelect = useCallback(() => setPhase('menu'), []);
 
   const startRace = useCallback(
-    (length: RaceLength = raceLength) => {
+    async (length: RaceLength = raceLength) => {
       sim.current = freshSim();
       resetDisplay();
-      setRaceLength(length);
-      distanceMetersRef.current = metersForLength(length);
-      setMode('race');
-      setOpponent(makeRival(length));
-      setPhase('intro'); // show the "vs" panel first
+      
+      const myPP = selectedCar?.currentPP ?? 150;
+      try {
+        const matchInfo = await api.races.match(myPP);
+        
+        setRaceLength(length);
+        distanceMetersRef.current = metersForLength(length);
+        setMode('race');
+        setOpponent(makeRival(length, matchInfo.opponent.username));
+        setPhase('intro'); // show the "vs" panel first
+      } catch (e: unknown) {
+        setError(getErrorMessage(e));
+      }
     },
-    [resetDisplay, raceLength, makeRival]
+    [resetDisplay, raceLength, makeRival, selectedCar]
   );
 
   const goToBurnout = useCallback(() => setPhase('burnout'), []);

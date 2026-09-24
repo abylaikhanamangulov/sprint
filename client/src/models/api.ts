@@ -114,6 +114,8 @@ export const api = {
     pve: (data: PveRaceRequest) =>
       post<PveRaceResponse>('/races/pve', { ...data }),
     history: () => get<RaceResult[]>('/races/history'),
+    match: (currentPP: number) => post<{ opponent: { username: string; pp: number; level: number } }>('/races/match', { currentPP }),
+    finish: (isWinner: boolean, distance: string) => post<{ silver: number; xp: number; newEnergy: number }>('/races/finish', { isWinner, distance }),
   },
   campaign: {
     chapters: () => get<CampaignChapterListItem[]>('/campaign/chapters'),
