@@ -105,6 +105,28 @@ export class ShopService {
     return url;
   }
 
+  async refillEnergy(userId: number) {
+    const { usersCol } = await import('../../core/database');
+    const user = await usersCol.findOne({ id: userId });
+    if (!user) throw new Error('USER_NOT_FOUND');
+
+    const maxEnergy = user.maxEnergy || 15;
+    if (user.energy >= maxEnergy) throw new Error('ALREADY_MAX_ENERGY');
+    
+    const refillCost = 5; // Звезд
+    if ((user.points || 0) < refillCost) throw new Error('NOT_ENOUGH_POINTS');
+
+    await usersCol.updateOne(
+      { id: userId }, 
+      { 
+        $inc: { points: -refillCost },
+        $set: { energy: maxEnergy }
+      }
+    );
+
+    return { success: true, newEnergy: maxEnergy, cost: refillCost };
+  }
+
   async openPack(userId: number, packId: string) {
     const { cardPacksCol, inventoryCol, usersCol, upgradesCol, carsCol } = await import('../../core/database');
     const pack = await cardPacksCol.findOne({ id: packId });
@@ -135,7 +157,15 @@ export class ShopService {
     drops.push({ type: 'upgrade_card', data: { category: guaranteedCategory }, amount: 1 });
 
     // Slots 2 to N
+    let pityCounter = (user as any).pityCounter || 0;
+
     for (let i = 1; i < pack.slots; i++) {
+      if (pityCounter >= 40) {
+        drops.push({ type: 'ecu_card', data: { category: 'ecu' }, amount: 1 });
+        pityCounter = 0; // Сбрасываем счетчик неудач
+        continue;
+      }
+
       const roll = Math.random() * 100;
       let current = 0;
       const probs = pack.slotProbabilities;
@@ -143,12 +173,14 @@ export class ShopService {
       current += probs.partCard;
       if (roll < current) {
         drops.push({ type: 'upgrade_card', data: { category: categories[Math.floor(Math.random() * categories.length)] || 'engine' }, amount: 1 });
+        pityCounter++; // Обычная карта - счетчик растет
         continue;
       }
 
       current += probs.x2Card;
       if (roll < current) {
         drops.push({ type: 'upgrade_card', data: { category: categories[Math.floor(Math.random() * categories.length)] || 'engine' }, amount: 2 });
+        pityCounter += 2; // Две обычные карты - счетчик растет на 2
         continue;
       }
 
@@ -157,12 +189,13 @@ export class ShopService {
         const pointsAmount = Math.floor(Math.random() * 41) + 10; // 10 to 50
         drops.push({ type: 'points', data: {}, amount: pointsAmount });
         await usersCol.updateOne({ id: userId }, { $inc: { points: pointsAmount } });
-        continue;
+        continue; // Поинты не влияют на гарант
       }
 
       current += probs.ecuCard;
       if (roll < current) {
         drops.push({ type: 'ecu_card', data: { category: 'ecu' }, amount: 1 });
+        pityCounter = 0; // Выпала ЭБУ! Сбрасываем счетчик
         continue;
       }
 
@@ -194,6 +227,9 @@ export class ShopService {
         await usersCol.updateOne({ id: userId }, { $inc: { points: 50 } });
       }
     }
+
+    // Сохраняем обновленный счетчик гаранта
+    await usersCol.updateOne({ id: userId }, { $set: { pityCounter } });
 
     // Give drops to user inventory
     for (const drop of drops) {
