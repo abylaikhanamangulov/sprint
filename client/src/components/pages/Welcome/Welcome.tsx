@@ -25,7 +25,7 @@ export function WelcomeView({ onDone }: Props) {
   const vm = useWelcomeViewModel(onDone);
 
   return (
-    <Screen style={{ textAlign: 'center', paddingTop: 40 }}>
+    <Screen style={{ textAlign: 'center', paddingTop: 40, paddingBottom: 60, overflowY: 'auto' }}>
       <Title>Добро пожаловать, {vm.firstName}! 👋</Title>
       <p style={{ color: '#8890a8', marginBottom: 24 }}>Выбери свой первый автомобиль для старта</p>
 
@@ -36,6 +36,7 @@ export function WelcomeView({ onDone }: Props) {
             car={car}
             isSelected={vm.selected === car.id}
             onClick={() => vm.select(car.id)}
+            showPrice={true}
           />
         ))}
       </CarRow>
