@@ -40,6 +40,7 @@ function ghostToCar(g: WarGhost): Car {
     drivetrain: g.drivetrain,
     isStarter: false,
     priceCoins: null,
+    priceStars: null,
     unlockCondition: null,
     baseStats: { speed: 220, acceleration: 190, handling: 150, nosPower: 120, weight: 1350 },
     maxGears: 6,
@@ -397,16 +398,15 @@ export function useRaceViewModel(): RaceViewModel {
         const res = await api.races.finish(isWinner, distStr);
 
         setResult({
-          success: true,
-          isWin: isWinner,
-          time: timeSec,
-          opponentTime: opponentRef.current?.targetTime ?? 0,
+          playerWon: isWinner,
+          aiTime: opponentRef.current?.targetTime ?? 0,
+          stars: 0,
+          result: {} as any,
           rewards: {
             coins: res.silver,
             xp: res.xp,
-          },
-          newRecord: false
-        });
+          }
+        } as any);
         fetchUser();
       } catch (e: unknown) {
         setError(getErrorMessage(e));
