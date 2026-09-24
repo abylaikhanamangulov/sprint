@@ -49,6 +49,7 @@ export interface Car {
   drivetrain: Drivetrain;
   isStarter: boolean;
   priceCoins: number | null;
+  priceStars: number | null;
   unlockCondition: string | null;
   baseStats: CarStats;
   maxGears: number;

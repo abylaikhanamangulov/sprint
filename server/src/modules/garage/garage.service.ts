@@ -7,8 +7,14 @@ export interface UserCosmetics extends CarCosmetics {
 }
 
 export class GarageService {
-  public calculatePP(baseStats: CarStats, upgrades: UserUpgrade[], categories: UpgradeCategory[]): { pp: number; stats: CarStats } {
+  public calculatePP(basePP: number, baseStats: CarStats, upgrades: UserUpgrade[], categories: UpgradeCategory[]): { pp: number; stats: CarStats } {
+    // Вспомогательная формула сырой производительности (где меньший разгон и вес — это лучше)
+    const calcRaw = (s: CarStats) => 
+      (s.speed * 0.5) - (s.acceleration * 10) + (s.handling * 1.5) + (s.nosPower * 0.5) - (s.weight * 0.02);
+
+    const rawStock = calcRaw(baseStats);
     const stats = { ...baseStats };
+    
     for (const upg of upgrades) {
       const cat = categories.find(c => c.id === upg.category);
       if (!cat) continue;
@@ -19,10 +25,10 @@ export class GarageService {
       }
     }
     
-    const pp = Math.round(
-      (stats.speed * 0.3 + stats.acceleration * 0.3 + stats.handling * 0.15 + stats.nosPower * 0.15) -
-      (stats.weight * 0.02)
-    );
+    const rawUpgraded = calcRaw(stats);
+    // Итоговый PP равен базовому PP + разница от апгрейдов
+    const pp = Math.round(basePP + (rawUpgraded - rawStock));
+    
     return { pp, stats };
   }
 
@@ -49,7 +55,7 @@ export class GarageService {
       if (!car) continue;
 
       const carUpgrades = userUpgrades.filter(u => u.carId === carId);
-      const { pp, stats } = this.calculatePP(car.baseStats, carUpgrades, categories);
+      const { pp, stats } = this.calculatePP(car.basePP, car.baseStats, carUpgrades, categories);
       const tuning = userTuning.find(t => t.carId === carId) || null;
       const cosmetics = userCosmetics.find((c: any) => c.carId === carId) || DEFAULT_COSMETICS;
 

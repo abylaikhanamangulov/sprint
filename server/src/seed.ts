@@ -22,9 +22,35 @@ export async function runSeed(closeClient = true) {
 
   console.log('[Seed] Inserting Cars...');
   const cars: Car[] = [
-    { id: 1, name: 'Lada VAZ 2107', class: 'D', drivetrain: 'rwd', isStarter: true, baseStats: { speed: 100, acceleration: 12, handling: 40, weight: 1000, nosPower: 0 }, priceCoins: 1000, unlockCondition: null, maxGears: 4, basePP: 150, image: '/assets/cars/vaz.png' },
-    { id: 2, name: 'Toyota Supra', class: 'A', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 250, acceleration: 8, handling: 70, weight: 1500, nosPower: 50 }, priceCoins: 15000, unlockCondition: null, maxGears: 6, basePP: 450, image: '/assets/cars/supra.png' },
-    { id: 3, name: 'Nissan GTR', class: 'S', drivetrain: 'awd', isStarter: false, baseStats: { speed: 320, acceleration: 3, handling: 90, weight: 1700, nosPower: 100 }, priceCoins: null, unlockCondition: null, maxGears: 6, basePP: 600, image: '/assets/cars/gtr.png' },
+    // --- D Class ---
+    { id: 1, name: 'Mazda MX-5 Miata (NA)', class: 'D', drivetrain: 'rwd', isStarter: true, baseStats: { speed: 210, acceleration: 7.5, handling: 75, weight: 940, nosPower: 0 }, priceCoins: 5000, priceStars: null, unlockCondition: null, maxGears: 5, basePP: 120, image: '/assets/cars/miata_na.png' },
+    { id: 2, name: 'Volkswagen Golf GTI (Mk1)', class: 'D', drivetrain: 'fwd', isStarter: true, baseStats: { speed: 215, acceleration: 7.0, handling: 70, weight: 810, nosPower: 0 }, priceCoins: 6500, priceStars: null, unlockCondition: null, maxGears: 5, basePP: 135, image: '/assets/cars/golf_mk1.png' },
+    { id: 3, name: 'Honda Civic Type R (EK9)', class: 'D', drivetrain: 'fwd', isStarter: true, baseStats: { speed: 225, acceleration: 6.8, handling: 65, weight: 1050, nosPower: 0 }, priceCoins: 8000, priceStars: null, unlockCondition: null, maxGears: 5, basePP: 150, image: '/assets/cars/civic_ek9.png' },
+    
+    // --- C Class ---
+    { id: 4, name: 'Nissan Silvia (S15)', class: 'C', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 245, acceleration: 5.8, handling: 75, weight: 1240, nosPower: 0 }, priceCoins: 25000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 250, image: '/assets/cars/silvia_s15.png' },
+    { id: 5, name: 'Mitsubishi Lancer Evo VIII', class: 'C', drivetrain: 'awd', isStarter: false, baseStats: { speed: 250, acceleration: 4.8, handling: 82, weight: 1410, nosPower: 0 }, priceCoins: 28000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 275, image: '/assets/cars/evo_viii.png' },
+    { id: 6, name: 'Toyota Supra (A80)', class: 'C', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 260, acceleration: 4.6, handling: 72, weight: 1550, nosPower: 0 }, priceCoins: 35000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 300, image: '/assets/cars/supra_a80.png' },
+
+    // --- B Class ---
+    { id: 7, name: 'BMW M3 (E46)', class: 'B', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 275, acceleration: 4.8, handling: 83, weight: 1495, nosPower: 0 }, priceCoins: 50000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 420, image: '/assets/cars/m3_e46.png' },
+    { id: 8, name: 'Nissan Skyline GT-R (R34)', class: 'B', drivetrain: 'awd', isStarter: false, baseStats: { speed: 285, acceleration: 4.0, handling: 85, weight: 1560, nosPower: 0 }, priceCoins: 55000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 440, image: '/assets/cars/skyline_r34.png' },
+    { id: 9, name: 'Ford Mustang GT (S550)', class: 'B', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 295, acceleration: 4.3, handling: 70, weight: 1720, nosPower: 0 }, priceCoins: 65000, priceStars: null, unlockCondition: null, maxGears: 6, basePP: 460, image: '/assets/cars/mustang_s550.png' },
+
+    // --- A Class (Прямая покупка за Серебро или Звезды) ---
+    { id: 10, name: 'Porsche 911 GT3 (992)', class: 'A', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 320, acceleration: 3.2, handling: 95, weight: 1435, nosPower: 0 }, priceCoins: 120000, priceStars: 350, unlockCondition: null, maxGears: 7, basePP: 580, image: '/assets/cars/911_gt3.png' },
+    { id: 11, name: 'Nissan GT-R Nismo', class: 'A', drivetrain: 'awd', isStarter: false, baseStats: { speed: 330, acceleration: 2.7, handling: 90, weight: 1720, nosPower: 0 }, priceCoins: 150000, priceStars: 400, unlockCondition: null, maxGears: 6, basePP: 600, image: '/assets/cars/gtr_nismo.png' },
+    { id: 12, name: 'Audi R8 V10 Plus', class: 'A', drivetrain: 'awd', isStarter: false, baseStats: { speed: 331, acceleration: 3.1, handling: 88, weight: 1695, nosPower: 0 }, priceCoins: 180000, priceStars: 450, unlockCondition: null, maxGears: 7, basePP: 620, image: '/assets/cars/r8_v10.png' },
+
+    // --- S Class (Premium) ---
+    { id: 13, name: 'Lamborghini Aventador SVJ', class: 'S', drivetrain: 'awd', isStarter: false, baseStats: { speed: 360, acceleration: 2.7, handling: 92, weight: 1525, nosPower: 0 }, priceCoins: null, priceStars: 750, unlockCondition: 'premium', maxGears: 7, basePP: 750, image: '/assets/cars/aventador_svj.png' },
+    { id: 14, name: 'McLaren P1', class: 'S', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 395, acceleration: 2.7, handling: 96, weight: 1490, nosPower: 0 }, priceCoins: null, priceStars: 850, unlockCondition: 'premium', maxGears: 7, basePP: 780, image: '/assets/cars/p1.png' },
+    { id: 15, name: 'Ferrari LaFerrari', class: 'S', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 375, acceleration: 2.4, handling: 95, weight: 1585, nosPower: 0 }, priceCoins: null, priceStars: 950, unlockCondition: 'premium', maxGears: 7, basePP: 820, image: '/assets/cars/laferrari.png' },
+
+    // --- X Class (Premium) ---
+    { id: 16, name: 'Pagani Huayra BC', class: 'X', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 385, acceleration: 2.5, handling: 98, weight: 1218, nosPower: 0 }, priceCoins: null, priceStars: 1500, unlockCondition: 'premium', maxGears: 7, basePP: 950, image: '/assets/cars/huayra_bc.png' },
+    { id: 17, name: 'Bugatti Chiron Super Sport', class: 'X', drivetrain: 'awd', isStarter: false, baseStats: { speed: 490, acceleration: 2.2, handling: 89, weight: 1945, nosPower: 0 }, priceCoins: null, priceStars: 1750, unlockCondition: 'premium', maxGears: 7, basePP: 980, image: '/assets/cars/chiron_pur.png' },
+    { id: 18, name: 'Koenigsegg Jesko Absolut', class: 'X', drivetrain: 'rwd', isStarter: false, baseStats: { speed: 531, acceleration: 2.4, handling: 93, weight: 1420, nosPower: 0 }, priceCoins: null, priceStars: 2000, unlockCondition: 'premium', maxGears: 9, basePP: 1000, image: '/assets/cars/jesko.png' },
   ];
   await carsCol.insertMany(cars);
 
