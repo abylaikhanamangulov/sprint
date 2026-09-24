@@ -31,7 +31,7 @@ export class AuthService {
         level: 1,
         xp: 0,
         xpToNext: 500,
-        coins: 1500,
+        coins: 8000,
         points: 0,
         energy: 15,
         maxEnergy: 15,
@@ -125,16 +125,21 @@ export class AuthService {
     const { carsCol } = await import('../../core/database');
     const car = await carsCol.findOne({ id: carId, isStarter: true });
     if (!car) throw new Error('Invalid starter car');
+    
+    // Взимаем плату за стартовую машину
+    const cost = car.priceCoins || 0;
+    if (user.coins < cost) throw new Error('NOT_ENOUGH_FUNDS');
 
     await usersCol.updateOne(
       { id: userId },
       { 
         $set: { selectedCarId: carId },
-        $addToSet: { ownedCars: carId }
+        $addToSet: { ownedCars: carId },
+        $inc: { coins: -cost }
       }
     );
 
-    return { success: true, carId };
+    return { success: true, carId, cost };
   }
 }
 
