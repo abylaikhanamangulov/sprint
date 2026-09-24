@@ -100,7 +100,7 @@ function estimateTime(
   meters: number
 ): number {
   const topMs = topKmh / 3.6;
-  const A = ACCEL_K * accelStat;
+  const A = ACCEL_K * (1000 / accelStat);
   let v = 0;
   let d = 0;
   let t = 0;
@@ -517,7 +517,7 @@ export function useRaceViewModel(): RaceViewModel {
 
       // Acceleration from the car's real 0-100 (A), shaped by the torque curve
       // and tapering toward the real top speed.
-      const A = ACCEL_K * accelStat;
+      const A = ACCEL_K * (1000 / accelStat);
       const overRevCut = s.rpm >= REDLINE && !isLast; // hitting the limiter in a low gear
       const tqEff = overRevCut ? 0 : Math.max(0.72, torqueAt(s.rpm)); // launch torque floor
       const v = s.speed / topSpeedMs;
