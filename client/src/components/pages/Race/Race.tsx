@@ -216,10 +216,10 @@ export function RaceView() {
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         vm.setThrottle(false);
-      } else if (e.key === 'ArrowLeft' && !e.repeat) {
+      } else if (e.code === 'KeyS' && !e.repeat) {
         e.preventDefault();
         vm.shiftDown();
-      } else if (e.key === 'ArrowRight' && !e.repeat) {
+      } else if (e.code === 'KeyW' && !e.repeat) {
         e.preventDefault();
         vm.shiftUp();
       }
@@ -423,6 +423,36 @@ export function RaceView() {
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Button $variant="primary" onClick={vm.resetRun}>
+            Ещё раз
+          </Button>
+          <Button $variant="outline" onClick={vm.toMenu}>
+            Меню
+          </Button>
+        </div>
+      </Screen>
+    );
+  }
+
+  // ── RESULT: Free Ride ──────────────────────────────────────────────────────
+  if (vm.phase === 'result' && vm.mode === 'free') {
+    return (
+      <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
+        <ResultIcon>⏱️</ResultIcon>
+        <Heading $size={22} style={{ marginBottom: 8 }}>
+          ФИНИШ
+        </Heading>
+        <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <Muted>Время заезда</Muted>
+            <strong>{vm.raceTime.toFixed(3)}с</strong>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+            <Muted>Максимальная скорость</Muted>
+            <strong>{Math.round(vm.maxSpeedKmh)} км/ч</strong>
+          </div>
+        </Card>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+          <Button $variant="primary" onClick={() => vm.startFree()}>
             Ещё раз
           </Button>
           <Button $variant="outline" onClick={vm.toMenu}>

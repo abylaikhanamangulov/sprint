@@ -366,9 +366,10 @@ export function useRaceViewModel(): RaceViewModel {
   opponentRef.current = opponent;
   maxGearsRef.current = maxGears;
 
-  const accelStat = selectedCar?.currentStats.acceleration ?? 100;
-  const speedStat = selectedCar?.currentStats.speed ?? 150;
-  const nosStat = selectedCar?.currentStats.nosPower ?? 80;
+  let accelStat = selectedCar?.currentStats?.acceleration ?? selectedCar?.car?.baseStats?.acceleration ?? 7.5;
+  if (accelStat > 20) accelStat = 7.5; // Prevent old arcade stats (like 100) from ruining physics
+  const speedStat = selectedCar?.currentStats?.speed ?? selectedCar?.car?.baseStats?.speed ?? 210;
+  const nosStat = selectedCar?.currentStats?.nosPower ?? selectedCar?.car?.baseStats?.nosPower ?? 0;
   // NOS is only usable if it's been installed (bought) on this car.
   const nosInstalled = (selectedCar?.upgrades ?? []).some(
     (u) => u.category === 'nos' && u.stage >= 1
@@ -440,7 +441,8 @@ export function useRaceViewModel(): RaceViewModel {
     (ts: number) => {
       const s = sim.current;
       if (lastTsRef.current === 0) lastTsRef.current = ts;
-      const dt = Math.min(0.05, (ts - lastTsRef.current) / 1000);
+      // Allow up to 0.25s per frame (4 FPS) before slowing down time, to prevent slow-motion on laggy devices
+      const dt = Math.min(0.25, (ts - lastTsRef.current) / 1000);
       lastTsRef.current = ts;
 
       // ── BURNOUT: 10s to warm tyres; chase the live, retreating green zone ─
@@ -499,61 +501,61 @@ export function useRaceViewModel(): RaceViewModel {
       const isLast = s.gear >= maxG;
       const gTop = gearTopSpeed(topSpeedMs, s.gear, maxG);
 
-      // RPM is derived from wheel speed in the current gear (real gearbox).
-      let mechRpm = rpmForSpeed(s.speed, gTop);
-
-      // Simulate clutch slip or wheelspin on launch so RPM doesn't drop to idle
-      if (s.speed < LAUNCH_SPEED && s.gear === 1) {
-        const k = s.speed / LAUNCH_SPEED;
-        let slipRpm = s.wheelspin ? REDLINE : Math.max(mechRpm, s.launchRpm * 0.7);
-        s.rpm = slipRpm * (1 - k) + mechRpm * k;
-      } else {
-        s.rpm = mechRpm;
+      if (phaseRef.current === 'racing' && !s.throttle) {
+        // We let the user manually press the gas
       }
 
-      // Cumulative time in the red (over-rev) zone — blows the engine, except on
-      // the last gear (nowhere to shift, so flooring it is allowed).
-      if (s.rpm >= REDLINE && !isLast) s.redTime += dt;
+      // --- ADVANCED MECHANICAL PHYSICS ---
+      const A = Math.max(2.0, ACCEL_K * (1000 / accelStat)); // At least 2.0 m/s^2 baseline
 
-      // Acceleration from the car's real 0-100 (A), shaped by the torque curve
-      // and tapering toward the real top speed.
-      const A = ACCEL_K * (1000 / accelStat);
-      const overRevCut = s.rpm >= REDLINE && !isLast; // hitting the limiter in a low gear
-      const tqEff = overRevCut ? 0 : Math.max(0.72, torqueAt(s.rpm)); // launch torque floor
-      const v = s.speed / topSpeedMs;
-      const taper = Math.max(0, 1 - Math.pow(v, TAPER_EXP));
-      let accel: number;
+      let targetRpm = IDLE_RPM + (s.speed / Math.max(1, gTop)) * (REDLINE - IDLE_RPM);
+      if (s.speed < LAUNCH_SPEED && s.gear === 1 && s.throttle) {
+         targetRpm = Math.max(targetRpm, s.launchRpm * 0.8);
+      }
+      s.rpm = Math.min(MAX_RPM, Math.max(IDLE_RPM, targetRpm));
 
-      if (s.throttle && !overRevCut) {
-        accel = A * tqEff * taper;
-        // launch grip from the burnout (fades in over the first metres)
-        if (s.speed < LAUNCH_SPEED) {
-          const k = s.speed / LAUNCH_SPEED;
-          accel *= s.launchGrip + (1 - s.launchGrip) * k;
-        } else if (s.wheelspin) {
-          s.wheelspin = false; // hooked up
+      const overRevCut = s.rpm >= REDLINE && !isLast;
+      if (overRevCut) {
+        s.redTime += dt;
+        if (s.redTime > OVERHEAT_LIMIT) {
+          if (rafRef.current) cancelAnimationFrame(rafRef.current);
+          setPhase('result');
+          return;
         }
-        if (s.nosActive) accel *= 1 + nosStat / 140;
-        // last gear, full throttle: speed never drops — pull to top speed
-        if (isLast && s.speed < topSpeedMs * 0.999) accel = Math.max(accel, 0.05);
-      } else if (overRevCut) {
-        // bouncing off the limiter in a non-final gear: drive cuts, speed bleeds
-        accel = -3.5 - 1.5 * v;
       } else {
-        accel = -ENGINE_BRAKE - 2 * v; // coast down
+        s.redTime = Math.max(0, s.redTime - dt * 2);
       }
 
-      // NOS bookkeeping (independent of throttle).
+      const v = Math.min(1.0, s.speed / topSpeedMs);
+      let accel = 0;
+
+      if (s.throttle) {
+        if (overRevCut) {
+          accel = 0.5; // Crawl on limiter, requires manual shift
+        } else {
+          const taper = Math.max(0.4, 1 - Math.pow(v, TAPER_EXP));
+          accel = A * Math.max(0.72, torqueAt(s.rpm)) * taper;
+          if (s.speed < LAUNCH_SPEED) {
+            accel *= Math.max(0.6, s.launchGrip); // Burnout grip effect
+          }
+          if (s.nosActive) accel *= 1.5;
+        }
+      } else {
+        accel = -2.0 - 2 * v; // Engine braking
+      }
+
+      // NOS
       if (s.nosActive) {
         s.nosTimer -= dt;
-        s.nosCharge = Math.max(0, s.nosCharge - (100 / 3) * dt);
+        s.nosCharge = Math.max(0, s.nosCharge - 33 * dt);
         if (s.nosTimer <= 0 || s.nosCharge <= 0) s.nosActive = false;
-      } else if (s.nosCharge < NOS_FULL) {
-        s.nosCharge = Math.min(NOS_FULL, s.nosCharge + 7 * dt);
+      } else if (s.nosCharge < 100) {
+        s.nosCharge = Math.min(100, s.nosCharge + 7 * dt);
       }
 
       s.speed = Math.max(0, Math.min(topSpeedMs, s.speed + accel * dt));
       s.distance += s.speed * dt;
+      // --- END ADVANCED MECHANICAL PHYSICS ---
 
       // Telemetry.
       const elapsed = (performance.now() - startTimeRef.current) / 1000;
@@ -591,13 +593,13 @@ export function useRaceViewModel(): RaceViewModel {
         return;
       }
 
-      // Finish in timed/war mode; free run never ends on its own.
-      if (modeRef.current !== 'free' && s.distance >= distanceMetersRef.current) {
+      // Check for finish
+      if (s.distance >= distanceMetersRef.current) {
         setRaceTime(elapsed);
         setPhase('result');
         if (modeRef.current === 'war') {
           finishWar(elapsed);
-        } else {
+        } else if (modeRef.current === 'race') {
           const used = s.nosCharge < NOS_FULL;
           setShifts((prev) => {
             finishRace(elapsed, prev, used);
@@ -753,13 +755,14 @@ export function useRaceViewModel(): RaceViewModel {
   const startFree = useCallback(
     (length: RaceLength = raceLength) => {
       sim.current = freshSim();
+      sim.current.gear = 1;
+      sim.current.launchRpm = 4000;
       resetDisplay();
       setRaceLength(length);
       distanceMetersRef.current = metersForLength(length);
       setMode('free');
       setOpponent(null);
-      startTimeRef.current = performance.now();
-      setPhase('racing'); // straight to driving — no countdown, no finish
+      setPhase('burnout');
     },
     [resetDisplay, raceLength]
   );
@@ -816,12 +819,7 @@ export function useRaceViewModel(): RaceViewModel {
     const m = modeRef.current;
     sim.current = freshSim();
     resetDisplay();
-    if (m === 'free') {
-      startTimeRef.current = performance.now();
-      setPhase('racing');
-    } else {
-      setPhase('burnout');
-    }
+    setPhase('burnout');
   }, [resetDisplay]);
 
   const toMenu = useCallback(() => {
