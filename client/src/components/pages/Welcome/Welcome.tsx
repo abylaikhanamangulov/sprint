@@ -10,11 +10,10 @@ const Title = styled.h1`
 
 const CarRow = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 16px;
-  overflow-x: auto;
+  align-items: center;
   padding: 16px 8px;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
   width: 100%;
   box-sizing: border-box;
 `;
