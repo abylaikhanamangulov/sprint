@@ -44,11 +44,29 @@ export class RacesService {
 
     // Базовые награды из нашего economy_model.md
     let baseSilver = 100; // Quarter mile (1/4 мили)
-    if (distance === 'eighth') baseSilver = 50;
-    if (distance === 'half') baseSilver = 200;
+    let baseXp = 20;
+    let lossSilver = 30;
+    let lossXp = 5;
 
-    const silverEarned = isWinner ? baseSilver : Math.floor(baseSilver / 3);
-    const xpEarned = isWinner ? 50 : 15;
+    if (distance === 'eighth') {
+      baseSilver = 50;
+      baseXp = 10;
+      lossSilver = 15;
+      lossXp = 2;
+    } else if (distance === 'half') {
+      baseSilver = 150;
+      baseXp = 30;
+      lossSilver = 45;
+      lossXp = 7;
+    } else if (distance === 'mile') {
+      baseSilver = 200;
+      baseXp = 40;
+      lossSilver = 60;
+      lossXp = 10;
+    }
+
+    const silverEarned = isWinner ? baseSilver : lossSilver;
+    const xpEarned = isWinner ? baseXp : lossXp;
 
     await usersCol.updateOne(
       { id: userId },

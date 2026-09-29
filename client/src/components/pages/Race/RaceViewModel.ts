@@ -401,7 +401,7 @@ export function useRaceViewModel(): RaceViewModel {
     async (timeSec: number, finalShifts: ShiftQuality[], usedNos: boolean) => {
       try {
         const isWinner = timeSec < (opponentRef.current?.targetTime ?? 999);
-        const distMap: Record<number, string> = { 201: 'eighth', 402: 'quarter', 804: 'half' };
+        const distMap: Record<number, string> = { 201: 'eighth', 402: 'quarter', 804: 'half', 1609: 'mile' };
         const distStr = distMap[distanceMetersRef.current] || 'quarter';
         
         const res = await api.races.finish(isWinner, distStr);
