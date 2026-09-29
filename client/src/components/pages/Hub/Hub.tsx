@@ -4,6 +4,7 @@ import { useHubViewModel } from 'src/components/pages/Hub/HubViewModel';
 import { Screen, Card, Button, Grid, ClassBadge } from 'src/views/ui';
 import { CarSprite } from 'src/views/components/CarSprite';
 import { GlassModal } from 'src/components/ui/GlassModal/GlassModal';
+import { RewardsModal } from '../Rewards/RewardsModal';
 
 const Banner = styled(Card)<{ $variant: 'reward' | 'claimed' }>`
   margin-bottom: 16px;
@@ -49,45 +50,23 @@ export function HubView() {
   const [showRewardModal, setShowRewardModal] = useState(false);
 
   useEffect(() => {
-    if (vm.dailyResult) {
-      setShowRewardModal(true);
-    }
-  }, [vm.dailyResult]);
+    // We can auto-open if needed, but for now user will click a button
+  }, []);
 
   return (
     <Screen>
       <MainHeader title="Главная" />
-      <GlassModal
-        isOpen={showRewardModal}
-        onClose={() => setShowRewardModal(false)}
-        icon={<div style={{ fontSize: '72px', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }}>🎁</div>}
-        title="Ежедневная награда"
-        description={
-          vm.dailyResult ? (
-            <>
-              Вы зашли в игру <strong>{vm.dailyResult.streak} дней подряд</strong>!<br/><br/>
-              Вы получили:<br/>
-              <span style={{ color: '#e8eaf0', fontSize: '18px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: 6 }}>{vm.dailyResult.reward.coins} <img src={coinIcon} alt="coin" style={{ width: 20, height: 20 }} /></span>
-            </>
-          ) : null
-        }
-        actionText="Круто!"
-      />
-
-      {vm.dailyAvailable && !vm.dailyResult && (
-        <Banner $variant="reward">
-          <div style={{ fontSize: 24, marginBottom: 8 }}>🎁</div>
-          <h3 style={{ fontSize: 16, marginBottom: 4 }}>Ежедневная награда</h3>
-          <p style={{ fontSize: 13, color: '#8890a8', marginBottom: 12 }}>
-            День {vm.dailyStreak + 1} из 7
-          </p>
-          <Button $variant="primary" onClick={vm.claimDaily} disabled={vm.claiming}>
-            {vm.claiming ? '...' : 'Забрать'}
-          </Button>
-        </Banner>
-      )}
-
-
+      <RewardsModal isOpen={showRewardModal} onClose={() => setShowRewardModal(false)} />
+      <Banner $variant="reward" onClick={() => setShowRewardModal(true)} style={{ cursor: 'pointer' }}>
+        <div style={{ fontSize: 24, marginBottom: 8 }}>🎁</div>
+        <h3 style={{ fontSize: 16, marginBottom: 4 }}>Система наград</h3>
+        <p style={{ fontSize: 13, color: '#8890a8', marginBottom: 12 }}>
+          Ежедневные подарки и события
+        </p>
+        <Button $variant="primary">
+          Открыть
+        </Button>
+      </Banner>
 
       {vm.selectedCar && (
         <Card style={{ marginBottom: 16, textAlign: 'center' }}>

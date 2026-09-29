@@ -21,7 +21,15 @@ export class GarageService {
       
       for (const [stat, boost] of Object.entries(cat.statsBoost)) {
         const key = stat as keyof CarStats;
-        stats[key] = (stats[key] || 0) + ((boost as number) * upg.stage);
+        const boostVal = boost as number;
+        
+        if (key === 'acceleration' && boostVal < 0) {
+          // Экспоненциальная модель разгона (0.9 ^ (Множитель * Стадия))
+          const factor = Math.abs(boostVal);
+          stats[key] = (stats[key] || 0) * Math.pow(0.90, factor * upg.stage);
+        } else {
+          stats[key] = (stats[key] || 0) + (boostVal * upg.stage);
+        }
       }
     }
     

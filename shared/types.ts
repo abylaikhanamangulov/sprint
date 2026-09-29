@@ -97,8 +97,10 @@ export interface User {
   selectedCarId: number | null;
   ownedCars: number[];
   clanId: number | null;
-  dailyStreak: number;
-  lastDailyReward: string | null;
+  rewardMonth: string; // e.g. "2026-09"
+  claimedDays: number[]; // e.g. [1, 2, 3] for the dates claimed this month
+  founderRewardClaimed: boolean; // if the user claimed the early adopter reward
+  claimedHolidays: string[]; // e.g. ["new_year_2026"]
   stats: UserStats;
   settings: UserSettings;
   createdAt: string;

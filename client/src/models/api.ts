@@ -86,7 +86,12 @@ export const api = {
     me: () => get<User>('/auth/me'),
     selectStarter: (carId: number) =>
       post<{ success: boolean; carId: number }>('/auth/select-starter', { carId }),
-    claimDaily: () => post<DailyRewardResponse>('/auth/daily-reward'),
+  },
+  rewards: {
+    status: () => get<any>('/rewards/status'),
+    claimDaily: () => post<any>('/rewards/claim-daily'),
+    claimFounder: () => post<any>('/rewards/claim-founder'),
+    claimHoliday: (holidayId: string) => post<any>('/rewards/claim-holiday', { holidayId }),
   },
   cars: {
     list: () => get<Car[]>('/cars'),

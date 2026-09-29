@@ -215,7 +215,7 @@ export function RaceView() {
         vm.setThrottle(true);
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        vm.setThrottle(false);
+        vm.setBrake(true);
       } else if (e.code === 'KeyS' && !e.repeat) {
         e.preventDefault();
         vm.shiftDown();
@@ -229,6 +229,9 @@ export function RaceView() {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
         vm.setThrottle(false);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        vm.setBrake(false);
       }
     };
 

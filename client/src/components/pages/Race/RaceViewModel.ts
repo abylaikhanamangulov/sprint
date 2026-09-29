@@ -48,14 +48,15 @@ function ghostToCar(g: WarGhost): Car {
     image: '',
   };
 }
-export type RaceLength = 'quarter' | 'half' | 'mile';
+export type RaceLength = 'eighth' | 'quarter' | 'half' | 'mile';
 
 export const MAX_RPM = 9000;
 export const IDLE_RPM = 1000;
 export const REDLINE = 8200;
 
-// Three selectable drag distances.
+// Selectable drag distances.
 export const RACE_LENGTHS: { id: RaceLength; meters: number; label: string; sub: string }[] = [
+  { id: 'eighth', meters: 201, label: '⅛ мили', sub: '201 м' },
   { id: 'quarter', meters: 402, label: '¼ мили', sub: '402 м' },
   { id: 'half', meters: 804, label: '½ мили', sub: '804 м' },
   { id: 'mile', meters: 1609, label: '1 миля', sub: '1609 м' },
@@ -198,6 +199,7 @@ interface RaceViewModel {
   nosCharge: number; // 0..100
   nosActive: boolean;
   throttle: boolean;
+  brake: boolean;
   shifts: ShiftQuality[];
   shiftZones: ShiftZones;
   inPerfect: boolean;
@@ -240,6 +242,7 @@ interface RaceViewModel {
   resetRun: () => void; // restart current run
   toMenu: () => void;
   setThrottle: (on: boolean) => void;
+  setBrake: (on: boolean) => void;
   shiftUp: () => void;
   shiftDown: () => void;
   activateNos: () => void;
@@ -251,6 +254,7 @@ interface SimState {
   gear: number;
   distance: number;
   throttle: boolean;
+  brake: boolean;
   nosCharge: number;
   nosActive: boolean;
   nosTimer: number;
@@ -277,6 +281,7 @@ function freshSim(): SimState {
     gear: 0,
     distance: 0,
     throttle: false,
+    brake: false,
     nosCharge: NOS_FULL,
     nosActive: false,
     nosTimer: 0,
@@ -333,6 +338,7 @@ export function useRaceViewModel(): RaceViewModel {
   const [nosCharge, setNosCharge] = useState(NOS_FULL);
   const [nosActive, setNosActive] = useState(false);
   const [throttle, setThrottleState] = useState(false);
+  const [brake, setBrakeState] = useState(false);
   const [warmNeedle, setWarmNeedle] = useState(0);
   const [warmFill, setWarmFill] = useState(0);
   const [warmZone, setWarmZone] = useState<[number, number]>([
@@ -368,6 +374,8 @@ export function useRaceViewModel(): RaceViewModel {
 
   let accelStat = selectedCar?.currentStats?.acceleration ?? selectedCar?.car?.baseStats?.acceleration ?? 7.5;
   if (accelStat > 20) accelStat = 7.5; // Prevent old arcade stats (like 100) from ruining physics
+  accelStat = Math.max(0.8, accelStat); // Physics fix: Prevent upgrades from dropping 0-100 time below 0.8s and breaking the math
+
   const speedStat = selectedCar?.currentStats?.speed ?? selectedCar?.car?.baseStats?.speed ?? 210;
   const nosStat = selectedCar?.currentStats?.nosPower ?? selectedCar?.car?.baseStats?.nosPower ?? 0;
   // NOS is only usable if it's been installed (bought) on this car.
@@ -540,6 +548,8 @@ export function useRaceViewModel(): RaceViewModel {
           }
           if (s.nosActive) accel *= 1.5;
         }
+      } else if (s.brake) {
+        accel = -15.0 - (v * 10.0); // Active braking
       } else {
         accel = -2.0 - 2 * v; // Engine braking
       }
@@ -640,12 +650,25 @@ export function useRaceViewModel(): RaceViewModel {
         clearInterval(seq);
         const hold = 400 + Math.random() * 1700; // random hold like real F1
         goTimer = setTimeout(() => {
-          // Launch quality = burnout grip × where the tach was on the lights.
+          // Launch quality = burnout grip × where the tach was on the lights × chassis dynamics
           const s = sim.current;
           const boost = revBoostFromRpm(s.rpm);
-          s.launchGrip = Math.max(0.5, Math.min(1.6, s.warmGrip * boost));
+          
+          // Drivetrain & Chassis physics
+          const drivetrain = selectedCar?.car?.drivetrain ?? 'rwd';
+          const weight = selectedCar?.currentStats?.weight ?? 1500;
+          const handling = selectedCar?.currentStats?.handling ?? 80;
+          
+          let dtMultiplier = 1.0;
+          if (drivetrain === 'awd') dtMultiplier = 1.25;
+          if (drivetrain === 'fwd') dtMultiplier = 0.8;
+          
+          // Lighter and better handling gives better launch grip multiplier
+          const chassisMultiplier = Math.max(0.7, Math.min(1.5, (1500 / weight) * (handling / 80)));
+          
+          s.launchGrip = Math.max(0.5, Math.min(2.2, s.warmGrip * boost * dtMultiplier * chassisMultiplier));
           s.launchRpm = s.rpm;
-          s.wheelspin = s.launchGrip < 0.85;
+          s.wheelspin = s.launchGrip < 0.95;
           s.gear = 1;
           setLightsOut(true);
           setPhase('racing');
@@ -832,6 +855,11 @@ export function useRaceViewModel(): RaceViewModel {
     setThrottleState(on);
   }, []);
 
+  const setBrake = useCallback((on: boolean) => {
+    sim.current.brake = on;
+    setBrakeState(on);
+  }, []);
+
   const shiftUp = useCallback(() => {
     const s = sim.current;
     if (phaseRef.current !== 'racing' || s.gear >= maxGears) return;
@@ -889,6 +917,7 @@ export function useRaceViewModel(): RaceViewModel {
     nosCharge,
     nosActive,
     throttle,
+    brake,
     shifts,
     shiftZones,
     inPerfect,
@@ -927,6 +956,7 @@ export function useRaceViewModel(): RaceViewModel {
     resetRun,
     toMenu,
     setThrottle,
+    setBrake,
     shiftUp,
     shiftDown,
     activateNos,

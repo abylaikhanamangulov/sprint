@@ -13,6 +13,7 @@ import tournamentsRoutes from './modules/tournaments/tournaments.routes';
 import shopRoutes from './modules/shop/shop.routes';
 import profileRoutes from './modules/profile/profile.routes';
 import notificationsRoutes from './modules/notifications/notifications.routes';
+import { rewardsRoutes } from './modules/rewards/rewards.routes';
 import { errorHandler } from './core/middlewares/error.middleware';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -45,6 +46,7 @@ app.use('/api/tournaments', tournamentsRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/rewards', rewardsRoutes);
 
 const clientDist = path.join(__dirname, '..', '..', 'client', 'dist');
 app.use(express.static(clientDist));

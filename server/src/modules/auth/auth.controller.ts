@@ -30,19 +30,7 @@ export const getMe = (req: AuthRequest, res: Response): void => {
   res.json(req.user);
 };
 
-export const dailyReward = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    if (!req.user) {
-      res.status(401).json({ error: MESSAGES.errors.unauthorized });
-      return;
-    }
-    const result = await authService.claimDailyReward(req.user.id);
-    res.json(result);
-  } catch (error) {
-    console.error('[Auth Controller]', error);
-    res.status(400).json({ error: (error as Error).message || MESSAGES.errors.dailyRewardError });
-  }
-};
+
 
 export const selectStarter = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

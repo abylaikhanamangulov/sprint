@@ -17,8 +17,6 @@ export interface ProfileViewModel {
   completedAchievements: AchievementView[];
   tier: RankTier | undefined;
   winRate: number;
-  dailyBonusDays: DailyBonusDay[];
-  claimDailyBonus: () => Promise<void>;
   setTasksModalOpen: (open: boolean) => void;
   setStatsModalOpen: (open: boolean) => void;
   setHistoryModalOpen: (open: boolean) => void;
@@ -48,87 +46,7 @@ export function useProfileViewModel(): ProfileViewModel {
   const inProcessAchievements = profile ? profile.achievements.filter(a => !a.unlocked) : [];
   const completedAchievements = profile ? profile.achievements.filter(a => a.unlocked) : [];
 
-  const [claiming, setClaiming] = useState(false);
 
-  // Generate the current week (Monday to Sunday)
-  const generateDailyBonusDays = (): DailyBonusDay[] => {
-    if (!user) return [];
-    
-    const today = new Date();
-    const dayOfWeek = today.getDay() === 0 ? 6 : today.getDay() - 1; 
-    
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - dayOfWeek);
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const lastRewardDate = user.lastDailyReward ? new Date(user.lastDailyReward) : null;
-    if (lastRewardDate) lastRewardDate.setHours(0, 0, 0, 0);
-
-    const todayDateOnly = new Date(today);
-    todayDateOnly.setHours(0, 0, 0, 0);
-
-    const days: DailyBonusDay[] = [];
-    const dayNames = ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(startOfWeek);
-      d.setDate(startOfWeek.getDate() + i);
-      
-      const isToday = d.getTime() === todayDateOnly.getTime();
-      let status: 'collected' | 'current' | 'missed' = 'missed';
-
-      if (lastRewardDate) {
-        const diffDays = Math.round((lastRewardDate.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-        if (diffDays >= 0 && diffDays < user.dailyStreak) {
-          status = 'collected';
-        }
-      }
-
-      if (isToday && status !== 'collected') {
-        status = 'current';
-      } else if (d.getTime() > todayDateOnly.getTime()) {
-        status = 'missed';
-      }
-
-      days.push({
-        dayName: dayNames[i],
-        dateStr: d.getDate().toString(),
-        status,
-        isToday,
-      });
-    }
-
-    return days;
-  };
-
-  const dailyBonusDays = generateDailyBonusDays();
-
-  const claimDailyBonus = async () => {
-    if (claiming || !user) return;
-    const today = dailyBonusDays.find(d => d.isToday);
-    if (today?.status === 'collected') return;
-
-    setClaiming(true);
-    try {
-      const res = await api.auth.claimDaily();
-      const newProfile = await api.profile.get();
-      setProfile(newProfile);
-      
-      useGameStore.setState((state) => ({
-        user: {
-          ...state.user!,
-          dailyStreak: res.streak,
-          lastDailyReward: new Date().toISOString(),
-          coins: state.user!.coins + res.reward.coins,
-        }
-      }));
-
-    } catch (err) {
-      console.error('Failed to claim daily bonus', err);
-    } finally {
-      setClaiming(false);
-    }
-  };
 
   return {
     user,
@@ -142,8 +60,6 @@ export function useProfileViewModel(): ProfileViewModel {
     completedAchievements,
     tier,
     winRate,
-    dailyBonusDays,
-    claimDailyBonus,
     setTasksModalOpen,
     setStatsModalOpen,
     setHistoryModalOpen,

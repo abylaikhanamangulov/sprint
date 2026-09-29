@@ -16,9 +16,9 @@ export async function authMiddleware(req: AuthRequest, res: Response, next: Next
     if (!telegramId) {
       let devUser = await usersCol.findOne({ id: 1 });
       if (devUser) {
-        devUser = await energyService.processEnergyRegen(devUser);
-        req.userId = devUser.id;
-        req.user = devUser;
+        devUser = await energyService.processEnergyRegen(devUser) as any;
+        req.userId = devUser!.id;
+        req.user = devUser as any;
       }
       next();
       return;
@@ -36,10 +36,10 @@ export async function authMiddleware(req: AuthRequest, res: Response, next: Next
       return;
     }
 
-    user = await energyService.processEnergyRegen(user);
+    user = await energyService.processEnergyRegen(user) as any;
 
-    req.userId = user.id;
-    req.user = user;
+    req.userId = user!.id;
+    req.user = user as any;
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);

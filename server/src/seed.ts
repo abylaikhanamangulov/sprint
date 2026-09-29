@@ -56,9 +56,13 @@ export async function runSeed(closeClient = true) {
 
   console.log('[Seed] Inserting Upgrades...');
   const upgrades: UpgradeCategory[] = [
-    { id: 'engine', name: 'Engine', icon: 'engine', currency: 'coins', maxStage: 5, baseCost: 500, costMultiplier: 1.5, statsBoost: { speed: 5, acceleration: -0.5 } },
-    { id: 'turbo', name: 'Turbo', icon: 'turbo', currency: 'coins', maxStage: 5, baseCost: 1000, costMultiplier: 1.6, statsBoost: { speed: 10, acceleration: -1 } },
-    { id: 'weight', name: 'Weight Reduction', icon: 'weight', currency: 'coins', maxStage: 3, baseCost: 800, costMultiplier: 1.8, statsBoost: { weight: -50, handling: 2 } },
+    { id: 'engine', name: 'Engine', icon: 'engine', currency: 'coins', maxStage: 5, baseCost: 500, costMultiplier: 1.5, statsBoost: { speed: 2, acceleration: -0.15 } },
+    { id: 'turbo', name: 'Turbo', icon: 'turbo', currency: 'coins', maxStage: 5, baseCost: 1000, costMultiplier: 1.6, statsBoost: { speed: 4, acceleration: -0.3 } },
+    { id: 'transmission', name: 'Transmission', icon: 'transmission', currency: 'coins', maxStage: 5, baseCost: 700, costMultiplier: 1.5, statsBoost: { acceleration: -0.1 } },
+    { id: 'tires', name: 'Tires', icon: 'tires', currency: 'coins', maxStage: 5, baseCost: 600, costMultiplier: 1.4, statsBoost: { handling: 3, acceleration: -0.1 } },
+    { id: 'weight', name: 'Weight Reduction', icon: 'weight', currency: 'coins', maxStage: 5, baseCost: 800, costMultiplier: 1.8, statsBoost: { weight: -20, handling: 1 } },
+    { id: 'nos', name: 'Nitrous Oxide', icon: 'nos', currency: 'coins', maxStage: 5, baseCost: 1200, costMultiplier: 1.5, statsBoost: { nosPower: 5 } },
+    { id: 'ecu', name: 'ECU Tuning', icon: 'ecu', currency: 'coins', maxStage: 5, baseCost: 1500, costMultiplier: 1.7, statsBoost: { speed: 5, acceleration: -0.25, handling: 2 } },
   ];
   await upgradesCol.insertMany(upgrades);
 

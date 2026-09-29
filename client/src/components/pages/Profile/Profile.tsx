@@ -164,7 +164,7 @@ export function Profile() {
         )}
       </div>
 
-      <DailyBonusWidget days={vm.dailyBonusDays} onClaim={vm.claimDailyBonus} />
+
 
       <div style={{ padding: '0 16px' }}>
         <Button $variant="outline" $size="sm" $block style={{ marginBottom: 16 }} onClick={vm.loadLeaderboard}>

@@ -41,8 +41,10 @@ export class AuthService {
         selectedCarId: null,
         ownedCars: [],
         clanId: null,
-        dailyStreak: 0,
-        lastDailyReward: null,
+        rewardMonth: '',
+        claimedDays: [],
+        founderRewardClaimed: false,
+        claimedHolidays: [],
         stats: {
           totalRaces: 0,
           pvpWins: 0,
@@ -74,47 +76,6 @@ export class AuthService {
     }
 
     return { user: user as User, isNew: user!.selectedCarId === null };
-  }
-
-  async claimDailyReward(userId: number) {
-    const user = await usersCol.findOne({ id: userId });
-    if (!user) throw new Error('User not found');
-
-    const now = new Date();
-
-    if (user.lastDailyReward) {
-      const hours = (now.getTime() - new Date(user.lastDailyReward).getTime()) / (1000 * 60 * 60);
-      if (hours < 20) throw new Error('Daily reward already claimed');
-      if (hours > 48) {
-        user.dailyStreak = 0;
-      } else {
-        user.dailyStreak = (user.dailyStreak || 0) + 1;
-      }
-    } else {
-      user.dailyStreak = 1;
-    }
-
-    user.lastDailyReward = now.toISOString();
-    
-    const reward = {
-      coins: 500 + Math.min(user.dailyStreak * 100, 2000) + (user.dailyStreak > 0 && user.dailyStreak % 7 === 0 ? 500 : 0),
-    };
-
-    user.coins = (user.coins || 0) + reward.coins;
-
-    await usersCol.updateOne({ id: userId }, { 
-      $set: { 
-        coins: user.coins, 
-        dailyStreak: user.dailyStreak, 
-        lastDailyReward: user.lastDailyReward 
-      } 
-    });
-
-    return {
-      success: true,
-      streak: user.dailyStreak,
-      reward,
-    };
   }
 
   async selectStarter(userId: number, carId: number) {
