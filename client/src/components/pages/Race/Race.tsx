@@ -298,6 +298,14 @@ export function RaceView() {
               </div>
             </Card>
           ))}
+          {vm.selectMode === 'free' && (
+            <Card $clickable onClick={() => vm.startSelected('endless')}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 18, fontWeight: 800 }}>Бесконечный</span>
+                <span style={{ color: '#4e7cff', fontWeight: 700 }}>∞</span>
+              </div>
+            </Card>
+          )}
           <Button $variant="outline" $block onClick={vm.cancelSelect}>
             Назад
           </Button>
@@ -578,6 +586,10 @@ export function RaceView() {
           <Button $variant="outline" $size="sm" onClick={vm.toMenu}>
             Выход
           </Button>
+            <Tele>
+              <strong>{Math.floor(vm.distance)}{vm.distanceMeters === Infinity ? '' : ` / ${vm.distanceMeters}`}</strong>
+              <span>�����</span>
+            </Tele>
           <Tele>
             <strong>{Math.round(vm.maxSpeedKmh)}</strong>
             <span>макс км/ч</span>
@@ -688,3 +700,6 @@ export function RaceView() {
     </RaceLayout>
   );
 }
+
+
+

@@ -48,7 +48,7 @@ function ghostToCar(g: WarGhost): Car {
     image: '',
   };
 }
-export type RaceLength = 'eighth' | 'quarter' | 'half' | 'mile';
+export type RaceLength = 'eighth' | 'quarter' | 'half' | 'mile' | 'endless';
 
 export const MAX_RPM = 9000;
 export const IDLE_RPM = 1000;
@@ -63,6 +63,7 @@ export const RACE_LENGTHS: { id: RaceLength; meters: number; label: string; sub:
 ];
 
 function metersForLength(l: RaceLength): number {
+  if (l === 'endless') return Infinity;
   return RACE_LENGTHS.find((x) => x.id === l)?.meters ?? 402;
 }
 export const WARM_MAX_LEVEL = 4;
@@ -205,8 +206,9 @@ interface RaceViewModel {
   inPerfect: boolean;
   inGood: boolean;
   overRev: boolean;
-  redTime: number; // cumulative seconds in the red zone
-  dnf: boolean; // did-not-finish — engine overheated
+  redTime: number;
+  dnf: boolean;
+  foul: boolean;
   // burnout / launch
   warmNeedle: number; // 0..100 — throttle-driven marker
   warmFill: number; // 0..100 — warmth filled
@@ -355,6 +357,7 @@ export function useRaceViewModel(): RaceViewModel {
   const [warOutcome, setWarOutcome] = useState<WarRaceResult | null>(null);
   const [redTime, setRedTime] = useState(0);
   const [dnf, setDnf] = useState(false);
+  const [foul, setFoul] = useState(false);
 
   const sim = useRef<SimState>(freshSim());
   const rafRef = useRef<number | null>(null);
@@ -520,7 +523,20 @@ export function useRaceViewModel(): RaceViewModel {
       if (s.speed < LAUNCH_SPEED && s.gear === 1 && s.throttle) {
          targetRpm = Math.max(targetRpm, s.launchRpm * 0.8);
       }
-      s.rpm = Math.min(MAX_RPM, Math.max(IDLE_RPM, targetRpm));
+      
+      if (s.gear === 0) {
+        // Free rev in neutral for ProStreet style launch hold
+        s.rpm = s.throttle
+          ? Math.min(MAX_RPM, s.rpm + 7200 * dt)
+          : Math.max(IDLE_RPM, s.rpm - 5600 * dt);
+      } else {
+        const rpmDiff = targetRpm - s.rpm;
+        if (rpmDiff > 0) {
+          s.rpm += rpmDiff * 15 * dt;
+        } else {
+          s.rpm += rpmDiff * 10 * dt; // Smooth needle drop
+        }
+      }
 
       const overRevCut = s.rpm >= REDLINE && !isLast;
       if (overRevCut) {
@@ -537,12 +553,15 @@ export function useRaceViewModel(): RaceViewModel {
       const v = Math.min(1.0, s.speed / topSpeedMs);
       let accel = 0;
 
-      if (s.throttle) {
+      if (s.gear === 0) {
+        accel = -2.0 - 2 * v; // Only engine drag, no throttle acceleration possible in neutral
+      } else if (s.throttle) {
         if (overRevCut) {
-          accel = 0.5; // Crawl on limiter, requires manual shift
+          accel = -12.0; // Heavy engine braking on over-rev / early downshift!
         } else {
           const taper = Math.max(0.4, 1 - Math.pow(v, TAPER_EXP));
-          accel = A * Math.max(0.72, torqueAt(s.rpm)) * taper;
+          const gearFactor = Math.max(0.35, 1.15 - s.gear * 0.15); // Higher gears pull harder, wrong gear = sluggish
+          accel = A * Math.max(0.1, torqueAt(s.rpm)) * taper * gearFactor;
           if (s.speed < LAUNCH_SPEED) {
             accel *= Math.max(0.6, s.launchGrip); // Burnout grip effect
           }
@@ -643,40 +662,27 @@ export function useRaceViewModel(): RaceViewModel {
     setLightsOut(false);
     let n = 0;
     let goTimer: ReturnType<typeof setTimeout> | undefined;
-    const seq = setInterval(() => {
-      n += 1;
-      setLights(n);
-      if (n >= 5) {
-        clearInterval(seq);
-        const hold = 400 + Math.random() * 1700; // random hold like real F1
-        goTimer = setTimeout(() => {
-          // Launch quality = burnout grip × where the tach was on the lights × chassis dynamics
-          const s = sim.current;
-          const boost = revBoostFromRpm(s.rpm);
-          
-          // Drivetrain & Chassis physics
-          const drivetrain = selectedCar?.car?.drivetrain ?? 'rwd';
-          const weight = selectedCar?.currentStats?.weight ?? 1500;
-          const handling = selectedCar?.currentStats?.handling ?? 80;
-          
-          let dtMultiplier = 1.0;
-          if (drivetrain === 'awd') dtMultiplier = 1.25;
-          if (drivetrain === 'fwd') dtMultiplier = 0.8;
-          
-          // Lighter and better handling gives better launch grip multiplier
-          const chassisMultiplier = Math.max(0.7, Math.min(1.5, (1500 / weight) * (handling / 80)));
-          
-          s.launchGrip = Math.max(0.5, Math.min(2.2, s.warmGrip * boost * dtMultiplier * chassisMultiplier));
-          s.launchRpm = s.rpm;
-          s.wheelspin = s.launchGrip < 0.95;
-          s.gear = 1;
-          setLightsOut(true);
-          setPhase('racing');
-        }, hold);
-      }
-    }, 550);
+    let seq: ReturnType<typeof setInterval> | undefined;
+
+    const startDelay = 400 + Math.random() * 1100; // 0.4s to 1.5s
+    const initialTimer = setTimeout(() => {
+      seq = setInterval(() => {
+        n += 1;
+        setLights(n);
+        if (n >= 5) {
+          clearInterval(seq);
+          const hold = 400 + Math.random() * 1100; // 0.4s to 1.5s
+          goTimer = setTimeout(() => {
+            setLightsOut(true);
+            setPhase('racing');
+          }, hold);
+        }
+      }, 550);
+    }, startDelay);
+
     return () => {
-      clearInterval(seq);
+      clearTimeout(initialTimer);
+      if (seq) clearInterval(seq);
       if (goTimer) clearTimeout(goTimer);
     };
   }, [phase]);
@@ -702,6 +708,7 @@ export function useRaceViewModel(): RaceViewModel {
     setWarOutcome(null);
     setRedTime(0);
     setDnf(false);
+    setFoul(false);
     setShifts([]);
     setResult(null);
     setError(null);
@@ -778,7 +785,6 @@ export function useRaceViewModel(): RaceViewModel {
   const startFree = useCallback(
     (length: RaceLength = raceLength) => {
       sim.current = freshSim();
-      sim.current.gear = 1;
       sim.current.launchRpm = 4000;
       resetDisplay();
       setRaceLength(length);
@@ -862,7 +868,39 @@ export function useRaceViewModel(): RaceViewModel {
 
   const shiftUp = useCallback(() => {
     const s = sim.current;
+    
+    // False start logic: If shifting into gear during countdown
+    if (phaseRef.current === 'countdown' && s.gear === 0) {
+      setFoul(true);
+      setPhase('result');
+      if (modeRef.current === 'war') finishWar(9999);
+      else if (modeRef.current === 'race') finishRace(9999, [], false);
+      return;
+    }
+
     if (phaseRef.current !== 'racing' || s.gear >= maxGears) return;
+
+    if (s.gear === 0) {
+      // Manual Launch (NFS ProStreet style)
+      const boost = revBoostFromRpm(s.rpm);
+      
+      const drivetrain = selectedCar?.car?.drivetrain ?? 'rwd';
+      const weight = selectedCar?.currentStats?.weight ?? 1500;
+      const handling = selectedCar?.currentStats?.handling ?? 80;
+      
+      let dtMultiplier = 1.0;
+      if (drivetrain === 'awd') dtMultiplier = 1.25;
+      if (drivetrain === 'fwd') dtMultiplier = 0.8;
+      
+      const chassisMultiplier = Math.max(0.7, Math.min(1.5, (1500 / weight) * (handling / 80)));
+      
+      s.launchGrip = Math.max(0.5, Math.min(2.2, s.warmGrip * boost * dtMultiplier * chassisMultiplier));
+      s.launchRpm = s.rpm;
+      s.wheelspin = s.launchGrip < 0.95;
+      s.gear = 1;
+      return;
+    }
+
     const zones = shiftZonesForGear(s.gear);
     let quality: ShiftQuality;
     if (s.rpm >= zones.perfect[0]) {
@@ -925,6 +963,7 @@ export function useRaceViewModel(): RaceViewModel {
     overRev,
     redTime,
     dnf,
+    foul,
     warmNeedle,
     warmFill,
     warmZone,
@@ -962,3 +1001,4 @@ export function useRaceViewModel(): RaceViewModel {
     activateNos,
   };
 }
+
