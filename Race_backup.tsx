@@ -97,11 +97,13 @@ const Hint = styled.div`
 
 const LaunchBtn = styled(Button)`
   flex: 1;
+  min-width: 65px;
+  font-variant-numeric: tabular-nums;
   height: 96px;
   font-size: 18px;
 `;
 
-// ── Free-run telemetry ───────────────────────────────────────────────────────
+// РІвЂќР‚РІвЂќР‚ Free-run telemetry РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 const TeleBar = styled.div`
   display: flex;
   align-items: center;
@@ -123,12 +125,12 @@ const Tele = styled.div`
 `;
 
 const DRIVETRAIN_LABEL: Record<Drivetrain, string> = {
-  fwd: 'FWD · передний',
-  rwd: 'RWD · задний',
-  awd: 'AWD · полный',
+  fwd: 'FWD Р’В· Р С—Р ВµРЎР‚Р ВµР Т‘Р Р…Р С‘Р в„–',
+  rwd: 'RWD Р’В· Р В·Р В°Р Т‘Р Р…Р С‘Р в„–',
+  awd: 'AWD Р’В· Р С—Р С•Р В»Р Р…РЎвЂ№Р в„–',
 };
 
-// ── Pre-race "VS" panel ──────────────────────────────────────────────────────
+// РІвЂќР‚РІвЂќР‚ Pre-race "VS" panel РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 const VsWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -179,7 +181,7 @@ const FName = styled.div`
   font-weight: 800;
 `;
 
-// ── Overheat warning bar (in race) ───────────────────────────────────────────
+// РІвЂќР‚РІвЂќР‚ Overheat warning bar (in race) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
 const HeatWrap = styled.div`
   display: flex;
   align-items: center;
@@ -202,11 +204,11 @@ const HeatFill = styled.div<{ $pct: number }>`
 `;
 
 const BURNOUT_HINT =
-  'Газом держи стрелку в зелёной зоне. Зона уходит влево и сужается — сбрасывай и подыгрывай газом. Чем выше прогрев, тем лучше старт.';
+  'Р вЂњР В°Р В·Р С•Р С Р Т‘Р ВµРЎР‚Р В¶Р С‘ РЎРѓРЎвЂљРЎР‚Р ВµР В»Р С”РЎС“ Р Р† Р В·Р ВµР В»РЎвЂР Р…Р С•Р в„– Р В·Р С•Р Р…Р Вµ. Р вЂ”Р С•Р Р…Р В° РЎС“РЎвЂ¦Р С•Р Т‘Р С‘РЎвЂљ Р Р†Р В»Р ВµР Р†Р С• Р С‘ РЎРѓРЎС“Р В¶Р В°Р ВµРЎвЂљРЎРѓРЎРЏ РІР‚вЂќ РЎРѓР В±РЎР‚Р В°РЎРѓРЎвЂ№Р Р†Р В°Р в„– Р С‘ Р С—Р С•Р Т‘РЎвЂ№Р С–РЎР‚РЎвЂ№Р Р†Р В°Р в„– Р С–Р В°Р В·Р С•Р С. Р В§Р ВµР С Р Р†РЎвЂ№РЎв‚¬Р Вµ Р С—РЎР‚Р С•Р С–РЎР‚Р ВµР Р†, РЎвЂљР ВµР С Р В»РЎС“РЎвЂЎРЎв‚¬Р Вµ РЎРѓРЎвЂљР В°РЎР‚РЎвЂљ.';
 
 export function RaceView() {
   const vm = useRaceViewModel();
-  const userName = useGameStore((s) => s.user?.firstName) || 'Ты';
+  const userName = useGameStore((s) => s.user?.firstName) || 'Р СћРЎвЂ№';
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -245,12 +247,12 @@ export function RaceView() {
 
   const userEnergy = useGameStore((s) => s.user?.energy) || 0;
 
-  // ── MENU ──────────────────────────────────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ MENU РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'menu') {
     const car = vm.selectedCar;
     return (
       <Screen>
-        <MainHeader title="Гонки" />
+        <MainHeader title="Р вЂњР С•Р Р…Р С”Р С‘" />
         <Column $gap={12} style={{ maxWidth: 300, margin: '0 auto' }}>
           <Button 
             $variant="primary" 
@@ -258,22 +260,22 @@ export function RaceView() {
             onClick={vm.chooseRace}
             disabled={userEnergy < 1 || !car}
           >
-            🏁 Заезд (PvE) {!car ? '(Нужно авто)' : userEnergy < 1 ? '(Нет энергии)' : ''}
+            СЂСџРЏРѓ Р вЂ”Р В°Р ВµР В·Р Т‘ (PvE) {!car ? '(Р СњРЎС“Р В¶Р Р…Р С• Р В°Р Р†РЎвЂљР С•)' : userEnergy < 1 ? '(Р СњР ВµРЎвЂљ РЎРЊР Р…Р ВµРЎР‚Р С–Р С‘Р С‘)' : ''}
           </Button>
           <Button $variant="primary" $block onClick={vm.chooseFree} disabled={!car}>
-            ♾️ Свободный заезд {!car && '(Нужно авто)'}
+            РІв„ўС•РїС‘РЏ Р РЋР Р†Р С•Р В±Р С•Р Т‘Р Р…РЎвЂ№Р в„– Р В·Р В°Р ВµР В·Р Т‘ {!car && '(Р СњРЎС“Р В¶Р Р…Р С• Р В°Р Р†РЎвЂљР С•)'}
           </Button>
           <Button $variant="outline" $block disabled>
-            ⚔️ PvP (скоро)
+            РІС™вЂќРїС‘РЏ PvP (РЎРѓР С”Р С•РЎР‚Р С•)
           </Button>
         </Column>
         {car && (
           <Card style={{ maxWidth: 300, margin: '16px auto' }}>
-            <Muted>Текущий авто</Muted>
+            <Muted>Р СћР ВµР С”РЎС“РЎвЂ°Р С‘Р в„– Р В°Р Р†РЎвЂљР С•</Muted>
             <div style={{ fontWeight: 600 }}>{car.car.name}</div>
             <div style={{ color: '#4e7cff' }}>PP {car.currentPP}</div>
             <Muted $size={11} style={{ display: 'block', marginTop: 4 }}>
-              {DRIVETRAIN_LABEL[car.car.drivetrain]} · {car.car.maxGears}-ст.
+              {DRIVETRAIN_LABEL[car.car.drivetrain]} Р’В· {car.car.maxGears}-РЎРѓРЎвЂљ.
             </Muted>
           </Card>
         )}
@@ -281,50 +283,50 @@ export function RaceView() {
     );
   }
 
-  // ── DISTANCE SELECT (race or free run) ──────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ DISTANCE SELECT (race or free run) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'select') {
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 40 }}>
-        <Heading style={{ marginBottom: 6 }}>Выбор дистанции</Heading>
+        <Heading style={{ marginBottom: 6 }}>Р вЂ™РЎвЂ№Р В±Р С•РЎР‚ Р Т‘Р С‘РЎРѓРЎвЂљР В°Р Р…РЎвЂ Р С‘Р С‘</Heading>
         <Muted style={{ display: 'block', marginBottom: 20 }}>
-          {vm.selectMode === 'free' ? '♾️ Свободный заезд' : 'PvE — на время'}
+          {vm.selectMode === 'free' ? 'РІв„ўС•РїС‘РЏ Р РЋР Р†Р С•Р В±Р С•Р Т‘Р Р…РЎвЂ№Р в„– Р В·Р В°Р ВµР В·Р Т‘' : 'PvE РІР‚вЂќ Р Р…Р В° Р Р†РЎР‚Р ВµР СРЎРЏ'}
         </Muted>
         <Column $gap={12} style={{ maxWidth: 320, margin: '0 auto' }}>
           {RACE_LENGTHS.map((d) => (
             <Card key={d.id} $clickable onClick={() => vm.startSelected(d.id)}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 18, fontWeight: 800 }}>{d.label}</span>
-                <span style={{ color: '#4e7cff', fontWeight: 700 }}>{d.sub}</span>
+                <span style={{ fontSize: 18, fontWeight: 800 }}>Р вЂР ВµРЎРѓР С”Р С•Р Р…Р ВµРЎвЂЎР Р…РЎвЂ№Р в„–</span>
+                <span style={{ color: '#4e7cff', fontWeight: 700 }}>РІв‚¬С›</span>
               </div>
             </Card>
           ))}
           {vm.selectMode === 'free' && (
             <Card $clickable onClick={() => vm.startSelected('endless')}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 18, fontWeight: 800 }}>Бесконечный</span>
-                <span style={{ color: '#4e7cff', fontWeight: 700 }}>∞</span>
-              </div>
-            </Card>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 18, fontWeight: 800 }}>Бесконечный</span>
+                  <span style={{ color: '#4e7cff', fontWeight: 700 }}>∞</span>
+                </div>
+              </Card>
           )}
           <Button $variant="outline" $block onClick={vm.cancelSelect}>
-            Назад
+            Р СњР В°Р В·Р В°Р Т‘
           </Button>
         </Column>
       </Screen>
     );
   }
 
-  // ── INTRO: VS panel (opponent nick + car) ───────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ INTRO: VS panel (opponent nick + car) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'intro') {
     const you = vm.selectedCar;
     const foe = vm.opponent;
     return (
       <Screen style={{ paddingTop: 28 }}>
         <Heading style={{ textAlign: 'center', marginBottom: 4 }}>
-          {vm.mode === 'war' ? '⚔️ Заезд войны' : 'Заезд'}
+          {vm.mode === 'war' ? 'РІС™вЂќРїС‘РЏ Р вЂ”Р В°Р ВµР В·Р Т‘ Р Р†Р С•Р в„–Р Р…РЎвЂ№' : 'Р вЂ”Р В°Р ВµР В·Р Т‘'}
         </Heading>
         <Muted style={{ display: 'block', textAlign: 'center', marginBottom: 18 }}>
-          {RACE_LENGTHS.find((d) => d.id === vm.raceLength)?.sub} · {vm.raceLength === 'quarter' ? '¼ мили' : ''}
+          {RACE_LENGTHS.find((d) => d.id === vm.raceLength)?.sub} Р’В· {vm.raceLength === 'quarter' ? 'Р’С Р СР С‘Р В»Р С‘' : ''}
         </Muted>
 
         <VsWrap>
@@ -334,7 +336,7 @@ export function RaceView() {
                 <CarSprite car={you.car} width={120} cosmetics={you.cosmetics} />
               </FighterSprite>
               <FighterInfo $right>
-                <Tag>Ты</Tag>
+                <Tag>Р СћРЎвЂ№</Tag>
                 <FName>{userName}</FName>
                 <div style={{ marginTop: 4 }}>
                   <ClassBadge $class={you.car.class}>{you.car.class}</ClassBadge>{' '}
@@ -352,7 +354,7 @@ export function RaceView() {
                 <CarSprite car={foe.car} width={120} cosmetics={foe.cosmetics} />
               </FighterSprite>
               <FighterInfo>
-                <Tag>{vm.mode === 'war' ? 'Призрак клана-соперника' : 'Соперник'}</Tag>
+                <Tag>{vm.mode === 'war' ? 'Р СџРЎР‚Р С‘Р В·РЎР‚Р В°Р С” Р С”Р В»Р В°Р Р…Р В°-РЎРѓР С•Р С—Р ВµРЎР‚Р Р…Р С‘Р С”Р В°' : 'Р РЋР С•Р С—Р ВµРЎР‚Р Р…Р С‘Р С”'}</Tag>
                 <FName>{foe.name}</FName>
                 <div style={{ marginTop: 4 }}>
                   <ClassBadge $class={foe.car.class}>{foe.car.class}</ClassBadge>{' '}
@@ -360,7 +362,7 @@ export function RaceView() {
                 </div>
                 {vm.mode === 'war' && (
                   <Muted $size={11} style={{ display: 'block', marginTop: 4 }}>
-                    Цель: обогнать {foe.targetTime.toFixed(3)}с
+                    Р В¦Р ВµР В»РЎРЉ: Р С•Р В±Р С•Р С–Р Р…Р В°РЎвЂљРЎРЉ {foe.targetTime.toFixed(3)}РЎРѓ
                   </Muted>
                 )}
               </FighterInfo>
@@ -368,14 +370,14 @@ export function RaceView() {
           )}
 
           <Button $variant="primary" $block onClick={vm.goToBurnout}>
-            К прогреву →
+            Р С™ Р С—РЎР‚Р С•Р С–РЎР‚Р ВµР Р†РЎС“ РІвЂ вЂ™
           </Button>
         </VsWrap>
       </Screen>
     );
   }
 
-  // ── BURNOUT (tyre warming minigame) ─────────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ BURNOUT (tyre warming minigame) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'burnout') {
     return (
       <RaceLayout data-racing>
@@ -403,7 +405,7 @@ export function RaceView() {
 
         <Controls>
           <LaunchBtn $variant="outline" onClick={vm.toMenu}>
-            Выход
+            Р вЂ™РЎвЂ№РЎвЂ¦Р С•Р Т‘
           </LaunchBtn>
           <GasPedal
             pressed={vm.throttle}
@@ -411,14 +413,14 @@ export function RaceView() {
             onRelease={() => vm.setThrottle(false)}
           />
           <LaunchBtn $variant="primary" onClick={vm.launch}>
-            На старт →
+            Р СњР В° РЎРѓРЎвЂљР В°РЎР‚РЎвЂљ РІвЂ вЂ™
           </LaunchBtn>
         </Controls>
       </RaceLayout>
     );
   }
 
-  // ── RESULT: engine overheat (DNF) ───────────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ RESULT: engine overheat (DNF) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'result' && (vm.dnf || vm.foul)) {
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 40 }}>
@@ -428,7 +430,7 @@ export function RaceView() {
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <Muted style={{ display: 'block' }}>
-            {vm.foul ? 'Ты переключился на 1-ю передачу до зеленого сигнала светофора. Дождись старта!' : `Стрелка пробыла в красной зоне больше ${OVERHEAT_LIMIT.toFixed(0)} секунд — мотор сдался. Заезд не засчитан. Переключайся до красной зоны!`}
+            {vm.foul ? 'Ты переключился на передачу до зеленого сигнала светофора. Дождись старта!' : 'Стрелка пробыла в красной зоне слишком долго. Переключайся вовремя!'}
           </Muted>
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
@@ -443,58 +445,58 @@ export function RaceView() {
     );
   }
 
-  // ── RESULT: Free Ride ──────────────────────────────────────────────────────
+  // ── RESULT: Free Ride
   if (vm.phase === 'result' && vm.mode === 'free') {
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
-        <ResultIcon>⏱️</ResultIcon>
+        <ResultIcon>РІРЏВ±РїС‘РЏ</ResultIcon>
         <Heading $size={22} style={{ marginBottom: 8 }}>
-          ФИНИШ
+          Р В¤Р ВР СњР ВР РЃ
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Muted>Время заезда</Muted>
-            <strong>{vm.raceTime.toFixed(3)}с</strong>
+            <Muted>Р вЂ™РЎР‚Р ВµР СРЎРЏ Р В·Р В°Р ВµР В·Р Т‘Р В°</Muted>
+            <strong>{vm.raceTime.toFixed(3)}РЎРѓ</strong>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Muted>Максимальная скорость</Muted>
-            <strong>{Math.round(vm.maxSpeedKmh)} км/ч</strong>
+            <Muted>Р СљР В°Р С”РЎРѓР С‘Р СР В°Р В»РЎРЉР Р…Р В°РЎРЏ РЎРѓР С”Р С•РЎР‚Р С•РЎРѓРЎвЂљРЎРЉ</Muted>
+            <strong>{Math.round(vm.maxSpeedKmh)} Р С”Р С/РЎвЂЎ</strong>
           </div>
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Button $variant="primary" onClick={() => vm.startFree()}>
-            Ещё раз
+            Р вЂўРЎвЂ°РЎвЂ РЎР‚Р В°Р В·
           </Button>
           <Button $variant="outline" onClick={vm.toMenu}>
-            Меню
+            Р СљР ВµР Р…РЎР‹
           </Button>
         </div>
       </Screen>
     );
   }
 
-  // ── RESULT: clan war ────────────────────────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ RESULT: clan war РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'result' && vm.mode === 'war') {
     const w = vm.warOutcome;
     const isWin = w ? w.won : (vm.opponent?.targetTime != null && vm.raceTime < vm.opponent.targetTime);
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
-        <ResultIcon>{isWin ? '⚔️🏆' : '⚔️😢'}</ResultIcon>
+        <ResultIcon>{isWin ? 'РІС™вЂќРїС‘РЏСЂСџРЏвЂ ' : 'РІС™вЂќРїС‘РЏСЂСџВСћ'}</ResultIcon>
         <Heading $size={22} style={{ marginBottom: 8 }}>
-          {isWin ? 'ОЧКО КЛАНУ!' : 'ПРИЗРАК БЫСТРЕЕ'}
+          {isWin ? 'Р С›Р В§Р С™Р С› Р С™Р вЂєР С’Р СњР Р€!' : 'Р СџР В Р ВР вЂ”Р В Р С’Р С™ Р вЂР В«Р РЋР СћР В Р вЂўР вЂў'}
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Muted>Твоё время</Muted>
-            <strong>{(w ? w.playerTime : vm.raceTime).toFixed(3)}с</strong>
+            <Muted>Р СћР Р†Р С•РЎвЂ Р Р†РЎР‚Р ВµР СРЎРЏ</Muted>
+            <strong>{(w ? w.playerTime : vm.raceTime).toFixed(3)}РЎРѓ</strong>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Muted>Призрак ({vm.opponent?.name})</Muted>
-            <strong>{(w ? w.ghostTime : vm.opponent?.targetTime)?.toFixed(3)}с</strong>
+            <Muted>Р СџРЎР‚Р С‘Р В·РЎР‚Р В°Р С” ({vm.opponent?.name})</Muted>
+            <strong>{(w ? w.ghostTime : vm.opponent?.targetTime)?.toFixed(3)}РЎРѓ</strong>
           </div>
           {w && (
             <div style={{ marginTop: 12, borderTop: '1px solid #2a3050', paddingTop: 8 }}>
-              <Muted>Счёт войны</Muted>
+              <Muted>Р РЋРЎвЂЎРЎвЂРЎвЂљ Р Р†Р С•Р в„–Р Р…РЎвЂ№</Muted>
               <div style={{ fontSize: 22, fontWeight: 900, marginTop: 4 }}>
                 <span style={{ color: '#2ed573' }}>{w.scoreOurs}</span>
                 {' : '}
@@ -507,47 +509,47 @@ export function RaceView() {
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Button $variant="primary" onClick={() => useGameStore.getState().setScreen('clan')}>
-            К клану
+            Р С™ Р С”Р В»Р В°Р Р…РЎС“
           </Button>
           <Button $variant="outline" onClick={vm.toMenu}>
-            Меню
+            Р СљР ВµР Р…РЎР‹
           </Button>
         </div>
       </Screen>
     );
   }
 
-  // ── RESULT: PvE ───────────────────────────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ RESULT: PvE РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   if (vm.phase === 'result') {
     const r = vm.result;
     const isWin = r ? r.playerWon : (vm.opponent?.targetTime != null && vm.raceTime < vm.opponent.targetTime);
     return (
       <Screen style={{ textAlign: 'center', paddingTop: 30 }}>
-        <ResultIcon>{isWin ? '🏆' : '😢'}</ResultIcon>
+        <ResultIcon>{isWin ? 'СЂСџРЏвЂ ' : 'СЂСџВСћ'}</ResultIcon>
         <Heading $size={22} style={{ marginBottom: 8 }}>
-          {isWin ? 'ПОБЕДА!' : 'ПРОИГРЫШ'}
+          {isWin ? 'Р СџР С›Р вЂР вЂўР вЂќР С’!' : 'Р СџР В Р С›Р ВР вЂњР В Р В«Р РЃ'}
         </Heading>
         <Card style={{ maxWidth: 320, margin: '0 auto 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Muted>Твоё время</Muted>
-            <strong>{vm.raceTime.toFixed(3)}с</strong>
+            <Muted>Р СћР Р†Р С•РЎвЂ Р Р†РЎР‚Р ВµР СРЎРЏ</Muted>
+            <strong>{vm.raceTime.toFixed(3)}РЎРѓ</strong>
           </div>
           {(r?.aiTime != null || vm.opponent?.targetTime != null) && (
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <Muted>Противник</Muted>
-              <strong>{(r?.aiTime ?? vm.opponent?.targetTime)?.toFixed(3)}с</strong>
+              <Muted>Р СџРЎР‚Р С•РЎвЂљР С‘Р Р†Р Р…Р С‘Р С”</Muted>
+              <strong>{(r?.aiTime ?? vm.opponent?.targetTime)?.toFixed(3)}РЎРѓ</strong>
             </div>
           )}
           {!!r && r.stars > 0 && (
             <div style={{ marginTop: 8 }}>
               <Stars style={{ fontSize: 20 }}>
-                {'★'.repeat(r.stars)}
-                {'☆'.repeat(3 - r.stars)}
+                {'РІВвЂ¦'.repeat(r.stars)}
+                {'РІВвЂ '.repeat(3 - r.stars)}
               </Stars>
             </div>
           )}
           <div style={{ marginTop: 12, borderTop: '1px solid #2a3050', paddingTop: 8 }}>
-            <Muted>Переключения:</Muted>
+            <Muted>Р СџР ВµРЎР‚Р ВµР С”Р В»РЎР‹РЎвЂЎР ВµР Р…Р С‘РЎРЏ:</Muted>
             <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginTop: 6, flexWrap: 'wrap' }}>
               {vm.shifts.map((s, i) => (
                 <ShiftPill key={i} $q={s}>
@@ -565,17 +567,17 @@ export function RaceView() {
         </Card>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Button $variant="primary" onClick={() => vm.startRace()}>
-            Ещё раз
+            Р вЂўРЎвЂ°РЎвЂ РЎР‚Р В°Р В·
           </Button>
           <Button $variant="outline" onClick={vm.toMenu}>
-            Меню
+            Р СљР ВµР Р…РЎР‹
           </Button>
         </div>
       </Screen>
     );
   }
 
-  // ── RACING & STAGING (countdown lights) ─────────────────────────────────────
+  // РІвЂќР‚РІвЂќР‚ RACING & STAGING (countdown lights) РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚РІвЂќР‚
   const isFree = vm.mode === 'free';
   const staging = vm.phase === 'countdown';
   return (
@@ -583,26 +585,26 @@ export function RaceView() {
       {isFree ? (
         <TeleBar>
           <Button $variant="outline" $size="sm" onClick={vm.toMenu}>
-            Выход
+            Р вЂ™РЎвЂ№РЎвЂ¦Р С•Р Т‘
           </Button>
             <Tele>
               <strong>{Math.floor(vm.distance)}{vm.distanceMeters === Infinity ? '' : ` / ${vm.distanceMeters}`}</strong>
-              <span>метры</span>
+              <span>РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…</span>
             </Tele>
           <Tele>
             <strong>{Math.round(vm.maxSpeedKmh)}</strong>
-            <span>км/ч</span>
+            <span>Р СР В°Р С”РЎРѓ Р С”Р С/РЎвЂЎ</span>
           </Tele>
           <Tele>
-            <strong>{vm.time100 != null ? vm.time100.toFixed(2) : '—'}</strong>
-            <span>0–100</span>
+            <strong>{vm.time100 != null ? vm.time100.toFixed(2) : 'РІР‚вЂќ'}</strong>
+            <span>0РІР‚вЂњ100</span>
           </Tele>
           <Tele>
-            <strong>{vm.time200 != null ? vm.time200.toFixed(2) : '—'}</strong>
-            <span>0–200</span>
+            <strong>{vm.time200 != null ? vm.time200.toFixed(2) : 'РІР‚вЂќ'}</strong>
+            <span>0РІР‚вЂњ200</span>
           </Tele>
           <Button $variant="outline" $size="sm" onClick={vm.resetRun}>
-            ↻ На старт
+            РІвЂ В» Р СњР В° РЎРѓРЎвЂљР В°РЎР‚РЎвЂљ
           </Button>
         </TeleBar>
       ) : (
@@ -635,7 +637,7 @@ export function RaceView() {
 
       {vm.redTime > 0.05 && (
         <HeatWrap>
-          <span style={{ color: '#ff4757' }}>🌡 ПЕРЕГРЕВ</span>
+          <span style={{ color: '#ff4757' }}>СЂСџРЉРЋ Р СџР вЂўР В Р вЂўР вЂњР В Р вЂўР вЂ™</span>
           <HeatTrack>
             <HeatFill $pct={(vm.redTime / OVERHEAT_LIMIT) * 100} />
           </HeatTrack>
@@ -643,7 +645,7 @@ export function RaceView() {
       )}
 
       {staging && (
-        <Hint>🚦 Газуй в зелёную зону тахометра и держи до момента, когда огни погаснут!</Hint>
+        <Hint>СЂСџС™В¦ Р вЂњР В°Р В·РЎС“Р в„– Р Р† Р В·Р ВµР В»РЎвЂР Р…РЎС“РЎР‹ Р В·Р С•Р Р…РЎС“ РЎвЂљР В°РЎвЂ¦Р С•Р СР ВµРЎвЂљРЎР‚Р В° Р С‘ Р Т‘Р ВµРЎР‚Р В¶Р С‘ Р Т‘Р С• Р СР С•Р СР ВµР Р…РЎвЂљР В°, Р С”Р С•Р С–Р Т‘Р В° Р С•Р С–Р Р…Р С‘ Р С—Р С•Р С–Р В°РЎРѓР Р…РЎС“РЎвЂљ!</Hint>
       )}
 
       <Gauges>
@@ -688,11 +690,11 @@ export function RaceView() {
             onClick={vm.activateNos}
             disabled={vm.nosCharge < 25 || vm.nosActive}
           >
-            ⚡ NOS {vm.nosActive ? 'ACTIVE' : ''}
+            РІС™РЋ NOS {vm.nosActive ? 'ACTIVE' : ''}
           </NosButton>
         ) : (
           <NosButton $ready={false} disabled style={{ fontSize: 12 }}>
-            NOS не установлен — купи в гараже
+            NOS Р Р…Р Вµ РЎС“РЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р В»Р ВµР Р… РІР‚вЂќ Р С”РЎС“Р С—Р С‘ Р Р† Р С–Р В°РЎР‚Р В°Р В¶Р Вµ
           </NosButton>
         )}
       </div>
